@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greendore — Onboarding Screens</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --soil-night:   #1C2E1E;
+    --canopy:       #2D4A30;
+    --canopy-mid:   #3D5E40;
+    --new-leaf:     #6A9E72;
+    --sprout:       #A8C8A0;
+    --mist:         #EFF5EC;
+    --terracotta:   #C4956A;
+    --terra-dark:   #9E6E45;
+    --terra-light:  #EDD9C0;
+    --linen:        #F7F3ED;
+    --linen-dark:   #EDE8E0;
+    --clay:         #E8D5B0;
+    --warm-gray:    #8A8478;
+    --text-dark:    #1A1F1B;
+    --text-mid:     #4A5248;
+    --text-soft:    #7A8278;
+    --white:        #FFFFFF;
+
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body:    'DM Sans', system-ui, sans-serif;
+
+    --phone-w: 375px;
+    --phone-h: 812px;
+    --radius-phone: 44px;
+    --radius-card: 20px;
+    --radius-btn: 14px;
+    --radius-pill: 100px;
+  }
+
+  body {
+    background: #F0EDE6;
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    min-height: 100vh;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* Page header */
+  .page-header {
+    max-width: 1320px;
+    margin: 0 auto 3rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    border-bottom: 0.5px solid rgba(45,74,48,0.2);
+    padding-bottom: 1.25rem;
+  }
+  .page-header h1 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--canopy);
+    letter-spacing: -0.02em;
+  }
+  .page-header span {
+    font-size: 13px;
+    color: var(--text-soft);
+    font-weight: 300;
+  }
+
+  /* Grid */
+  .screens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(375px, 1fr));
+    gap: 3rem 2.5rem;
+    max-width: 1320px;
+    margin: 0 auto;
+    justify-items: center;
+  }
+
+  /* Screen wrapper */
+  .screen-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    width: 375px;
+  }
+  .screen-meta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .screen-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .screen-number {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--terracotta);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .screen-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+  }
+  .screen-note {
+    font-size: 12px;
+    color: var(--text-soft);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* Phone shell */
+  .phone {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    border-radius: var(--radius-phone);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.1);
+  }
+
+  /* Status bar */
+  .status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 28px 8px;
+    z-index: 10;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .status-bar.dark { color: rgba(255,255,255,0.85); }
+  .status-bar.light { color: var(--text-dark); }
+  .status-icons { display: flex; gap: 5px; align-items: center; }
+
+  /* Progress dots */
+  .progress-dots {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    position: absolute;
+    bottom: 36px;
+    left: 0; right: 0;
+    z-index: 10;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.3);
+    transition: all 0.3s;
+  }
+  .dot.active {
+    width: 20px;
+    background: rgba(255,255,255,0.9);
+  }
+  .dot.dark-dot { background: rgba(45,74,48,0.2); }
+  .dot.dark-dot.active { background: var(--canopy); }
+
+  /* ───────────────────────────
+     SCREEN 01 — SPLASH
+  ─────────────────────────── */
+  .s01 {
+    background: var(--soil-night);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .s01-glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(106,158,114,0.18) 0%, transparent 70%);
+  }
+  .s01-soil {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 220px;
+  }
+  .s01-plant {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+    animation: sproutUp 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
+    transform-origin: bottom center;
+  }
+  @keyframes sproutUp {
+    from { transform: scaleY(0) translateY(30px); opacity: 0; }
+    to   { transform: scaleY(1) translateY(0); opacity: 1; }
+  }
+  .s01-wordmark {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: rgba(255,255,255,0.92);
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.8s ease 1.2s both;
+  }
+  .s01-tagline {
+    font-size: 13px;
+    color: rgba(168,200,160,0.7);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    position: relative;
+    z-index: 2;
+    margin-top: 6px;
+    animation: fadeUp 0.8s ease 1.5s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ───────────────────────────
+     SCREEN 02 — WELCOME
+  ─────────────────────────── */
+  .s02 {
+    background: var(--soil-night);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .s02-illustration {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  .s02-window-frame {
+    position: absolute;
+    top: 20px; left: 0; right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, #1a2f3a 0%, #0d1f18 100%);
+  }
+  .s02-window {
+    position: absolute;
+    top: 28px; left: 50%;
+    transform: translateX(-50%);
+    width: 220px; height: 200px;
+    border: 1.5px solid rgba(168,200,160,0.25);
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    background: linear-gradient(180deg, #1a3a50 0%, #0e2230 100%);
+  }
+  .s02-window-glow {
+    position: absolute;
+    bottom: -10px; left: -10px; right: -10px;
+    height: 80px;
+    background: radial-gradient(ellipse at center bottom, rgba(106,158,114,0.35) 0%, transparent 70%);
+  }
+  .s02-moon {
+    position: absolute;
+    top: 22px; right: 28px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(232,213,176,0.6);
+  }
+  .s02-stars {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
+  .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+  }
+  .s02-pod {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .s02-surface {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50px;
+    background: #1a1410;
+  }
+  .s02-content {
+    padding: 24px 28px 40px;
+    background: var(--linen);
+    border-radius: 28px 28px 0 0;
+    position: relative;
+    z-index: 2;
+  }
+  .s02-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--new-leaf);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .s02-headline {
+    font-family: var(--font-display);
+    font-size: 26px;
+    line-height: 1.2;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .s02-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-mid);
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+  .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 17px;
+    background: var(--canopy);
+    color: rgba(255,255,255,0.95);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    color: var(--text-mid);
+    border: 1px solid rgba(45,74,48,0.2);
+    border-radius: var(--radius-btn);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  /* ───────────────────────────
+     SCREEN 03 — ACCOUNT
+  ─────────────────────────── */
+  .s03 {
+    background: var(--linen);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 60px 28px 40px;
+    position: relative;
+  }
+  .back-btn {
+    position: absolute;
+    top: 60px; left: 24px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--linen-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .s03-top {
+    margin-bottom: 36px;
+    padding-top: 16px;
+  }
+  .step-indicator {
+    font-size: 11px;
+    color: var(--terracotta);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .s03-headline {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1.15;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .s03-sub {
+    font-size: 14px;
+    color: var(--text-soft);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    border-radius: var(--radius-btn);
+    border: 1px solid rgba(0,0,0,0.1);
+    background: var(--white);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  .social-icon {
+    width: 20px; height: 20px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .divider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .divider-line {
+    flex: 1;
+    height: 0.5px;
+    background: rgba(0,0,0,0.1);
+  }
+  .divider-text {
+    font-size: 12px;
+    color: var(--text-soft);
+    font-weight: 300;
+  }
+  .field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-mid);
+    letter-spacing: 0.03em;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .field-input {
+    display: block;
+    width: 100%;
+    padding: 15px 16px;
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    outline: none;
+  }
+  .field-input:focus {
+    border-color: var(--new-leaf);
+    box-shadow: 0 0 0 3px rgba(106,158,114,0.12);
+  }
+  .field-hint {
+    font-size: 12px;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .s03-footer {
+    margin-top: auto;
+  }
+  .privacy-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-soft);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-top: 14px;
+  }
+  .privacy-note a { color: var(--new-leaf); text-decoration: none; }
+
+  /* ───────────────────────────
+     SCREEN 04 — POD CONNECTION
+  ─────────────────────────── */
+  .s04 {
+    background: var(--soil-night);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .s04-top {
+    padding: 60px 28px 0;
+    text-align: center;
+    z-index: 2;
+  }
+  .s04-step {
+    font-size: 11px;
+    color: rgba(168,200,160,0.7);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .s04-headline {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: rgba(255,255,255,0.94);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .s04-sub {
+    font-size: 14px;
+    color: rgba(168,200,160,0.7);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+  .pulse-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
+  .pulse-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(106,158,114,0.3);
+    animation: pulseRing 2.4s ease-out infinite;
+    transform-origin: center;
+  }
+  .pulse-ring:nth-child(1) { width: 80px;  height: 80px;  animation-delay: 0s; }
+  .pulse-ring:nth-child(2) { width: 130px; height: 130px; animation-delay: 0.6s; }
+  .pulse-ring:nth-child(3) { width: 190px; height: 190px; animation-delay: 1.2s; }
+  .pulse-ring:nth-child(4) { width: 260px; height: 260px; animation-delay: 1.8s; }
+  @keyframes pulseRing {
+    0%   { opacity: 0.8; transform: scale(0.85); }
+    100% { opacity: 0;   transform: scale(1.05); }
+  }
+  .pod-center {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .pod-icon-wrap {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    background: rgba(45,74,48,0.6);
+    border: 1px solid rgba(106,158,114,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pod-status-text {
+    font-size: 13px;
+    color: rgba(168,200,160,0.8);
+    letter-spacing: 0.04em;
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+  .s04-bottom {
+    width: 100%;
+    padding: 20px 28px 40px;
+    z-index: 2;
+  }
+  .s04-states {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .state-pill {
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .state-pill.done {
+    background: rgba(106,158,114,0.2);
+    color: var(--sprout);
+  }
+  .state-pill.active {
+    background: rgba(106,158,114,0.35);
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+  }
+  .state-pill.pending {
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.3);
+  }
+  .btn-ghost {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-btn);
+    font-family: var(--font-body);
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  /* ───────────────────────────
+     SCREEN 05 — PLANT SELECTION
+  ─────────────────────────── */
+  .s05 {
+    background: var(--linen);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .s05-header {
+    padding: 60px 28px 0;
+    flex-shrink: 0;
+  }
+  .s05-headline {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .s05-sub {
+    font-size: 14px;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+  .plant-scroll {
+    display: flex;
+    gap: 14px;
+    padding: 8px 28px 8px;
+    overflow-x: auto;
+    flex-shrink: 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .plant-scroll::-webkit-scrollbar { display: none; }
+  .plant-card {
+    min-width: 200px;
+    border-radius: 22px;
+    overflow: hidden;
+    flex-shrink: 0;
+    scroll-snap-align: center;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+  }
+  .plant-card.selected {
+    border-color: var(--canopy);
+  }
+  .plant-card-img {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 16px;
+  }
+  .plant-card-bg-basil    { background: linear-gradient(170deg, #1a3320 0%, #2d5535 100%); }
+  .plant-card-bg-mint     { background: linear-gradient(170deg, #163328 0%, #215040 100%); }
+  .plant-card-bg-micro    { background: linear-gradient(170deg, #2a3a1a 0%, #3d5522 100%); }
+  .plant-card-bg-chilli   { background: linear-gradient(170deg, #3a1a1a 0%, #5a2820 100%); }
+  .plant-card-bg-cilantro { background: linear-gradient(170deg, #1a2e20 0%, #284a2e 100%); }
+  .plant-card-info {
+    background: var(--white);
+    padding: 14px 16px 18px;
+  }
+  .plant-card-name {
+    font-family: var(--font-display);
+    font-size: 17px;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .plant-card-char {
+    font-size: 12px;
+    color: var(--text-soft);
+    font-weight: 300;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .plant-card-days {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: var(--mist);
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--canopy);
+    letter-spacing: 0.02em;
+  }
+  .plant-card .selected-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 26px; height: 26px;
+    background: var(--canopy);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .s05-footer {
+    padding: 20px 28px 36px;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+  .selected-indicator {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+  .selected-indicator strong {
+    color: var(--canopy);
+    font-weight: 500;
+  }
+
+  /* ───────────────────────────
+     SCREEN 06 — NAME YOUR PLANT
+  ─────────────────────────── */
+  .s06 {
+    background: var(--linen);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 64px 28px 40px;
+  }
+  .s06-top { margin-bottom: 40px; }
+  .s06-step {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--terracotta);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .s06-headline {
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 1.2;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .s06-body {
+    font-size: 14px;
+    color: var(--text-soft);
+    font-weight: 300;
+    line-height: 1.65;
+  }
+  .s06-plant-preview {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.07);
+    margin-bottom: 28px;
+  }
+  .s06-plant-thumb {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(170deg, #1a3320 0%, #2d5535 100%);
+    flex-shrink: 0;
+  }
+  .s06-plant-info { flex: 1; }
+  .s06-plant-type {
+    font-size: 11px;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-bottom: 2px;
+  }
+  .s06-plant-name-display {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+  }
+  .name-input-wrap {
+    position: relative;
+    margin-bottom: 12px;
+  }
+  .name-input {
+    display: block;
+    width: 100%;
+    padding: 18px 20px;
+    background: var(--white);
+    border: 1.5px solid var(--new-leaf);
+    border-radius: 14px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text-dark);
+    outline: none;
+    letter-spacing: -0.01em;
+    box-shadow: 0 0 0 4px rgba(106,158,114,0.1);
+  }
+  .name-input::placeholder { color: rgba(0,0,0,0.2); font-style: italic; }
+  .name-input-hint {
+    font-size: 12px;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-bottom: 28px;
+    padding-left: 4px;
+    line-height: 1.5;
+  }
+  .s06-footer { margin-top: auto; }
+  .skip-link {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-top: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(0,0,0,0.15);
+  }
+
+  /* ───────────────────────────
+     SCREEN 07 — READY
+  ─────────────────────────── */
+  .s07 {
+    background: var(--canopy);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .s07-glow-top {
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(168,200,160,0.2) 0%, transparent 65%);
+  }
+  .s07-top {
+    padding: 72px 28px 0;
+    text-align: center;
+    z-index: 2;
+  }
+  .s07-plant-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(168,200,160,0.7);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .s07-headline {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: rgba(255,255,255,0.95);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 0;
+  }
+  .s07-headline em {
+    font-style: italic;
+    color: var(--clay);
+  }
+  .s07-pod-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+  .s07-pod-glow {
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(168,200,160,0.25) 0%, transparent 70%);
+    animation: glow-pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(0.95); }
+    50%       { opacity: 1;   transform: scale(1.05); }
+  }
+  .s07-pod-box {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .s07-pod-frame {
+    width: 120px; height: 120px;
+    border-radius: 28px;
+    background: rgba(45,74,48,0.5);
+    border: 1px solid rgba(168,200,160,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .s07-led-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .led {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--new-leaf);
+    animation: led-on 0.4s ease forwards;
+    opacity: 0;
+  }
+  .led:nth-child(1) { animation-delay: 0.2s; }
+  .led:nth-child(2) { animation-delay: 0.5s; }
+  .led:nth-child(3) { animation-delay: 0.8s; }
+  @keyframes led-on {
+    to { opacity: 1; box-shadow: 0 0 6px rgba(106,158,114,0.7); }
+  }
+  .s07-quote {
+    font-size: 14px;
+    color: rgba(168,200,160,0.75);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.65;
+    text-align: center;
+    max-width: 260px;
+  }
+  .s07-bottom {
+    padding: 20px 28px 50px;
+    width: 100%;
+    z-index: 2;
+    text-align: center;
+  }
+  .s07-stats {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .stat-chip {
+    flex: 1;
+    padding: 10px 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+  }
+  .stat-chip-val {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .stat-chip-label {
+    font-size: 11px;
+    color: rgba(168,200,160,0.6);
+    font-weight: 300;
+    display: block;
+  }
+  .btn-cta {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    background: var(--linen);
+    color: var(--canopy);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  /* SVG plant illustrations */
+  .plant-svg { display: block; }
+
+  /* Spec callouts */
+  .spec-panel {
+    background: var(--white);
+    border: 0.5px solid rgba(0,0,0,0.08);
+    border-radius: 16px;
+    padding: 16px 18px;
+    width: 375px;
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 5px 0;
+    border-bottom: 0.5px solid rgba(0,0,0,0.06);
+    font-size: 12px;
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-key { color: var(--text-soft); font-weight: 300; }
+  .spec-val { color: var(--text-dark); font-weight: 500; font-size: 11px; text-align: right; max-width: 200px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Greendore — Onboarding</h1>
+  <span>7 screens · complete design specification · DM Serif Display + DM Sans</span>
+</div>
+
+<div class="screens-grid">
+
+  <!-- ═══════════════════════════════
+       SCREEN 01 — SPLASH
+  ════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-meta">
+      <div class="screen-meta-row">
+        <span class="screen-number">Screen 01</span>
+        <span class="screen-title">Splash — the living logo</span>
+      </div>
+      <p class="screen-note">Auto-advances after 2.4s. Sets the entire emotional tone. No copy, no UI — pure atmosphere.</p>
+    </div>
+    <div class="phone">
+      <div class="s01">
+        <div class="s01-glow"></div>
+        <!-- Soil -->
+        <svg class="s01-soil" viewBox="0 0 375 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 120 Q60 90 120 110 Q180 130 240 105 Q300 80 375 100 L375 220 L0 220 Z" fill="#0F1C10" opacity="0.9"/>
+          <path d="M0 145 Q80 125 160 140 Q240 155 320 135 Q348 128 375 132 L375 220 L0 220 Z" fill="#0A1309" opacity="0.95"/>
+        </svg>
+        <!-- Seedling SVG -->
+        <div class="s01-plant">
+          <svg width="80" height="110" viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- stem -->
+            <path d="M40 108 Q38 80 40 60 Q42 40 40 20" stroke="#4A7856" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- left leaf -->
+            <path d="M40 72 Q22 60 18 42 Q30 38 40 54" fill="#3D5E40" opacity="0.9"/>
+            <!-- right leaf -->
+            <path d="M40 58 Q58 44 62 26 Q50 22 40 40" fill="#4A7856"/>
+            <!-- top left leaf -->
+            <path d="M40 38 Q24 26 22 12 Q34 8 40 26" fill="#5A7A5E" opacity="0.85"/>
+            <!-- top leaf -->
+            <path d="M40 22 Q44 8 50 4 Q54 14 46 22" fill="#6A9E72"/>
+          </svg>
+        </div>
+        <div class="s01-wordmark">Greendore</div>
+        <div class="s01-tagline">Grow with intention</div>
+        <div class="progress-dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="spec-panel">
+      <div class="spec-row"><span class="spec-key">Background</span><span class="spec-val">#1C2E1E — Soil night</span></div>
+      <div class="spec-row"><span class="spec-key">Wordmark font</span><span class="spec-val">DM Serif Display 32px, #FFFFFF E8 opacity</span></div>
+      <div class="spec-row"><span class="spec-key">Tagline font</span><span class="spec-val">DM Sans 13px light, #A8C8A0 70% opacity</span></div>
+      <div class="spec-row"><span class="spec-key">Plant animation</span><span class="spec-val">scaleY(0→1) + translateY(30→0) 1.2s cubic-bezier(0.16,1,0.3,1)</span></div>
+      <div class="spec-row"><span class="spec-key">Wordmark entry</span><span class="spec-val">fade + translateY(12→0) 0.8s ease, delay 1.2s</span></div>
+      <div class="spec-row"><span class="spec-key">Auto-advance</span><span class="spec-val">2.4s total duration</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       SCREEN 02 — WELCOME
+  ════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-meta">
+      <div class="screen-meta-row">
+        <span class="screen-number">Screen 02</span>
+        <span class="screen-title">Welcome — the botanist speaks</span>
+      </div>
+      <p class="screen-note">Dark illustration above a linen content sheet. One sentence. Two actions. No feature list.</p>
+    </div>
+    <div class="phone">
+      <div class="s02">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <div class="status-icons">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="4" width="3" height="8" rx="1" opacity="0.4"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" opacity="0.6"/><rect x="9" y="0.5" width="3" height="11.5" rx="1" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2C5.5 2 3.3 3.1 1.8 4.9L0 3C2 1.1 4.8 0 8 0s6 1.1 8 3l-1.8 1.9C12.7 3.1 10.5 2 8 2z" opacity="0.6"/><path d="M8 5c-1.5 0-2.9.6-3.9 1.6L2.5 4.9C3.9 3.4 5.8 2.5 8 2.5s4.1.9 5.5 2.4L11.9 6.6C10.9 5.6 9.5 5 8 5z" opacity="0.85"/><circle cx="8" cy="9.5" r="2"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity="0.35" fill="none"/><rect x="22.5" y="3.5" width="2" height="5" rx="1" opacity="0.4"/><rect x="2" y="2" width="16" height="8" rx="2"/></svg>
+          </div>
+        </div>
+        <div class="s02-illustration">
+          <div class="s02-window-frame">
+            <div class="s02-window">
+              <div class="s02-moon"></div>
+              <!-- stars -->
+              <svg class="s02-stars" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="30" r="1.2" fill="rgba(255,255,255,0.5)"/>
+                <circle cx="80" cy="18" r="1" fill="rgba(255,255,255,0.4)"/>
+                <circle cx="130" cy="35" r="1.5" fill="rgba(255,255,255,0.6)"/>
+                <circle cx="60" cy="55" r="1" fill="rgba(255,255,255,0.3)"/>
+                <circle cx="170" cy="22" r="1.2" fill="rgba(255,255,255,0.5)"/>
+                <circle cx="155" cy="60" r="1" fill="rgba(255,255,255,0.35)"/>
+              </svg>
+              <div class="s02-window-glow"></div>
+              <!-- Pod inside window -->
+              <div class="s02-pod">
+                <svg width="90" height="75" viewBox="0 0 90 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- pod body -->
+                  <rect x="10" y="25" width="70" height="40" rx="8" fill="#1D3A20" stroke="rgba(106,158,114,0.3)" stroke-width="1"/>
+                  <!-- pod top/lid -->
+                  <rect x="15" y="12" width="60" height="16" rx="6" fill="#243E28" stroke="rgba(106,158,114,0.2)" stroke-width="1"/>
+                  <!-- grow lights (glow dots) -->
+                  <circle cx="28" cy="20" r="3" fill="#6A9E72" opacity="0.9"/>
+                  <circle cx="45" cy="20" r="3" fill="#6A9E72" opacity="0.9"/>
+                  <circle cx="62" cy="20" r="3" fill="#6A9E72" opacity="0.9"/>
+                  <!-- plant silhouettes in pod -->
+                  <path d="M28 25 Q26 18 24 14 Q30 12 32 20 Q33 23 28 25Z" fill="#3A6040" opacity="0.7"/>
+                  <path d="M45 25 Q42 16 40 10 Q46 8 50 16 Q51 21 45 25Z" fill="#4A7856" opacity="0.8"/>
+                  <path d="M62 25 Q60 18 58 14 Q64 12 66 20 Q67 23 62 25Z" fill="#3A6040" opacity="0.7"/>
+                  <!-- LEDs on pod face -->
+                  <circle cx="18" cy="45" r="2.5" fill="#6A9E72" opacity="0.8"/>
+                  <circle cx="18" cy="53" r="2.5" fill="rgba(196,149,106,0.6)" opacity="0.8"/>
+                  <!-- water window -->
+                  <rect x="65" y="35" width="10" height="22" rx="3" fill="rgba(106,158,114,0.15)" stroke="rgba(106,158,114,0.2)" stroke-width="0.5"/>
+                  <rect x="66" y="48" width="8" height="8" rx="2" fill="rgba(106,158,114,0.3)"/>
+                </svg>
+              </div>
+            </div>
+            <!-- Window sill -->
+            <rect x="100" y="220" width="280" height="10" rx="0" fill="#1A1410" style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);width:220px;height:8px;border-radius:0 0 4px 4px;background:#1a1410;"></rect>
+          </div>
+          <div class="s02-surface"></div>
+        </div>
+        <div class="s02-content">
+          <p class="s02-label">Welcome to Greendore</p>
+          <h1 class="s02-headline">Your pod is ready to grow something remarkable.</h1>
+          <p class="s02-body">Even without experience, your first harvest is closer than you think. We'll guide you through every day.</p>
+          <button class="btn-primary">Start growing</button>
+          <button class="btn-secondary">I already have a pod</button>
+        </div>
+        <div class="progress-dots">
+          <div class="dot"></div>
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="spec-panel">
+      <div class="spec-row"><span class="spec-key">Top bg</span><span class="spec-val">#1C2E1E night scene, ~55% screen height</span></div>
+      <div class="spec-row"><span class="spec-key">Content sheet bg</span><span class="spec-val">#F7F3ED — Linen, border-radius 28px top</span></div>
+      <div class="spec-row"><span class="spec-key">Label</span><span class="spec-val">DM Sans 11px 500, #6A9E72, 0.1em tracking</span></div>
+      <div class="spec-row"><span class="spec-key">Headline</span><span class="spec-val">DM Serif Display 26px, #1A1F1B, -0.02em</span></div>
+      <div class="spec-row"><span class="spec-key">Body</span><span class="spec-val">DM Sans 14px 300, #4A5248, 1.65 line-height</span></div>
+      <div class="spec-row"><span class="spec-key">Primary btn</span><span class="spec-val">bg #2D4A30, text #FFFFFF, 17px padding, radius 14px</span></div>
+      <div class="spec-row"><span class="spec-key">Secondary btn</span><span class="spec-val">border 1px rgba(45,74,48,0.2), text #4A5248</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       SCREEN 03 — ACCOUNT
+  ════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-meta">
+      <div class="screen-meta-row">
+        <span class="screen-number">Screen 03</span>
+        <span class="screen-title">Account — the lightest ask</span>
+      </div>
+      <p class="screen-note">First name only. Social sign-in above the fold. The headline makes it personal, not transactional.</p>
+    </div>
+    <div class="phone">
+      <div class="s03">
+        <div class="status-bar light" style="position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;z-index:10;font-size:12px;font-weight:500;color:var(--text-dark);">
+          <span>9:41</span>
+          <div class="status-icons" style="display:flex;gap:5px;align-items:center;">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor" opacity="0.7"><rect x="0" y="4" width="3" height="8" rx="1" opacity="0.4"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" opacity="0.6"/><rect x="9" y="0.5" width="3" height="11.5" rx="1" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          </div>
+        </div>
+        <div class="back-btn">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="s03-top" style="padding-top:52px;">
+          <p class="step-indicator">Step 1 of 4</p>
+          <h2 class="s03-headline">What should we call you?</h2>
+          <p class="s03-sub">We'll use your name to personalise every piece of guidance you receive.</p>
+        </div>
+        <div>
+          <div class="social-btn">
+            <div class="social-icon" style="background:#fff;border:1px solid rgba(0,0,0,0.1);">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            </div>
+            Continue with Google
+          </div>
+          <div class="social-btn">
+            <div class="social-icon" style="background:#000;border-radius:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            </div>
+            Continue with Apple
+          </div>
+          <div class="divider-row">
+            <div class="divider-line"></div>
+            <span class="divider-text">or enter your name</span>
+            <div class="divider-line"></div>
+          </div>
+          <label class="field-label">First name</label>
+          <input type="text" class="field-input" placeholder="e.g. Amara" value="Amara">
+          <p class="field-hint">We only need your first name — no surname required.</p>
+        </div>
+        <div class="s03-footer">
+          <button class="btn-primary">Continue</button>
+          <p class="privacy-note">By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>. We never sell your data.</p>
+        </div>
+      </div>
+    </div>
+    <div class="spec-panel">
+      <div class="spec-row"><span class="spec-key">Background</span><span class="spec-val">#F7F3ED — Linen</span></div>
+      <div class="spec-row"><span class="spec-key">Headline</span><span class="spec-val">DM Serif Display 30px, -0.02em, #1A1F1B</span></div>
+      <div class="spec-row"><span class="spec-key">Step indicator</span><span class="spec-val">DM Sans 11px 500, #C4956A terracotta, 0.08em</span></div>
+      <div class="spec-row"><span class="spec-key">Social buttons</span><span class="spec-val">bg #FFFFFF, border 1px rgba(0,0,0,0.1), 15px padding</span></div>
+      <div class="spec-row"><span class="spec-key">Input active</span><span class="spec-val">border 1px #6A9E72, focus ring rgba(106,158,114,0.12) 3px</span></div>
+      <div class="spec-row"><span class="spec-key">Input font</span><span class="spec-val">DM Sans 15px 400, #1A1F1B</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       SCREEN 04 — POD CONNECTION
+  ════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-meta">
+      <div class="screen-meta-row">
+        <span class="screen-number">Screen 04</span>
+        <span class="screen-title">Pod connection — hardware meets soul</span>
+      </div>
+      <p class="screen-note">The moment the hardware becomes real. Pulse rings, living copy. Three clear states: scanning → found → connected.</p>
+    </div>
+    <div class="phone">
+      <div class="s04">
+        <div class="status-bar dark" style="position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;z-index:10;font-size:12px;font-weight:500;color:rgba(255,255,255,0.8);">
+          <span>9:41</span>
+        </div>
+        <div class="s04-top">
+          <p class="s04-step">Step 2 of 4</p>
+          <h2 class="s04-headline">Your pod is waking up</h2>
+          <p class="s04-sub">Make sure your pod is plugged in. It should have a soft green pulse on the front.</p>
+        </div>
+        <div class="pulse-area">
+          <div class="pulse-ring"></div>
+          <div class="pulse-ring"></div>
+          <div class="pulse-ring"></div>
+          <div class="pulse-ring"></div>
+          <div class="pod-center">
+            <div class="pod-icon-wrap">
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6" y="16" width="32" height="22" rx="5" fill="rgba(45,74,48,0.7)" stroke="rgba(106,158,114,0.4)" stroke-width="0.75"/>
+                <rect x="9" y="8" width="26" height="10" rx="4" fill="rgba(61,94,64,0.7)" stroke="rgba(106,158,114,0.3)" stroke-width="0.75"/>
+                <circle cx="14" cy="13" r="2" fill="#6A9E72" opacity="0.9"/>
+                <circle cx="22" cy="13" r="2" fill="#6A9E72" opacity="0.9"/>
+                <circle cx="30" cy="13" r="2" fill="#6A9E72" opacity="0.9"/>
+                <path d="M14 16 Q12 10 11 7 Q15 5 17 11 Q18 14 14 16Z" fill="#4A7856" opacity="0.6"/>
+                <path d="M22 16 Q20 9 19 5 Q24 3 26 9 Q27 13 22 16Z" fill="#5A8A62" opacity="0.7"/>
+                <path d="M30 16 Q28 10 27 7 Q31 5 33 11 Q34 14 30 16Z" fill="#4A7856" opacity="0.6"/>
+              </svg>
+            </div>
+            <span class="pod-status-text">Scanning nearby…</span>
+          </div>
+        </div>
+        <div class="s04-bottom">
+          <div class="s04-states">
+            <div class="state-pill done">Bluetooth on</div>
+            <div class="state-pill active">Scanning</div>
+            <div class="state-pill pending">Connected</div>
+          </div>
+          <button class="btn-ghost">Connect manually instead</button>
+        </div>
+        <div class="progress-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="spec-panel">
+      <div class="spec-row"><span class="spec-key">Background</span><span class="spec-val">#1C2E1E — Soil night</span></div>
+      <div class="spec-row"><span class="spec-key">Pulse rings</span><span class="spec-val">border 1px rgba(106,158,114,0.3), 4 rings, scale 0.85→1.05, stagger 0.6s each, opacity 0.8→0</span></div>
+      <div class="spec-row"><span class="spec-key">Headline</span><span class="spec-val">DM Serif Display 26px, rgba(255,255,255,0.94)</span></div>
+      <div class="spec-row"><span class="spec-key">Active state pill</span><span class="spec-val">bg rgba(106,158,114,0.35), text rgba(255,255,255,0.9)</span></div>
+      <div class="spec-row"><span class="spec-key">Done state pill</span><span class="spec-val">bg rgba(106,158,114,0.2), text #A8C8A0</span></div>
+      <div class="spec-row"><span class="spec-key">Status blink</span><span class="spec-val">opacity 1↔0.4, 1.4s ease-in-out infinite</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       SCREEN 05 — PLANT SELECTION
+  ════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-meta">
+      <div class="screen-meta-row">
+        <span class="screen-number">Screen 05</span>
+        <span class="screen-title">Plant selection — choosing your first life</span>
+      </div>
+      <p class="screen-note">Tactile horizontal card scroll. Each plant has personality. Basil is selected — card responds with border and checkmark.</p>
+    </div>
+    <div class="phone">
+      <div class="s05">
+        <div class="status-bar light" style="position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;z-index:10;font-size:12px;font-weight:500;color:var(--text-dark);">
+          <span>9:41</span>
+        </div>
+        <div class="s05-header">
+          <p class="step-indicator" style="color:var(--terracotta);">Step 3 of 4</p>
+          <h2 class="s05-headline">What would you like to grow first?</h2>
+          <p class="s05-sub">Choose one plant for your pod. You can always grow more later.</p>
+        </div>
+
+        <div class="plant-scroll">
+          <!-- Basil — selected -->
+          <div class="plant-card selected">
+            <div class="selected-badge">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="plant-card-img plant-card-bg-basil">
+              <svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M40 118 Q38 90 40 68 Q42 46 40 28" stroke="#5A9060" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M40 90 Q18 76 14 54 Q28 48 40 68" fill="#2D5535" opacity="0.85"/>
+                <path d="M40 72 Q62 56 66 34 Q52 28 40 50" fill="#3D6840"/>
+                <path d="M40 52 Q20 38 18 18 Q32 12 40 36" fill="#4A7A50" opacity="0.9"/>
+                <path d="M40 32 Q48 14 56 8 Q62 20 50 30" fill="#5A9060"/>
+                <path d="M40 90 Q50 92 60 86 Q62 96 52 100" fill="#2D5535" opacity="0.5"/>
+              </svg>
+            </div>
+            <div class="plant-card-info">
+              <p class="plant-card-name">Genovese Basil</p>
+              <p class="plant-card-char">Fragrant, fast-growing, perfect for pasta and salads.</p>
+              <span class="plant-card-days">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#3B6D11" stroke-width="1"/><path d="M5 2.5V5L6.5 6.5" stroke="#3B6D11" stroke-width="1" stroke-linecap="round"/></svg>
+                21–28 days to harvest
+              </span>
+            </div>
+          </div>
+
+          <!-- Mint -->
+          <div class="plant-card">
+            <div class="plant-card-img plant-card-bg-mint">
+              <svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M40 118 Q37 95 38 72 Q40 52 38 32" stroke="#3A7850" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M38 95 Q15 80 12 58 Q26 52 38 72" fill="#1E5535" opacity="0.8"/>
+                <path d="M38 75 Q60 60 64 38 Q50 32 38 55" fill="#285040"/>
+                <path d="M38 55 Q16 40 15 20 Q28 14 38 38" fill="#357848" opacity="0.85"/>
+                <path d="M38 35 Q46 16 54 10 Q60 22 48 33" fill="#3D8850"/>
+                <path d="M38 95 Q22 88 16 95 Q18 105 28 104" fill="#1E5535" opacity="0.4"/>
+              </svg>
+            </div>
+            <div class="plant-card-info">
+              <p class="plant-card-name">Spearmint</p>
+              <p class="plant-card-char">Cool, vigorous and refreshing. Great for drinks and tea.</p>
+              <span class="plant-card-days">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#3B6D11" stroke-width="1"/><path d="M5 2.5V5L6.5 6.5" stroke="#3B6D11" stroke-width="1" stroke-linecap="round"/></svg>
+                18–24 days
+              </span>
+            </div>
+          </div>
+
+          <!-- Microgreens -->
+          <div class="plant-card">
+            <div class="plant-card-img plant-card-bg-micro">
+              <svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 118 Q18 95 22 80" stroke="#7AAA40" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M30 118 Q28 90 32 72" stroke="#6A9830" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M40 118 Q38 88 42 68" stroke="#7AAA40" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M50 118 Q48 92 54 74" stroke="#6A9830" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M60 118 Q58 95 62 80" stroke="#7AAA40" stroke-width="1.5" stroke-linecap="round"/>
+                <ellipse cx="22" cy="76" rx="8" ry="5" fill="#6A9E30" transform="rotate(-20 22 76)"/>
+                <ellipse cx="32" cy="68" rx="8" ry="5" fill="#7AB840" transform="rotate(15 32 68)"/>
+                <ellipse cx="42" cy="64" rx="8" ry="5" fill="#6A9E30" transform="rotate(-10 42 64)"/>
+                <ellipse cx="54" cy="70" rx="8" ry="5" fill="#7AB840" transform="rotate(20 54 70)"/>
+                <ellipse cx="62" cy="76" rx="7" ry="4" fill="#6A9E30" transform="rotate(-15 62 76)"/>
+              </svg>
+            </div>
+            <div class="plant-card-info">
+              <p class="plant-card-name">Sunflower microgreens</p>
+              <p class="plant-card-char">Nutty and satisfying. The fastest path to your first harvest.</p>
+              <span class="plant-card-days">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#3B6D11" stroke-width="1"/><path d="M5 2.5V5L6.5 6.5" stroke="#3B6D11" stroke-width="1" stroke-linecap="round"/></svg>
+                10–14 days
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="s05-footer">
+          <p class="selected-indicator">You chose <strong>Genovese Basil</strong></p>
+          <button class="btn-primary">Grow this plant</button>
+        </div>
+        <div class="progress-dots" style="bottom:80px;">
+          <div class="dot dark-dot"></div>
+          <div class="dot dark-dot"></div>
+          <div class="dot dark-dot"></div>
+          <div class="dot dark-dot"></div>
+          <div class="dot dark-dot active"></div>
+          <div class="dot dark-dot"></div>
+          <div class="dot dark-dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="spec-panel">
+      <div class="spec-row"><span class="spec-key">Background</span><span class="spec-val">#F7F3ED — Linen</span></div>
+      <div class="spec-row"><span class="spec-key">Card size</span><span class="spec-val">200px wide, snap scroll, 14px gap</span></div>
+      <div class="spec-row"><span class="spec-key">Selected card border</span><span class="spec-val">1.5px solid #2D4A30 canopy</span></div>
+      <div class="spec-row"><span class="spec-key">Card illustration area</span><span class="spec-val">220px height, unique dark gradient per plant type</span></div>
+      <div class="spec-row"><span class="spec-key">Card info area</span><span class="spec-val">bg #FFFFFF, padding 14px 16px 18px</span></div>
+      <div class="spec-row"><span class="spec-key">Plant name</span><span class="spec-val">DM Serif Display 17px, -0.01em, #1A1F1B</span></div>
+      <div class="spec-row"><span class="spec-key">Days pill</span><span class="spec-val">bg #EFF5EC, text #3B6D11, border-radius 100px</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       SCREEN 06 — NAME YOUR PLANT
+  ════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-meta">
+      <div class="screen-meta-row">
+        <span class="screen-number">Screen 06</span>
+        <span class="screen-title">Name your plant — the ritual</span>
+      </div>
+      <p class="screen-note">The most emotionally charged screen. A single large input. The selected plant preview shows the name updating in real time.</p>
+    </div>
+    <div class="phone">
+      <div class="s06">
+        <div class="status-bar light" style="position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;z-index:10;font-size:12px;font-weight:500;color:var(--text-dark);">
+          <span>9:41</span>
+        </div>
+        <div class="s06-top" style="padding-top:48px;">
+          <p class="s06-step">Step 4 of 4</p>
+          <h2 class="s06-headline">Every good grower names their first plant.</h2>
+          <p class="s06-body">It doesn't have to mean anything. But somehow, it always does.</p>
+        </div>
+        <div class="s06-plant-preview">
+          <div class="s06-plant-thumb">
+            <svg width="32" height="40" viewBox="0 0 32 40" fill="none">
+              <path d="M16 39 Q15 28 16 20 Q17 12 16 5" stroke="#5A9060" stroke-width="2" stroke-linecap="round"/>
+              <path d="M16 28 Q7 22 5 14 Q11 11 16 20" fill="#2D5535" opacity="0.85"/>
+              <path d="M16 22 Q25 15 27 7 Q21 5 16 14" fill="#3D6840"/>
+              <path d="M16 14 Q8 8 7 1 Q13 -1 16 8" fill="#4A7A50" opacity="0.9"/>
+            </svg>
+          </div>
+          <div class="s06-plant-info">
+            <p class="s06-plant-type">Genovese Basil</p>
+            <p class="s06-plant-name-display">Vesper</p>
+          </div>
+        </div>
+        <div class="name-input-wrap">
+          <input type="text" class="name-input" placeholder="Give her a name…" value="Vesper">
+        </div>
+        <p class="name-input-hint">The name appears throughout your garden. It makes the journey feel personal.</p>
+        <div class="s06-footer">
+          <button class="btn-primary">This is her name</button>
+          <span class="skip-link">Skip — I'll name her later</span>
+        </div>
+      </div>
+    </div>
+    <div class="spec-panel">
+      <div class="spec-row"><span class="spec-key">Background</span><span class="spec-val">#F7F3ED — Linen</span></div>
+      <div class="spec-row"><span class="spec-key">Headline</span><span class="spec-val">DM Serif Display 28px italic possible, -0.02em</span></div>
+      <div class="spec-row"><span class="spec-key">Plant preview</span><span class="spec-val">bg #FFFFFF, border 1px rgba(0,0,0,0.07), radius 16px</span></div>
+      <div class="spec-row"><span class="spec-key">Name display in preview</span><span class="spec-val">DM Serif Display 20px, updates live as user types</span></div>
+      <div class="spec-row"><span class="spec-key">Name input font</span><span class="spec-val">DM Serif Display 22px, border 1.5px #6A9E72 active</span></div>
+      <div class="spec-row"><span class="spec-key">Input focus ring</span><span class="spec-val">box-shadow 0 0 0 4px rgba(106,158,114,0.10)</span></div>
+      <div class="spec-row"><span class="spec-key">CTA copy</span><span class="spec-val">"This is her name" — responds to plant gender/choice</span></div>
+      <div class="spec-row"><span class="spec-key">Skip link</span><span class="spec-val">DM Sans 13px 300, underline offset 3px, low contrast intentional</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       SCREEN 07 — READY
+  ════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-meta">
+      <div class="screen-meta-row">
+        <span class="screen-number">Screen 07</span>
+        <span class="screen-title">Ready — the pod comes alive</span>
+      </div>
+      <p class="screen-note">The payoff. Deep canopy green. The plant's name is the headline. LEDs animate on. The botanist delivers the first personalised line.</p>
+    </div>
+    <div class="phone">
+      <div class="s07">
+        <div class="s07-glow-top"></div>
+        <div class="status-bar dark" style="position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;z-index:10;font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);">
+          <span>9:41</span>
+        </div>
+        <div class="s07-top">
+          <p class="s07-plant-name">Your garden</p>
+          <h2 class="s07-headline"><em>Vesper</em> is in good hands.</h2>
+        </div>
+        <div class="s07-pod-area">
+          <div class="s07-pod-glow"></div>
+          <div class="s07-pod-box">
+            <div class="s07-pod-frame">
+              <svg width="76" height="76" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8" y="30" width="60" height="36" rx="8" fill="rgba(45,74,48,0.5)" stroke="rgba(168,200,160,0.25)" stroke-width="0.75"/>
+                <rect x="12" y="16" width="52" height="16" rx="6" fill="rgba(61,94,64,0.5)" stroke="rgba(168,200,160,0.2)" stroke-width="0.75"/>
+                <circle cx="22" cy="24" r="3.5" fill="#6A9E72" opacity="0.9"/>
+                <circle cx="38" cy="24" r="3.5" fill="#6A9E72" opacity="0.9"/>
+                <circle cx="54" cy="24" r="3.5" fill="#6A9E72" opacity="0.9"/>
+                <path d="M22 30 Q19 22 17 16 Q23 13 26 22 Q27 27 22 30Z" fill="#4A7856" opacity="0.7"/>
+                <path d="M38 30 Q35 20 32 13 Q39 10 43 19 Q45 25 38 30Z" fill="#5A8A62" opacity="0.75"/>
+                <path d="M54 30 Q51 22 49 16 Q55 13 58 22 Q59 27 54 30Z" fill="#4A7856" opacity="0.7"/>
+                <circle cx="15" cy="46" r="3" fill="#6A9E72" opacity="0.85"/>
+                <circle cx="15" cy="56" r="3" fill="rgba(196,149,106,0.7)" opacity="0.85"/>
+              </svg>
+            </div>
+            <div class="s07-led-row">
+              <div class="led"></div>
+              <div class="led"></div>
+              <div class="led"></div>
+            </div>
+            <p class="s07-quote">"Let's see what she needs today."</p>
+          </div>
+        </div>
+        <div class="s07-bottom">
+          <div class="s07-stats">
+            <div class="stat-chip">
+              <span class="stat-chip-val">21</span>
+              <span class="stat-chip-label">days to harvest</span>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-chip-val">68%</span>
+              <span class="stat-chip-label">humidity</span>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-chip-val">24°C</span>
+              <span class="stat-chip-label">temperature</span>
+            </div>
+          </div>
+          <button class="btn-cta">Open my garden</button>
+        </div>
+      </div>
+    </div>
+    <div class="spec-panel">
+      <div class="spec-row"><span class="spec-key">Background</span><span class="spec-val">#2D4A30 — Canopy (dark green)</span></div>
+      <div class="spec-row"><span class="spec-key">Plant name headline</span><span class="spec-val">DM Serif Display 28px italic, #E8D5B0 clay — the only warm element</span></div>
+      <div class="spec-row"><span class="spec-key">Pod glow</span><span class="spec-val">radial-gradient rgba(168,200,160,0.25), scale 0.95↔1.05 2.5s loop</span></div>
+      <div class="spec-row"><span class="spec-key">LEDs animation</span><span class="spec-val">opacity 0→1, stagger 0.2/0.5/0.8s, box-shadow glow on arrival</span></div>
+      <div class="spec-row"><span class="spec-key">Stats chips</span><span class="spec-val">bg rgba(255,255,255,0.08), border rgba(255,255,255,0.1)</span></div>
+      <div class="spec-row"><span class="spec-key">CTA button</span><span class="spec-val">bg #F7F3ED linen, text #2D4A30 canopy — inverted contrast</span></div>
+      <div class="spec-row"><span class="spec-key">Transition out</span><span class="spec-val">Shared element transition — pod frame scales into home screen hero card</span></div>
+    </div>
+  </div>
+
+</div><!-- end grid -->
+
+<!-- Global type specimen footer -->
+<div style="max-width:1320px;margin:4rem auto 0;border-top:0.5px solid rgba(45,74,48,0.15);padding-top:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;">
+  <div>
+    <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-soft);margin-bottom:12px;">Typography system</p>
+    <p style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;color:var(--canopy);letter-spacing:-0.02em;margin-bottom:4px;">DM Serif Display</p>
+    <p style="font-size:13px;color:var(--text-soft);font-weight:300;margin-bottom:12px;">Headlines, plant names, emotionally charged moments. Weight 400 regular + italic.</p>
+    <p style="font-family:'DM Sans',system-ui,sans-serif;font-size:18px;font-weight:300;color:var(--text-dark);margin-bottom:4px;">DM Sans</p>
+    <p style="font-size:13px;color:var(--text-soft);font-weight:300;">Body copy, labels, data. Weights 300 (body), 400 (normal), 500 (emphasis).</p>
+  </div>
+  <div>
+    <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-soft);margin-bottom:12px;">Transition rules</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="padding:10px 14px;background:var(--white);border-radius:10px;border:0.5px solid rgba(0,0,0,0.07);">
+        <p style="font-size:12px;font-weight:500;color:var(--text-dark);margin:0 0 2px;">Screen → Screen</p>
+        <p style="font-size:12px;color:var(--text-soft);font-weight:300;margin:0;">Horizontal slide, 320ms, ease-out cubic</p>
+      </div>
+      <div style="padding:10px 14px;background:var(--white);border-radius:10px;border:0.5px solid rgba(0,0,0,0.07);">
+        <p style="font-size:12px;font-weight:500;color:var(--text-dark);margin:0 0 2px;">Dark → Light screens</p>
+        <p style="font-size:12px;color:var(--text-soft);font-weight:300;margin:0;">Background cross-fade 400ms underlying slide</p>
+      </div>
+      <div style="padding:10px 14px;background:var(--white);border-radius:10px;border:0.5px solid rgba(0,0,0,0.07);">
+        <p style="font-size:12px;font-weight:500;color:var(--text-dark);margin:0 0 2px;">S07 → Home screen</p>
+        <p style="font-size:12px;color:var(--text-soft);font-weight:300;margin:0;">Shared element: pod frame morphs into home hero card</p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-soft);margin-bottom:12px;">Color usage rules</p>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:14px;height:14px;border-radius:50%;background:#1C2E1E;flex-shrink:0;"></div>
+        <span style="font-size:12px;color:var(--text-soft);font-weight:300;">Soil night — only on immersive/dark screens</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:14px;height:14px;border-radius:50%;background:#2D4A30;flex-shrink:0;"></div>
+        <span style="font-size:12px;color:var(--text-soft);font-weight:300;">Canopy — primary buttons, payoff screen bg</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:14px;height:14px;border-radius:50%;background:#6A9E72;flex-shrink:0;"></div>
+        <span style="font-size:12px;color:var(--text-soft);font-weight:300;">New leaf — labels, active states, focus rings</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:14px;height:14px;border-radius:50%;background:#C4956A;flex-shrink:0;"></div>
+        <span style="font-size:12px;color:var(--text-soft);font-weight:300;">Terracotta — step indicators, accents only</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:14px;height:14px;border-radius:50%;background:#E8D5B0;flex-shrink:0;"></div>
+        <span style="font-size:12px;color:var(--text-soft);font-weight:300;">Clay — italic display text on dark canopy bg only</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:14px;height:14px;border-radius:50%;background:#F7F3ED;flex-shrink:0;"></div>
+        <span style="font-size:12px;color:var(--text-soft);font-weight:300;">Linen — all light-mode screen backgrounds</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
