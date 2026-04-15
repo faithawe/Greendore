@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greendore — Home Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --soil-night:  #1C2E1E;
+  --canopy:      #2D4A30;
+  --canopy-mid:  #3D5E40;
+  --new-leaf:    #6A9E72;
+  --sprout:      #A8C8A0;
+  --mist:        #EFF5EC;
+  --terracotta:  #C4956A;
+  --terra-dark:  #9E6E45;
+  --terra-light: #EDD9C0;
+  --linen:       #F7F3ED;
+  --linen-dark:  #EDE8E0;
+  --clay:        #E8D5B0;
+  --warm-gray:   #8A8478;
+  --text-dark:   #1A1F1B;
+  --text-mid:    #4A5248;
+  --text-soft:   #7A8278;
+  --text-hint:   #A8A89E;
+  --white:       #FFFFFF;
+  --warning:     #C4956A;
+  --good:        #6A9E72;
+  --font-d: 'DM Serif Display', Georgia, serif;
+  --font-s: 'DM Sans', system-ui, sans-serif;
+  --r-card: 24px;
+  --r-btn:  14px;
+  --r-pill: 100px;
+  --r-chip: 12px;
+}
+
+body {
+  background: #ECEAE3;
+  font-family: var(--font-s);
+  color: var(--text-dark);
+  min-height: 100vh;
+  padding: 3rem 1.5rem 5rem;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  max-width: 1400px;
+  margin: 0 auto 3rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  border-bottom: 0.5px solid rgba(45,74,48,0.2);
+  padding-bottom: 1.25rem;
+}
+.page-header h1 {
+  font-family: var(--font-d);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--canopy);
+  letter-spacing: -0.02em;
+}
+.page-header span { font-size: 13px; color: var(--text-soft); font-weight: 300; }
+
+/* ── LAYOUT ── */
+.layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 375px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* ── PHONE ── */
+.phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; position: sticky; top: 2rem; }
+.phone {
+  width: 375px;
+  height: 812px;
+  border-radius: 44px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.09);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.05), 0 12px 48px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(255,255,255,0.12);
+  background: var(--linen);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── STATUS BAR ── */
+.status-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 28px 8px;
+  z-index: 20;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.88);
+  pointer-events: none;
+}
+
+/* ── HERO SECTION ── */
+.hero {
+  height: 340px;
+  background: var(--canopy);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.hero-texture {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 260px 200px at 60% 110%, rgba(106,158,114,0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 180px 120px at 10% 60%,  rgba(168,200,160,0.08) 0%, transparent 60%);
+}
+.hero-top {
+  position: absolute;
+  top: 56px; left: 24px; right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 4;
+}
+.hero-greeting-row { display: flex; flex-direction: column; gap: 1px; }
+.hero-greeting {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(168,200,160,0.75);
+  letter-spacing: 0.03em;
+}
+.hero-name {
+  font-family: var(--font-d);
+  font-size: 22px;
+  color: rgba(255,255,255,0.95);
+  letter-spacing: -0.02em;
+}
+.hero-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(168,200,160,0.2);
+  border: 1px solid rgba(168,200,160,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(168,200,160,0.9);
+}
+
+/* Plant illustration in hero */
+.hero-plant-stage {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero-plant-glow {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px; height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(106,158,114,0.28) 0%, transparent 70%);
+  z-index: 2;
+}
+.hero-pod {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+/* Day progress bar in hero */
+.hero-progress-wrap {
+  position: absolute;
+  bottom: 24px; left: 24px; right: 24px;
+  z-index: 5;
+}
+.hero-progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.hero-progress-plant {
+  font-family: var(--font-d);
+  font-size: 18px;
+  color: rgba(255,255,255,0.95);
+  letter-spacing: -0.01em;
+}
+.hero-progress-plant em {
+  font-style: italic;
+  color: var(--clay);
+}
+.hero-progress-days {
+  font-size: 12px;
+  color: rgba(168,200,160,0.7);
+  font-weight: 300;
+}
+.progress-track {
+  height: 4px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 32%;
+  background: var(--new-leaf);
+  border-radius: 2px;
+}
+
+/* ── SCROLL BODY ── */
+.home-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 0 100px;
+  background: var(--linen);
+  position: relative;
+  z-index: 1;
+}
+.home-body::-webkit-scrollbar { display: none; }
+
+/* ── SECTION HEADER ── */
+.section-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin-bottom: 10px;
+}
+.section-hd-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dark);
+  letter-spacing: -0.01em;
+}
+.section-hd-link {
+  font-size: 12px;
+  color: var(--new-leaf);
+  font-weight: 400;
+  cursor: pointer;
+}
+
+/* ── BOTANIST INSIGHT CARD ── */
+.insight-card {
+  margin: 20px 20px 0;
+  background: var(--canopy);
+  border-radius: var(--r-card);
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.insight-card-texture {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 200px 150px at 90% -20%, rgba(168,200,160,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.insight-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 8px;
+  background: rgba(168,200,160,0.15);
+  border-radius: var(--r-pill);
+  margin-bottom: 10px;
+}
+.insight-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--new-leaf);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.insight-tag-text {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(168,200,160,0.85);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.insight-body {
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.88);
+  font-weight: 300;
+  margin-bottom: 14px;
+  font-style: italic;
+  font-family: var(--font-d);
+}
+.insight-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.insight-icon {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--new-leaf);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── SENSOR STRIP ── */
+.sensor-strip {
+  display: flex;
+  gap: 10px;
+  padding: 16px 20px 0;
+  overflow-x: auto;
+}
+.sensor-strip::-webkit-scrollbar { display: none; }
+.sensor-chip {
+  flex-shrink: 0;
+  background: var(--white);
+  border-radius: 16px;
+  border: 0.5px solid rgba(0,0,0,0.07);
+  padding: 12px 14px;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sensor-chip.alert {
+  border-color: rgba(196,149,106,0.4);
+  background: rgba(237,217,192,0.3);
+}
+.sensor-icon-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sensor-label {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-hint);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.sensor-val {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.sensor-val.good { color: var(--new-leaf); }
+.sensor-val.warn { color: var(--terracotta); }
+.sensor-unit {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--text-hint);
+  margin-left: 1px;
+}
+.sensor-status {
+  font-size: 10px;
+  font-weight: 400;
+  margin-top: 1px;
+}
+.sensor-status.good { color: var(--new-leaf); }
+.sensor-status.warn { color: var(--terracotta); }
+.sensor-status.ok   { color: var(--text-hint); }
+
+/* ── TODAY'S ACTION CARD ── */
+.action-wrap {
+  padding: 20px 20px 0;
+}
+.action-card {
+  background: var(--white);
+  border-radius: var(--r-card);
+  border: 0.5px solid rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+.action-card-top {
+  padding: 16px 18px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
+}
+.action-icon-wrap {
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: var(--mist);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.action-icon-wrap.terra { background: var(--terra-light); }
+.action-text { flex: 1; }
+.action-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+}
+.action-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+.action-badge {
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  font-size: 10px;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.action-badge.now {
+  background: rgba(196,149,106,0.15);
+  color: var(--terra-dark);
+}
+.action-badge.done {
+  background: var(--mist);
+  color: var(--new-leaf);
+}
+.action-card-row {
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 0.5px solid rgba(0,0,0,0.05);
+}
+.action-card-row:last-child { border-bottom: none; }
+.task-check {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0,0,0,0.12);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.task-check.done {
+  background: var(--new-leaf);
+  border-color: var(--new-leaf);
+}
+.task-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-dark);
+  flex: 1;
+}
+.task-label.done {
+  color: var(--text-hint);
+  text-decoration: line-through;
+  text-decoration-color: rgba(0,0,0,0.2);
+}
+.task-time {
+  font-size: 11px;
+  color: var(--text-hint);
+  font-weight: 300;
+}
+
+/* ── GROWTH TIMELINE ── */
+.timeline-wrap { padding: 20px 20px 0; }
+.timeline-card {
+  background: var(--white);
+  border-radius: var(--r-card);
+  border: 0.5px solid rgba(0,0,0,0.07);
+  padding: 16px 18px;
+}
+.timeline-row {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+.timeline-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.timeline-stage:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: calc(50% + 14px);
+  right: calc(-50% + 14px);
+  height: 1px;
+  background: rgba(0,0,0,0.08);
+}
+.timeline-stage.done::after { background: var(--new-leaf); opacity: 0.4; }
+.timeline-stage.active::after { background: rgba(0,0,0,0.08); }
+.t-node {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.t-node.done { background: var(--new-leaf); }
+.t-node.active {
+  background: var(--white);
+  border: 2px solid var(--new-leaf);
+  box-shadow: 0 0 0 4px rgba(106,158,114,0.12);
+}
+.t-node.future { background: rgba(0,0,0,0.06); }
+.t-stage-name {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-hint);
+  text-align: center;
+  line-height: 1.3;
+}
+.t-stage-name.done { color: var(--new-leaf); font-weight: 500; }
+.t-stage-name.active { color: var(--text-dark); font-weight: 500; }
+.timeline-current-note {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--mist);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--canopy);
+  line-height: 1.55;
+}
+
+/* ── ENVIRONMENT CARDS ── */
+.env-wrap { padding: 20px 20px 0; }
+.env-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.env-card {
+  background: var(--white);
+  border-radius: 18px;
+  border: 0.5px solid rgba(0,0,0,0.07);
+  padding: 14px 16px;
+}
+.env-card.wide {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.env-card-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.env-card-value {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--text-dark);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.env-card-value.warn { color: var(--terracotta); }
+.env-card-sub {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--text-soft);
+}
+/* Mini sparkline */
+.sparkline-wrap {
+  height: 32px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  margin-top: 8px;
+}
+.spark-bar {
+  flex: 1;
+  border-radius: 2px;
+  background: rgba(106,158,114,0.15);
+  min-height: 4px;
+}
+.spark-bar.hi { background: rgba(106,158,114,0.45); }
+.spark-bar.active { background: var(--new-leaf); }
+/* Light schedule */
+.light-schedule {
+  flex: 1;
+}
+.light-track {
+  height: 8px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 8px;
+}
+.light-active-zone {
+  position: absolute;
+  left: 20%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,200,50,0.3), rgba(255,200,50,0.6), rgba(255,200,50,0.3));
+  border-radius: 4px;
+}
+.light-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.light-label-txt {
+  font-size: 9px;
+  color: var(--text-hint);
+  font-weight: 300;
+}
+.water-level-bar {
+  height: 8px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.water-fill {
+  height: 100%;
+  width: 72%;
+  background: rgba(106,158,114,0.5);
+  border-radius: 4px;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 84px;
+  background: rgba(247,243,237,0.96);
+  backdrop-filter: blur(10px);
+  border-top: 0.5px solid rgba(0,0,0,0.07);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 12px 0 0;
+  z-index: 30;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px 14px;
+}
+.nav-icon-wrap {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+.nav-item.active .nav-icon-wrap { background: var(--mist); }
+.nav-label {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-hint);
+}
+.nav-item.active .nav-label { color: var(--canopy); font-weight: 500; }
+
+/* ── SPEC PANEL (right side) ── */
+.spec-col { display: flex; flex-direction: column; gap: 2rem; }
+.spec-section {
+  background: var(--white);
+  border: 0.5px solid rgba(0,0,0,0.07);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.spec-section-header {
+  padding: 14px 20px;
+  background: var(--linen);
+  border-bottom: 0.5px solid rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.spec-section-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--canopy);
+  flex-shrink: 0;
+}
+.spec-section-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+.spec-section-sub {
+  font-size: 12px;
+  color: var(--text-soft);
+  font-weight: 300;
+}
+.spec-table { width: 100%; border-collapse: collapse; }
+.spec-table tr { border-bottom: 0.5px solid rgba(0,0,0,0.05); }
+.spec-table tr:last-child { border-bottom: none; }
+.spec-table td {
+  padding: 9px 20px;
+  font-size: 12px;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.spec-table td:first-child {
+  color: var(--text-soft);
+  font-weight: 300;
+  width: 38%;
+  white-space: nowrap;
+}
+.spec-table td:last-child {
+  color: var(--text-dark);
+  font-weight: 400;
+  font-family: var(--font-s);
+}
+.spec-table code {
+  background: var(--linen);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--canopy);
+}
+.color-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+  border: 0.5px solid rgba(0,0,0,0.1);
+}
+.region-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 500;
+  margin: 1px 2px;
+}
+
+/* ── ANATOMY DIAGRAM ── */
+.anatomy-wrap {
+  position: relative;
+  width: 375px;
+  height: 812px;
+  background: var(--linen);
+  border-radius: 44px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.09);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.05), 0 12px 48px rgba(0,0,0,0.15);
+}
+.anatomy-label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.anatomy-label-text {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--canopy);
+  background: rgba(239,245,236,0.92);
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 0.5px solid rgba(45,74,48,0.2);
+  white-space: nowrap;
+}
+.anatomy-line {
+  width: 20px;
+  height: 0.5px;
+  background: rgba(45,74,48,0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Greendore — Home Screen</h1>
+  <span>Full design specification · all components · annotations · font, color, position, spacing</span>
+</div>
+
+<div class="layout">
+
+  <!-- ══════════════════════════════
+       LEFT — LIVE MOCKUP
+  ═══════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone">
+
+      <!-- STATUS BAR -->
+      <div class="status-bar">
+        <span>9:41</span>
+        <div style="display:flex;gap:5px;align-items:center;">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="4" width="3" height="8" rx="1" opacity="0.45"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" opacity="0.65"/><rect x="9" y="0.5" width="3" height="11.5" rx="1" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2C5.5 2 3.3 3.1 1.8 4.9L0 3C2 1.1 4.8 0 8 0s6 1.1 8 3l-1.8 1.9C12.7 3.1 10.5 2 8 2z" opacity="0.5"/><path d="M8 5c-1.5 0-2.9.6-3.9 1.6L2.5 4.9C3.9 3.4 5.8 2.5 8 2.5s4.1.9 5.5 2.4L11.9 6.6C10.9 5.6 9.5 5 8 5z" opacity="0.8"/><circle cx="8" cy="9.5" r="2"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity="0.3" fill="none"/><rect x="22.5" y="3.5" width="2" height="5" rx="1" opacity="0.35"/><rect x="2" y="2" width="16" height="8" rx="2"/></svg>
+        </div>
+      </div>
+
+      <!-- ── HERO ── -->
+      <div class="hero">
+        <div class="hero-texture"></div>
+
+        <!-- Greeting row -->
+        <div class="hero-top">
+          <div class="hero-greeting-row">
+            <span class="hero-greeting">Good morning</span>
+            <span class="hero-name">Amara</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <!-- Notification bell -->
+            <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;position:relative;">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6v2.5L2 11h12l-1.5-2.5V6c0-2.49-2.01-4.5-4.5-4.5z" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" stroke-linejoin="round"/>
+                <path d="M6.5 11v.5a1.5 1.5 0 003 0V11" stroke="rgba(255,255,255,0.7)" stroke-width="1.2"/>
+              </svg>
+              <!-- notif dot -->
+              <div style="position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--terracotta);border:1.5px solid var(--canopy);"></div>
+            </div>
+            <div class="hero-avatar">A</div>
+          </div>
+        </div>
+
+        <!-- Plant illustration in hero -->
+        <div class="hero-plant-glow"></div>
+        <div class="hero-plant-stage" style="bottom:62px;">
+          <svg width="140" height="160" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- main stem -->
+            <path d="M70 158 Q68 130 70 108 Q72 86 70 64 Q69 48 70 32" stroke="#5A9060" stroke-width="3" stroke-linecap="round"/>
+            <!-- left lower leaf -->
+            <path d="M70 128 Q42 112 36 86 Q52 78 70 104" fill="#2D5535" opacity="0.75"/>
+            <!-- right lower leaf -->
+            <path d="M70 112 Q98 94 104 68 Q88 60 70 90" fill="#3D6A42" opacity="0.8"/>
+            <!-- left mid leaf -->
+            <path d="M70 92 Q46 74 42 50 Q58 42 70 72" fill="#3A6840" opacity="0.85"/>
+            <!-- right mid leaf -->
+            <path d="M70 76 Q96 56 100 30 Q84 24 70 52" fill="#4A7A50"/>
+            <!-- left top leaf -->
+            <path d="M70 56 Q50 40 46 20 Q62 14 70 38" fill="#5A8A5E" opacity="0.9"/>
+            <!-- right top leaf -->
+            <path d="M70 40 Q90 22 92 6 Q78 2 70 26" fill="#6A9E72"/>
+            <!-- tiny top shoot -->
+            <path d="M70 24 Q66 14 64 8 Q70 5 74 12 Q74 18 70 24" fill="#7AB882" opacity="0.8"/>
+            <!-- secondary stem left -->
+            <path d="M60 100 Q52 88 46 78" stroke="#4A7856" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+            <!-- secondary stem right -->
+            <path d="M80 84 Q88 72 92 62" stroke="#4A7856" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+        </div>
+
+        <!-- Pod base -->
+        <div class="hero-pod">
+          <svg width="180" height="64" viewBox="0 0 180 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- pod body -->
+            <rect x="20" y="18" width="140" height="42" rx="10" fill="rgba(29,58,32,0.75)" stroke="rgba(168,200,160,0.2)" stroke-width="0.75"/>
+            <!-- pod lid -->
+            <rect x="28" y="4" width="124" height="16" rx="7" fill="rgba(40,70,44,0.75)" stroke="rgba(168,200,160,0.15)" stroke-width="0.75"/>
+            <!-- grow lights -->
+            <circle cx="55" cy="12" r="3.5" fill="#6A9E72" opacity="0.9"/>
+            <circle cx="90" cy="12" r="3.5" fill="#6A9E72" opacity="0.9"/>
+            <circle cx="125" cy="12" r="3.5" fill="#6A9E72" opacity="0.9"/>
+            <!-- plant holes in lid where stems come through -->
+            <circle cx="55"  cy="18" r="2" fill="rgba(0,0,0,0.3)"/>
+            <circle cx="90"  cy="18" r="2" fill="rgba(0,0,0,0.3)"/>
+            <circle cx="125" cy="18" r="2" fill="rgba(0,0,0,0.3)"/>
+            <!-- water window -->
+            <rect x="142" y="26" width="12" height="28" rx="4" fill="rgba(106,158,114,0.12)" stroke="rgba(106,158,114,0.25)" stroke-width="0.5"/>
+            <rect x="143.5" y="38" width="9" height="14" rx="2.5" fill="rgba(106,158,114,0.4)"/>
+            <!-- status LEDs -->
+            <circle cx="30" cy="30" r="3" fill="#6A9E72" opacity="0.9"/>
+            <circle cx="30" cy="42" r="3" fill="rgba(196,149,106,0.7)"/>
+            <!-- pod feet -->
+            <rect x="36" y="58" width="20" height="5" rx="2.5" fill="rgba(20,40,22,0.5)"/>
+            <rect x="124" y="58" width="20" height="5" rx="2.5" fill="rgba(20,40,22,0.5)"/>
+          </svg>
+        </div>
+
+        <!-- Hero progress bar -->
+        <div class="hero-progress-wrap">
+          <div class="hero-progress-label">
+            <span class="hero-progress-plant"><em>Vesper</em> · Genovese Basil</span>
+            <span class="hero-progress-days">Day 7 of 21</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SCROLL BODY ── -->
+      <div class="home-body">
+
+        <!-- BOTANIST INSIGHT -->
+        <div class="insight-card">
+          <div class="insight-card-texture"></div>
+          <div class="insight-tag">
+            <div class="insight-dot"></div>
+            <span class="insight-tag-text">Botanist insight</span>
+          </div>
+          <p class="insight-body">"Vesper is in her second true-leaf stage. Growth above soil looks slow right now — her roots are quietly doubling below. This is exactly where she should be."</p>
+          <div style="display:flex;gap:8px;">
+            <div class="insight-action">
+              <div class="insight-icon">
+                <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1 4h6M4 1l3 3-3 3" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              What to expect next
+            </div>
+            <div class="insight-action" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.08);">
+              Learn more
+            </div>
+          </div>
+        </div>
+
+        <!-- SENSOR STRIP -->
+        <div class="sensor-strip" style="margin-top:20px;">
+
+          <div class="sensor-chip">
+            <div class="sensor-icon-row">
+              <span class="sensor-label">Humidity</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L9.5 6.5A3.5 3.5 0 012.5 6.5L6 1z" stroke="#6A9E72" stroke-width="1" fill="rgba(106,158,114,0.15)"/></svg>
+            </div>
+            <div>
+              <span class="sensor-val good">67</span><span class="sensor-unit">%</span>
+            </div>
+            <span class="sensor-status good">Ideal</span>
+          </div>
+
+          <div class="sensor-chip">
+            <div class="sensor-icon-row">
+              <span class="sensor-label">Temp</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="4.5" y="1" width="3" height="7" rx="1.5" stroke="#6A9E72" stroke-width="1"/><circle cx="6" cy="9.5" r="2" stroke="#6A9E72" stroke-width="1"/></svg>
+            </div>
+            <div>
+              <span class="sensor-val good">24</span><span class="sensor-unit">°C</span>
+            </div>
+            <span class="sensor-status good">Optimal</span>
+          </div>
+
+          <div class="sensor-chip alert">
+            <div class="sensor-icon-row">
+              <span class="sensor-label">Water</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L9.5 6.5A3.5 3.5 0 012.5 6.5L6 1z" stroke="#C4956A" stroke-width="1" fill="rgba(196,149,106,0.2)"/></svg>
+            </div>
+            <div>
+              <span class="sensor-val warn">34</span><span class="sensor-unit">%</span>
+            </div>
+            <span class="sensor-status warn">Refill soon</span>
+          </div>
+
+          <div class="sensor-chip">
+            <div class="sensor-icon-row">
+              <span class="sensor-label">Light</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="#6A9E72" stroke-width="1"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.5 2.5l.7.7M8.8 8.8l.7.7M2.5 9.5l.7-.7M8.8 3.2l.7-.7" stroke="#6A9E72" stroke-width="1" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <span class="sensor-val good">14</span><span class="sensor-unit">h</span>
+            </div>
+            <span class="sensor-status good">On schedule</span>
+          </div>
+
+          <div class="sensor-chip">
+            <div class="sensor-icon-row">
+              <span class="sensor-label">pH</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9L5 3L8 7L10 5" stroke="#6A9E72" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+            </div>
+            <div>
+              <span class="sensor-val good">6.4</span>
+            </div>
+            <span class="sensor-status ok">Normal</span>
+          </div>
+
+        </div>
+
+        <!-- TODAY'S TASKS -->
+        <div class="action-wrap">
+          <div class="section-hd" style="padding:0 0 10px;margin:0;">
+            <span class="section-hd-title">Today's care</span>
+            <span class="section-hd-link">2 of 3 done</span>
+          </div>
+          <div class="action-card">
+            <!-- Priority action -->
+            <div class="action-card-top">
+              <div class="action-icon-wrap terra">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <path d="M11 3L14.5 9.5A5 5 0 016.5 9.5L11 3z" fill="rgba(196,149,106,0.5)" stroke="#C4956A" stroke-width="1.2" stroke-linejoin="round"/>
+                  <path d="M11 14v5M8.5 19h5" stroke="#C4956A" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="action-text">
+                <p class="action-title">Refill the water reservoir</p>
+                <p class="action-desc">Vesper's tank is at 34%. She'll need water within the next 18 hours to stay comfortable.</p>
+              </div>
+              <span class="action-badge now">Now</span>
+            </div>
+            <!-- Completed tasks -->
+            <div class="action-card-row">
+              <div class="task-check done">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4.5 7.5L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="task-label done">Check grow light schedule</span>
+              <span class="task-time">8:00 AM</span>
+            </div>
+            <div class="action-card-row">
+              <div class="task-check done">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4.5 7.5L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="task-label done">Rotate pod for even light</span>
+              <span class="task-time">9:15 AM</span>
+            </div>
+            <!-- Upcoming task -->
+            <div class="action-card-row">
+              <div class="task-check"></div>
+              <span class="task-label">Trim any yellowing leaves</span>
+              <span class="task-time">Evening</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- GROWTH TIMELINE -->
+        <div class="timeline-wrap">
+          <div class="section-hd" style="padding:0 0 10px;margin:0;">
+            <span class="section-hd-title">Growth journey</span>
+            <span class="section-hd-link">Full journal</span>
+          </div>
+          <div class="timeline-card">
+            <div class="timeline-row">
+              <div class="timeline-stage done">
+                <div class="t-node done">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="t-stage-name done">Germination</span>
+              </div>
+              <div class="timeline-stage done">
+                <div class="t-node done">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="t-stage-name done">Seedling</span>
+              </div>
+              <div class="timeline-stage active">
+                <div class="t-node active">
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--new-leaf);"></div>
+                </div>
+                <span class="t-stage-name active">True leaves</span>
+              </div>
+              <div class="timeline-stage">
+                <div class="t-node future">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 3l1.5 3h3l-2.5 2 1 3L6 9.5 3 11l1-3L1.5 6h3z" stroke="rgba(0,0,0,0.2)" stroke-width="1" fill="none"/></svg>
+                </div>
+                <span class="t-stage-name">Harvest ready</span>
+              </div>
+            </div>
+            <div class="timeline-current-note">
+              Currently in true leaf stage · Day 7 — Roots are establishing. Expect visible new leaf pairs in the next 3–5 days.
+            </div>
+          </div>
+        </div>
+
+        <!-- ENVIRONMENT CARDS -->
+        <div class="env-wrap">
+          <div class="section-hd" style="padding:0 0 10px;margin:0;">
+            <span class="section-hd-title">Environment</span>
+            <span class="section-hd-link">Adjust settings</span>
+          </div>
+          <div class="env-grid">
+            <!-- Temperature card with sparkline -->
+            <div class="env-card">
+              <p class="env-card-label">Temperature</p>
+              <p class="env-card-value">24°<span style="font-size:14px;font-weight:300;color:var(--text-hint);">C</span></p>
+              <p class="env-card-sub">Optimal range 22–26°C</p>
+              <div class="sparkline-wrap">
+                <div class="spark-bar" style="height:45%;"></div>
+                <div class="spark-bar hi" style="height:60%;"></div>
+                <div class="spark-bar" style="height:50%;"></div>
+                <div class="spark-bar hi" style="height:70%;"></div>
+                <div class="spark-bar hi" style="height:65%;"></div>
+                <div class="spark-bar" style="height:55%;"></div>
+                <div class="spark-bar active" style="height:75%;"></div>
+              </div>
+            </div>
+            <!-- Humidity card with sparkline -->
+            <div class="env-card">
+              <p class="env-card-label">Humidity</p>
+              <p class="env-card-value">67<span style="font-size:14px;font-weight:300;color:var(--text-hint);">%</span></p>
+              <p class="env-card-sub">Ideal 60–75% for basil</p>
+              <div class="sparkline-wrap">
+                <div class="spark-bar hi" style="height:60%;"></div>
+                <div class="spark-bar" style="height:40%;"></div>
+                <div class="spark-bar hi" style="height:70%;"></div>
+                <div class="spark-bar" style="height:50%;"></div>
+                <div class="spark-bar hi" style="height:65%;"></div>
+                <div class="spark-bar" style="height:45%;"></div>
+                <div class="spark-bar active" style="height:80%;"></div>
+              </div>
+            </div>
+            <!-- Water level -->
+            <div class="env-card">
+              <p class="env-card-label">Water reservoir</p>
+              <p class="env-card-value warn">34<span style="font-size:14px;font-weight:300;color:var(--text-hint);">%</span></p>
+              <p class="env-card-sub" style="color:var(--terracotta);">Refill within 18h</p>
+              <div class="water-level-bar">
+                <div class="water-fill" style="width:34%;background:rgba(196,149,106,0.5);"></div>
+              </div>
+            </div>
+            <!-- Light schedule card -->
+            <div class="env-card">
+              <p class="env-card-label">Light cycle</p>
+              <p class="env-card-value">14<span style="font-size:14px;font-weight:300;color:var(--text-hint);">h</span></p>
+              <p class="env-card-sub">6:00 AM – 8:00 PM</p>
+              <div class="light-track">
+                <div class="light-active-zone"></div>
+              </div>
+              <div class="light-labels">
+                <span class="light-label-txt">12am</span>
+                <span class="light-label-txt">6am</span>
+                <span class="light-label-txt">12pm</span>
+                <span class="light-label-txt">6pm</span>
+                <span class="light-label-txt">12am</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPACER for nav -->
+        <div style="height:20px;"></div>
+
+      </div><!-- end home-body -->
+
+      <!-- BOTTOM NAV -->
+      <div class="bottom-nav">
+        <div class="nav-item active">
+          <div class="nav-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 2L4 7v9a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1V7L10 2z" stroke="#2D4A30" stroke-width="1.4" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <span class="nav-label" style="color:var(--canopy);">Garden</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 3L13.5 9.5A5 5 0 016.5 9.5L10 3z" stroke="#8A8478" stroke-width="1.4" stroke-linejoin="round" fill="none"/>
+              <path d="M10 13v4M8 17h4" stroke="#8A8478" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="nav-label">Grow</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="7" stroke="#8A8478" stroke-width="1.4"/>
+              <path d="M10 6.5v4l2.5 2.5" stroke="#8A8478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="nav-label">Harvest</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="7" r="3" stroke="#8A8478" stroke-width="1.4"/>
+              <path d="M4 17c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke="#8A8478" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="nav-label">Community</span>
+        </div>
+      </div>
+
+    </div><!-- end phone -->
+
+    <!-- Phone caption -->
+    <p style="font-size:11px;color:var(--text-hint);text-align:center;font-weight:300;letter-spacing:0.03em;">Home screen · Day 7 · Vesper the Basil</p>
+  </div>
+
+  <!-- ══════════════════════════════
+       RIGHT — SPEC PANELS
+  ═══════════════════════════════ -->
+  <div class="spec-col">
+
+    <!-- SCREEN STRUCTURE -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot"></div>
+        <div>
+          <p class="spec-section-title">Screen structure</p>
+          <p class="spec-section-sub">Layout zones, heights, z-index stack</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Phone dimensions</td><td><code>375 × 812px</code>, border-radius <code>44px</code></td></tr>
+        <tr><td>Status bar</td><td>Height <code>50px</code>, absolute, z-index 20, dark on hero / light on linen</td></tr>
+        <tr><td>Hero zone</td><td>Height <code>340px</code>, fixed height, <code>overflow: hidden</code>, background <code>#2D4A30</code> Canopy</td></tr>
+        <tr><td>Scroll body</td><td><code>flex: 1</code>, <code>overflow-y: auto</code>, <code>padding-bottom: 100px</code> for nav clearance</td></tr>
+        <tr><td>Bottom nav</td><td>Height <code>84px</code>, absolute bottom, z-index 30, frosted linen bg</td></tr>
+        <tr><td>Content side padding</td><td><code>20px</code> left/right throughout scroll body</td></tr>
+        <tr><td>Component gap</td><td><code>20px</code> margin-top between all major sections</td></tr>
+      </table>
+    </div>
+
+    <!-- HERO ZONE -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#1C2E1E;"></div>
+        <div>
+          <p class="spec-section-title">Hero zone — 340px</p>
+          <p class="spec-section-sub">Greeting, plant illustration, pod, progress bar</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Background</td><td><span class="color-dot" style="background:#2D4A30;"></span><code>#2D4A30</code> Canopy green</td></tr>
+        <tr><td>Ambient texture</td><td>Two radial-gradient overlays: <code>rgba(106,158,114,0.22)</code> bottom-right glow + <code>rgba(168,200,160,0.08)</code> left-mid. No images, CSS only.</td></tr>
+        <tr><td>Greeting text</td><td>"Good morning" — DM Sans 12px 400, <code>rgba(168,200,160,0.75)</code>, 0.03em tracking</td></tr>
+        <tr><td>User name</td><td>DM Serif Display 22px 400, <code>rgba(255,255,255,0.95)</code>, -0.02em tracking</td></tr>
+        <tr><td>Top padding</td><td>Greeting row: <code>top: 56px</code> (below status bar), <code>left/right: 24px</code></td></tr>
+        <tr><td>Notification button</td><td>36×36px circle, <code>rgba(255,255,255,0.08)</code> bg, border <code>rgba(255,255,255,0.1)</code>. Alert dot: 7px <code>#C4956A</code>, border 1.5px canopy</td></tr>
+        <tr><td>Avatar</td><td>40×40px circle, bg <code>rgba(168,200,160,0.2)</code>, border <code>rgba(168,200,160,0.3)</code>, initial letter DM Sans 14px 500 <code>rgba(168,200,160,0.9)</code></td></tr>
+        <tr><td>Plant illustration</td><td>SVG, centered horizontally, <code>bottom: 62px</code> (above pod), 140×160px bounding box. Layered leaf paths in shades <code>#2D5535</code>→<code>#7AB882</code></td></tr>
+        <tr><td>Pod SVG</td><td>180×64px, centered, <code>bottom: 0</code>. Body <code>rgba(29,58,32,0.75)</code>, lid <code>rgba(40,70,44,0.75)</code>. LED dots <code>#6A9E72</code>. Water window fill <code>rgba(106,158,114,0.4)</code> at current level.</td></tr>
+        <tr><td>Plant name line</td><td>DM Serif Display 18px — name in italic <code>#E8D5B0</code> Clay · variety in regular <code>rgba(255,255,255,0.95)</code></td></tr>
+        <tr><td>Day counter</td><td>DM Sans 12px 300, <code>rgba(168,200,160,0.7)</code></td></tr>
+        <tr><td>Progress track</td><td>Height <code>4px</code>, bg <code>rgba(255,255,255,0.12)</code>, fill <code>#6A9E72</code> New leaf, border-radius 2px. Width = (current day / total days) %</td></tr>
+        <tr><td>Progress position</td><td><code>bottom: 24px</code>, <code>left/right: 24px</code>, z-index 5</td></tr>
+      </table>
+    </div>
+
+    <!-- BOTANIST INSIGHT CARD -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#2D4A30;"></div>
+        <div>
+          <p class="spec-section-title">Botanist insight card</p>
+          <p class="spec-section-sub">AI-generated, plant-specific, always the first card in the scroll</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Background</td><td><span class="color-dot" style="background:#2D4A30;"></span><code>#2D4A30</code> Canopy — creates visual continuity with hero</td></tr>
+        <tr><td>Border radius</td><td><code>24px</code></td></tr>
+        <tr><td>Margin</td><td><code>20px</code> from top of scroll body (first visible card)</td></tr>
+        <tr><td>Tag label</td><td>"Botanist insight" — DM Sans 10px 500, <code>rgba(168,200,160,0.85)</code>, 0.06em tracking, ALL CAPS. Pill bg <code>rgba(168,200,160,0.15)</code></td></tr>
+        <tr><td>Live dot</td><td>6px circle <code>#6A9E72</code>, pulse animation opacity 1↔0.5, scale 1↔0.8, 2s loop</td></tr>
+        <tr><td>Body text</td><td>DM Serif Display 14px italic, <code>rgba(255,255,255,0.88)</code>, line-height 1.65. Always written as a quote from the botanist perspective. Never clinical language.</td></tr>
+        <tr><td>Action buttons</td><td>Inline-flex pill, <code>rgba(255,255,255,0.10)</code> bg, border <code>rgba(255,255,255,0.12)</code>, font DM Sans 12px 500 <code>rgba(255,255,255,0.9)</code></td></tr>
+        <tr><td>Arrow icon</td><td>10px circle <code>#6A9E72</code>, inset chevron SVG white</td></tr>
+        <tr><td>Copy rule</td><td>Insight text must: name the plant, describe what's happening physically, normalise the current state (especially if slow/unclear), end on a forward-looking note. Max 2 sentences.</td></tr>
+      </table>
+    </div>
+
+    <!-- SENSOR STRIP -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#6A9E72;"></div>
+        <div>
+          <p class="spec-section-title">Sensor strip</p>
+          <p class="spec-section-sub">Horizontal scroll · 5 chips · compact live data</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Container</td><td>Horizontal scroll, <code>padding: 16px 20px 0</code>, no scrollbar, <code>-webkit-overflow-scrolling: touch</code></td></tr>
+        <tr><td>Chip size</td><td>Min-width <code>90px</code>, padding <code>12px 14px</code>, border-radius <code>16px</code></td></tr>
+        <tr><td>Normal chip bg</td><td><code>#FFFFFF</code>, border <code>0.5px rgba(0,0,0,0.07)</code></td></tr>
+        <tr><td>Alert chip bg</td><td><code>rgba(237,217,192,0.30)</code>, border <code>rgba(196,149,106,0.40)</code></td></tr>
+        <tr><td>Sensor label</td><td>DM Sans 10px 400, <code>#A8A89E</code>, letter-spacing 0.04em, UPPERCASE</td></tr>
+        <tr><td>Value — normal</td><td>DM Sans 20px 500 <code>#6A9E72</code> New leaf, -0.02em tracking</td></tr>
+        <tr><td>Value — warning</td><td>DM Sans 20px 500 <code>#C4956A</code> Terracotta</td></tr>
+        <tr><td>Unit suffix</td><td>DM Sans 11px 300 <code>#A8A89E</code></td></tr>
+        <tr><td>Status label</td><td>DM Sans 10px 400, green <code>#6A9E72</code> / warn <code>#C4956A</code> / neutral <code>#A8A89E</code></td></tr>
+        <tr><td>5 sensors shown</td><td>Humidity · Temperature · Water · Light · pH — in that priority order</td></tr>
+      </table>
+    </div>
+
+    <!-- TODAY'S CARE CARD -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#C4956A;"></div>
+        <div>
+          <p class="spec-section-title">Today's care card</p>
+          <p class="spec-section-sub">Priority action + task list in one card. The daily heartbeat.</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Section header</td><td>DM Sans 13px 500 <code>#1A1F1B</code> left + link "X of Y done" DM Sans 12px 400 <code>#6A9E72</code> right</td></tr>
+        <tr><td>Card bg</td><td><code>#FFFFFF</code>, border <code>0.5px rgba(0,0,0,0.07)</code>, border-radius <code>24px</code></td></tr>
+        <tr><td>Priority action bg</td><td>Top section only, no fill change. Divided from tasks by <code>0.5px rgba(0,0,0,0.06)</code> line</td></tr>
+        <tr><td>Action icon — water</td><td>44×44px rounded rect (14px radius), bg <code>#EDD9C0</code> terra-light, SVG icon <code>#C4956A</code></td></tr>
+        <tr><td>Action icon — general</td><td>44×44px, bg <code>#EFF5EC</code> mist, SVG icon <code>#6A9E72</code></td></tr>
+        <tr><td>Action title</td><td>DM Sans 14px 500 <code>#1A1F1B</code>, -0.01em tracking</td></tr>
+        <tr><td>Action desc</td><td>DM Sans 13px 300 <code>#7A8278</code>, line-height 1.5. Must include plant name and specific timeframe.</td></tr>
+        <tr><td>Badge "Now"</td><td>DM Sans 10px 500 <code>#9E6E45</code>, bg <code>rgba(196,149,106,0.15)</code>, pill radius</td></tr>
+        <tr><td>Badge "Done"</td><td>DM Sans 10px 500 <code>#6A9E72</code>, bg <code>#EFF5EC</code> mist</td></tr>
+        <tr><td>Task row padding</td><td><code>12px 18px</code>, divider <code>0.5px rgba(0,0,0,0.05)</code></td></tr>
+        <tr><td>Task checkbox — empty</td><td>20×20px circle, border <code>1.5px rgba(0,0,0,0.12)</code></td></tr>
+        <tr><td>Task checkbox — done</td><td>20×20px circle, bg + border <code>#6A9E72</code>, white checkmark SVG inside</td></tr>
+        <tr><td>Task label — done</td><td>DM Sans 13px 400 <code>#A8A89E</code>, line-through <code>rgba(0,0,0,0.2)</code> color</td></tr>
+        <tr><td>Task time</td><td>DM Sans 11px 300 <code>#A8A89E</code></td></tr>
+        <tr><td>Copy rule</td><td>Priority action desc must always: name the plant, state the current value, give a human timeframe. Never "Humidity below threshold."</td></tr>
+      </table>
+    </div>
+
+    <!-- GROWTH TIMELINE -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#A8C8A0;"></div>
+        <div>
+          <p class="spec-section-title">Growth journey timeline</p>
+          <p class="spec-section-sub">4-stage horizontal strip · current stage highlighted</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Card bg</td><td><code>#FFFFFF</code>, border-radius <code>24px</code>, padding <code>16px 18px</code></td></tr>
+        <tr><td>4 stages</td><td>Germination → Seedling → True leaves → Harvest ready</td></tr>
+        <tr><td>Connector line</td><td><code>1px rgba(0,0,0,0.08)</code> default. Done stages: <code>#6A9E72</code> opacity 0.4. Positioned <code>top: 14px</code> (node center)</td></tr>
+        <tr><td>Done node</td><td>28×28px circle, bg <code>#6A9E72</code>, white check SVG</td></tr>
+        <tr><td>Active node</td><td>28×28px circle, bg <code>#FFFFFF</code>, border <code>2px #6A9E72</code>, inner 8px dot <code>#6A9E72</code>, outer ring <code>rgba(106,158,114,0.12)</code> 4px</td></tr>
+        <tr><td>Future node</td><td>28×28px circle, bg <code>rgba(0,0,0,0.06)</code></td></tr>
+        <tr><td>Stage label — done</td><td>DM Sans 10px 500 <code>#6A9E72</code></td></tr>
+        <tr><td>Stage label — active</td><td>DM Sans 10px 500 <code>#1A1F1B</code></td></tr>
+        <tr><td>Stage label — future</td><td>DM Sans 10px 400 <code>#A8A89E</code></td></tr>
+        <tr><td>Current note</td><td>Margin-top 14px, bg <code>#EFF5EC</code> mist, border-radius 12px, padding <code>10px 14px</code>. DM Sans 12px 300 <code>#2D4A30</code>, line-height 1.55</td></tr>
+      </table>
+    </div>
+
+    <!-- ENVIRONMENT GRID -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#EDE8E0;border:1px solid rgba(0,0,0,0.1);"></div>
+        <div>
+          <p class="spec-section-title">Environment grid</p>
+          <p class="spec-section-sub">2-column grid of data cards · sparklines + visual indicators</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Grid layout</td><td><code>2 columns, 1fr 1fr</code>, gap <code>10px</code></td></tr>
+        <tr><td>Card bg</td><td><code>#FFFFFF</code>, border <code>0.5px rgba(0,0,0,0.07)</code>, border-radius <code>18px</code>, padding <code>14px 16px</code></td></tr>
+        <tr><td>Label</td><td>DM Sans 11px 400 <code>#A8A89E</code>, UPPERCASE, 0.05em tracking</td></tr>
+        <tr><td>Value</td><td>DM Sans 26px 500 <code>#1A1F1B</code>, -0.03em tracking. Warning state: <code>#C4956A</code></td></tr>
+        <tr><td>Unit</td><td>DM Sans 14px 300 <code>#A8A89E</code> inline after number</td></tr>
+        <tr><td>Sub-label</td><td>DM Sans 11px 300 <code>#7A8278</code>. Warning state: <code>#C4956A</code></td></tr>
+        <tr><td>Sparkline bars</td><td>Height <code>32px</code> container, flex align bottom. Normal bar <code>rgba(106,158,114,0.15)</code>, highlighted <code>rgba(106,158,114,0.45)</code>, current <code>#6A9E72</code>. Border-radius 2px.</td></tr>
+        <tr><td>Water bar</td><td>Height <code>8px</code>, bg <code>rgba(0,0,0,0.06)</code>. Fill: normal <code>rgba(106,158,114,0.5)</code>, warning <code>rgba(196,149,106,0.5)</code>. Width = current %. Radius 4px.</td></tr>
+        <tr><td>Light track</td><td>Height <code>8px</code>, bg <code>rgba(0,0,0,0.06)</code>. Active zone: <code>rgba(255,200,50,0.6)</code> gradient. Position derived from schedule hours.</td></tr>
+        <tr><td>Time labels below track</td><td>DM Sans 9px 300 <code>#A8A89E</code>, 5 labels: 12am / 6am / 12pm / 6pm / 12am</td></tr>
+      </table>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#EDE8E0;border:1px solid rgba(0,0,0,0.1);"></div>
+        <div>
+          <p class="spec-section-title">Bottom navigation</p>
+          <p class="spec-section-sub">4 tabs · Garden (active) · Grow · Harvest · Community</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Height</td><td><code>84px</code> total — <code>12px</code> top padding + 28px icon + 4px gap + 10px label + 30px home indicator area</td></tr>
+        <tr><td>Background</td><td><code>rgba(247,243,237,0.96)</code> frosted linen + <code>backdrop-filter: blur(10px)</code></td></tr>
+        <tr><td>Top border</td><td><code>0.5px solid rgba(0,0,0,0.07)</code></td></tr>
+        <tr><td>Icon — active</td><td>20×20px SVG <code>#2D4A30</code> Canopy stroke. Wrap: 28×28 <code>#EFF5EC</code> mist bg, radius 10px</td></tr>
+        <tr><td>Icon — inactive</td><td>20×20px SVG <code>#8A8478</code> warm gray stroke. No background wrap.</td></tr>
+        <tr><td>Label — active</td><td>DM Sans 10px 500 <code>#2D4A30</code> Canopy</td></tr>
+        <tr><td>Label — inactive</td><td>DM Sans 10px 400 <code>#A8A89E</code></td></tr>
+        <tr><td>Tab names</td><td>Garden (home) · Grow (detailed charts) · Harvest (log + recipes) · Community (pod comparisons)</td></tr>
+      </table>
+    </div>
+
+    <!-- TYPOGRAPHY SYSTEM -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#1A1F1B;"></div>
+        <div>
+          <p class="spec-section-title">Typography on home screen</p>
+          <p class="spec-section-sub">Every text style used, in order of hierarchy</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Plant name / hero</td><td>DM Serif Display 18px italic, <code>#E8D5B0</code> Clay on dark bg</td></tr>
+        <tr><td>User name / hero</td><td>DM Serif Display 22px, <code>rgba(255,255,255,0.95)</code></td></tr>
+        <tr><td>Insight body</td><td>DM Serif Display 14px italic, <code>rgba(255,255,255,0.88)</code></td></tr>
+        <tr><td>Section headers</td><td>DM Sans 13px 500, <code>#1A1F1B</code></td></tr>
+        <tr><td>Card titles</td><td>DM Sans 14px 500, <code>#1A1F1B</code>, -0.01em</td></tr>
+        <tr><td>Card body</td><td>DM Sans 13px 300, <code>#7A8278</code>, line-height 1.5</td></tr>
+        <tr><td>Data values (large)</td><td>DM Sans 26px 500, <code>#1A1F1B</code> or semantic, -0.03em</td></tr>
+        <tr><td>Sensor values</td><td>DM Sans 20px 500, <code>#6A9E72</code> or <code>#C4956A</code>, -0.02em</td></tr>
+        <tr><td>Labels / caps</td><td>DM Sans 10–11px 400–500, <code>#A8A89E</code>, 0.04–0.08em tracking</td></tr>
+        <tr><td>Times / metadata</td><td>DM Sans 11px 300, <code>#A8A89E</code></td></tr>
+        <tr><td>Link / action text</td><td>DM Sans 12px 400, <code>#6A9E72</code></td></tr>
+      </table>
+    </div>
+
+    <!-- MICRO-INTERACTIONS -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#C4956A;"></div>
+        <div>
+          <p class="spec-section-title">Motion & micro-interactions</p>
+          <p class="spec-section-sub">Every animation on this screen</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Screen entry</td><td>Scroll body fades up from +16px, opacity 0→1, 320ms ease-out. Hero is static (already visible from S07 transition).</td></tr>
+        <tr><td>Hero → Home transition</td><td>Shared element: pod frame from S07 morphs/scales into hero pod position. 360ms spring(0.4, 0.8).</td></tr>
+        <tr><td>Insight live dot</td><td>Pulse: opacity 1↔0.5 + scale 1↔0.8, 2s ease-in-out, infinite loop</td></tr>
+        <tr><td>Sensor chip tap</td><td>scale(0.97) 80ms, releases to 1.0 120ms. Opens detail sheet from bottom.</td></tr>
+        <tr><td>Task checkbox tap</td><td>Circle scales to 1.15× in 60ms, fills with green + checkmark in 140ms, settles at 1.0 in 80ms. Satisfying, physical.</td></tr>
+        <tr><td>Progress bar</td><td>Animates from 0% to current width on screen entry. 600ms ease-out, delay 400ms after screen load.</td></tr>
+        <tr><td>Sparkline bars</td><td>Grow from 0 height to final height. 400ms ease-out, each bar staggered by 40ms.</td></tr>
+        <tr><td>Priority action card</td><td>If water is low: subtle 1px terracotta border pulses opacity 0.4→1→0.4 once on load. Never loops — avoid anxiety.</td></tr>
+        <tr><td>Bottom nav tap</td><td>Icon scales 1→1.12→1.0, 160ms. Active bg fades in 120ms.</td></tr>
+        <tr><td>Scroll behavior</td><td>Hero stays fixed. Scroll body scrolls independently. Status bar text switches from white to dark as scroll body slides over hero (intersection observer at y=40).</td></tr>
+      </table>
+    </div>
+
+    <!-- CONTENT RULES -->
+    <div class="spec-section">
+      <div class="spec-section-header">
+        <div class="spec-section-dot" style="background:#EFF5EC;border:1px solid rgba(45,74,48,0.2);"></div>
+        <div>
+          <p class="spec-section-title">Content rules — the botanist voice</p>
+          <p class="spec-section-sub">What every dynamic string must and must not say</p>
+        </div>
+      </div>
+      <table class="spec-table">
+        <tr><td>Greeting line</td><td>Time-of-day aware: "Good morning" / "Good afternoon" / "Good evening" — never just "Hello"</td></tr>
+        <tr><td>Insight card</td><td>Always uses plant name. Always contextualises the current stage. Always ends positively or forward-looking. Max 2 sentences. Written in first person from plant's perspective OR botanist speaking to user.</td></tr>
+        <tr><td>Task descriptions</td><td>Include plant name + specific data + human timeframe. "Vesper's tank is at 34%. She'll need water within 18 hours." Not "Water level low."</td></tr>
+        <tr><td>Sensor status labels</td><td>Ideal / Optimal / On schedule / Normal / Refill soon / Too dry / Check needed — never raw boolean states like "OK" / "ERROR"</td></tr>
+        <tr><td>Growth note</td><td>Always explain WHY the current stage looks the way it does. Basil in true-leaf stage looks slow above soil — roots are doubling below. Normalise what beginners fear.</td></tr>
+        <tr><td>Empty states</td><td>If no tasks today: "Everything is in order today. Just let Vesper grow." Not "No tasks."</td></tr>
+      </table>
+    </div>
+
+  </div><!-- end spec-col -->
+
+</div><!-- end layout -->
+
+</body>
+</html>
