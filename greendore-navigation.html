@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greendore — Navigation System</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --soil:      #1C2E1E;
+  --canopy:    #2D4A30;
+  --canopy-m:  #3D5E40;
+  --leaf:      #6A9E72;
+  --sprout:    #A8C8A0;
+  --mist:      #EFF5EC;
+  --terra:     #C4956A;
+  --terra-d:   #9E6E45;
+  --terra-l:   #EDD9C0;
+  --linen:     #F7F3ED;
+  --linen-d:   #EDE8E0;
+  --clay:      #E8D5B0;
+  --wgray:     #8A8478;
+  --td:        #1A1F1B;
+  --tm:        #4A5248;
+  --ts:        #7A8278;
+  --th:        #A8A89E;
+  --white:     #FFFFFF;
+  --fd: 'DM Serif Display', Georgia, serif;
+  --fs: 'DM Sans', system-ui, sans-serif;
+}
+body {
+  background: #E8E4DC;
+  font-family: var(--fs);
+  color: var(--td);
+  padding: 3rem 2rem 6rem;
+}
+.page-hd {
+  max-width: 1400px; margin: 0 auto 3rem;
+  display: flex; align-items: baseline; gap: 1rem;
+  border-bottom: 0.5px solid rgba(45,74,48,0.2);
+  padding-bottom: 1.25rem;
+}
+.page-hd h1 { font-family: var(--fd); font-size: 28px; font-weight: 400; color: var(--canopy); letter-spacing: -0.02em; }
+.page-hd span { font-size: 13px; color: var(--ts); font-weight: 300; }
+
+/* ── FULL APP MAP ── */
+.map-wrap { max-width: 1400px; margin: 0 auto 4rem; }
+.map-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--th); margin-bottom: 1.25rem; }
+
+.app-map {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.map-col { display: flex; flex-direction: column; gap: 8px; }
+.map-tab-header {
+  padding: 12px 16px;
+  border-radius: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.map-tab-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.map-tab-name { font-size: 13px; font-weight: 500; }
+.map-tab-role { font-size: 11px; font-weight: 300; margin-top: 1px; }
+.map-screen {
+  padding: 9px 14px;
+  background: var(--white);
+  border-radius: 10px;
+  border: 0.5px solid rgba(0,0,0,0.07);
+  display: flex; align-items: center; gap: 8px;
+}
+.map-screen-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.map-screen-name { font-size: 12px; font-weight: 400; color: var(--td); }
+.map-screen-sub  { font-size: 11px; font-weight: 300; color: var(--th); margin-top: 1px; }
+.map-sheet {
+  padding: 9px 14px;
+  background: var(--linen);
+  border-radius: 10px;
+  border: 0.5px dashed rgba(0,0,0,0.12);
+  display: flex; align-items: center; gap: 8px;
+  margin-left: 12px;
+}
+.map-sheet-name { font-size: 11px; font-weight: 300; color: var(--ts); font-style: italic; }
+
+/* Global items outside tabs */
+.global-row {
+  max-width: 1400px; margin: 0 auto 4rem;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+}
+.global-card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 0.5px solid rgba(0,0,0,0.07);
+  padding: 16px 18px;
+}
+.global-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--th); margin-bottom: 8px; }
+.global-card-title { font-size: 14px; font-weight: 500; color: var(--td); margin-bottom: 6px; }
+.global-card-desc  { font-size: 12px; font-weight: 300; color: var(--ts); line-height: 1.55; }
+
+/* ── PHONE GRID ── */
+.phones-section { max-width: 1400px; margin: 0 auto; }
+.phones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(375px, 1fr));
+  gap: 3rem 2rem;
+  justify-items: center;
+}
+.phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; width: 375px; }
+.screen-meta { width: 100%; }
+.screen-num  { font-size: 11px; font-weight: 500; color: var(--terra); letter-spacing: 0.08em; text-transform: uppercase; }
+.screen-title { font-size: 15px; font-weight: 500; color: var(--td); margin: 2px 0; letter-spacing: -0.01em; }
+.screen-note  { font-size: 12px; color: var(--ts); font-weight: 300; line-height: 1.5; }
+
+/* PHONE SHELL */
+.phone {
+  width: 375px; height: 812px;
+  border-radius: 44px; overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.09);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.05), 0 12px 48px rgba(0,0,0,0.14), inset 0 0 0 1px rgba(255,255,255,0.1);
+  display: flex; flex-direction: column;
+}
+
+/* STATUS BAR */
+.sb {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 50px; display: flex; align-items: flex-end;
+  justify-content: space-between; padding: 0 28px 8px;
+  z-index: 20; font-size: 12px; font-weight: 500;
+  pointer-events: none;
+}
+.sb.light { color: var(--td); }
+.sb.dark  { color: rgba(255,255,255,0.88); }
+
+/* ── BOTTOM NAV (the main deliverable) ── */
+.bnav {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 82px;
+  background: rgba(247,243,237,0.97);
+  border-top: 0.5px solid rgba(0,0,0,0.08);
+  display: flex; align-items: flex-start;
+  justify-content: space-around;
+  padding-top: 10px;
+  z-index: 30;
+}
+.bnav.dark-nav {
+  background: rgba(28,46,30,0.96);
+  border-top: 0.5px solid rgba(255,255,255,0.07);
+}
+.ni { /* nav item */
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  cursor: pointer; padding: 4px 16px;
+  position: relative;
+}
+.ni-icon {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  transition: background 0.18s;
+  position: relative;
+}
+.ni.active .ni-icon { background: var(--mist); }
+.bnav.dark-nav .ni.active .ni-icon { background: rgba(106,158,114,0.18); }
+.ni-label {
+  font-size: 10px; font-weight: 400; color: var(--th);
+  letter-spacing: 0.01em;
+}
+.ni.active .ni-label { color: var(--canopy); font-weight: 500; }
+.bnav.dark-nav .ni .ni-label { color: rgba(168,200,160,0.45); }
+.bnav.dark-nav .ni.active .ni-label { color: rgba(168,200,160,0.9); font-weight: 500; }
+
+/* Active indicator pill under icon */
+.ni.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--canopy);
+}
+.bnav.dark-nav .ni.active::after { background: var(--leaf); }
+
+/* Notif badge on nav icon */
+.nav-badge {
+  position: absolute; top: -2px; right: -2px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--terra);
+  border: 1.5px solid var(--linen);
+}
+.bnav.dark-nav .nav-badge { border-color: var(--soil); }
+
+/* ── SCREEN CONTENT FILLS ── */
+
+/* Garden */
+.s-garden { background: var(--linen); height: 100%; }
+.garden-hero {
+  height: 300px; background: var(--canopy);
+  position: relative; overflow: hidden;
+}
+.garden-hero-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 260px 200px at 58% 110%, rgba(106,158,114,0.2) 0%, transparent 65%);
+}
+.garden-body { padding: 18px 20px; }
+
+/* Grow */
+.s-grow { background: var(--linen); height: 100%; }
+.grow-header {
+  height: 130px; background: var(--canopy);
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 0 24px 20px;
+  position: relative; overflow: hidden;
+}
+.grow-header-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 300px 150px at 80% 120%, rgba(106,158,114,0.15) 0%, transparent 60%);
+}
+.grow-body { flex: 1; overflow: hidden; padding: 18px 20px; }
+
+/* Harvest */
+.s-harvest { background: var(--linen); height: 100%; }
+.harvest-header {
+  height: 130px; background: linear-gradient(160deg, #3A2818 0%, #5A3820 100%);
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 0 24px 20px;
+  position: relative; overflow: hidden;
+}
+.harvest-header-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 240px 120px at 70% 130%, rgba(196,149,106,0.25) 0%, transparent 60%);
+}
+.harvest-body { flex: 1; overflow: hidden; padding: 18px 20px; }
+
+/* Community */
+.s-community { background: var(--linen); height: 100%; }
+.community-header {
+  height: 130px; background: linear-gradient(160deg, #1C2838 0%, #243450 100%);
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 0 24px 20px;
+  position: relative; overflow: hidden;
+}
+.community-body { flex: 1; overflow: hidden; padding: 18px 20px; }
+
+/* Shared header text */
+.h-label { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.07em; text-transform: uppercase; font-weight: 400; margin-bottom: 4px; }
+.h-title { font-family: var(--fd); font-size: 24px; color: rgba(255,255,255,0.95); letter-spacing: -0.02em; }
+.h-sub   { font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 300; margin-top: 2px; }
+
+/* Content preview cards */
+.preview-card {
+  background: var(--white); border-radius: 18px;
+  border: 0.5px solid rgba(0,0,0,0.07);
+  padding: 14px 16px; margin-bottom: 10px;
+}
+.preview-card-title { font-size: 13px; font-weight: 500; color: var(--td); margin-bottom: 3px; }
+.preview-card-sub   { font-size: 12px; font-weight: 300; color: var(--ts); line-height: 1.5; }
+.mini-stat-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.mini-stat {
+  flex: 1; background: var(--white);
+  border-radius: 14px; border: 0.5px solid rgba(0,0,0,0.07);
+  padding: 10px 12px;
+}
+.mini-stat-val { font-size: 18px; font-weight: 500; color: var(--td); letter-spacing: -0.02em; }
+.mini-stat-lbl { font-size: 10px; color: var(--th); font-weight: 300; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
+/* Chart placeholder */
+.chart-ph {
+  background: var(--white); border-radius: 18px;
+  border: 0.5px solid rgba(0,0,0,0.07);
+  padding: 14px 16px; margin-bottom: 10px;
+  height: 140px; position: relative; overflow: hidden;
+}
+.chart-ph-label { font-size: 11px; color: var(--th); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+.chart-bars { display: flex; gap: 5px; align-items: flex-end; height: 90px; }
+.cb { flex: 1; border-radius: 4px 4px 0 0; }
+
+/* Avatar row in community */
+.avatar-row { display: flex; gap: -4px; margin-bottom: 4px; }
+.av {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 500;
+  border: 2px solid var(--linen);
+  margin-right: -6px;
+}
+
+/* Harvest item */
+.harvest-item {
+  background: var(--white); border-radius: 16px;
+  border: 0.5px solid rgba(0,0,0,0.07);
+  padding: 12px 14px; margin-bottom: 8px;
+  display: flex; gap: 12px; align-items: center;
+}
+.harvest-thumb {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.harvest-item-name { font-size: 13px; font-weight: 500; color: var(--td); margin-bottom: 2px; }
+.harvest-item-date { font-size: 11px; font-weight: 300; color: var(--th); }
+.harvest-item-yield {
+  margin-left: auto; font-size: 13px; font-weight: 500; color: var(--terra-d);
+  flex-shrink: 0;
+}
+
+/* Spec table */
+.spec-section {
+  background: var(--white); border: 0.5px solid rgba(0,0,0,0.07);
+  border-radius: 20px; overflow: hidden; margin-bottom: 1.5rem;
+}
+.spec-hd {
+  padding: 13px 20px; background: var(--linen);
+  border-bottom: 0.5px solid rgba(0,0,0,0.07);
+  display: flex; align-items: center; gap: 10px;
+}
+.spec-hd-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.spec-hd-title { font-size: 13px; font-weight: 500; color: var(--td); }
+.spec-hd-sub   { font-size: 11px; font-weight: 300; color: var(--ts); margin-top: 1px; }
+.spec-t { width: 100%; border-collapse: collapse; }
+.spec-t tr { border-bottom: 0.5px solid rgba(0,0,0,0.05); }
+.spec-t tr:last-child { border-bottom: none; }
+.spec-t td { padding: 9px 20px; font-size: 12px; vertical-align: top; line-height: 1.55; }
+.spec-t td:first-child { color: var(--ts); font-weight: 300; width: 35%; white-space: nowrap; }
+.spec-t td:last-child  { color: var(--td); font-weight: 400; }
+code { background: var(--linen); border-radius: 4px; padding: 1px 5px; font-size: 11px; font-family: 'SF Mono','Fira Code',monospace; color: var(--canopy); }
+.cd  { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; border: 0.5px solid rgba(0,0,0,0.08); }
+</style>
+</head>
+<body>
+
+<div class="page-hd">
+  <h1>Greendore — Navigation System</h1>
+  <span>App architecture · 4-tab nav · all major screens · full spec</span>
+</div>
+
+<!-- ══════════════════════════════════
+     FULL APP MAP
+═══════════════════════════════════ -->
+<div class="map-wrap">
+  <p class="map-label">Complete app screen map</p>
+  <div class="app-map">
+
+    <!-- GARDEN -->
+    <div class="map-col">
+      <div class="map-tab-header" style="background:rgba(45,74,48,0.08);">
+        <div class="map-tab-icon" style="background:var(--canopy);">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L2.5 6v7.5h4v-4h3v4h4V6L8 1.5z" stroke="white" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg>
+        </div>
+        <div>
+          <p class="map-tab-name" style="color:var(--canopy);">Garden</p>
+          <p class="map-tab-role" style="color:var(--leaf);">Tab 1 · Home</p>
+        </div>
+      </div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:var(--canopy);"></div><div><p class="map-screen-name">Home</p><p class="map-screen-sub">Pod status, insight, tasks</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Sensor detail sheet</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Task detail sheet</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Add pod / swap plant</p></div></div>
+    </div>
+
+    <!-- GROW -->
+    <div class="map-col">
+      <div class="map-tab-header" style="background:rgba(106,158,114,0.1);">
+        <div class="map-tab-icon" style="background:var(--leaf);">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L11 8.5A4.5 4.5 0 015 8.5L8 2z" stroke="white" stroke-width="1.3" stroke-linejoin="round" fill="none"/><path d="M8 12v2.5M6.5 14.5h3" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <p class="map-tab-name" style="color:#3B6D11;">Grow</p>
+          <p class="map-tab-role" style="color:var(--leaf);">Tab 2 · Charts &amp; progress</p>
+        </div>
+      </div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:var(--leaf);"></div><div><p class="map-screen-name">Growth timeline</p><p class="map-screen-sub">Stages, milestones, journal</p></div></div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:var(--leaf);"></div><div><p class="map-screen-name">Environment charts</p><p class="map-screen-sub">Humidity, temp, light history</p></div></div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:var(--leaf);"></div><div><p class="map-screen-name">Plant encyclopedia</p><p class="map-screen-sub">Species info &amp; care guides</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Milestone detail sheet</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Adjust environment sheet</p></div></div>
+    </div>
+
+    <!-- HARVEST -->
+    <div class="map-col">
+      <div class="map-tab-header" style="background:rgba(196,149,106,0.1);">
+        <div class="map-tab-icon" style="background:var(--terra);">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13l2.5-5 3 3 2-4 3 6H3z" stroke="white" stroke-width="1.3" stroke-linejoin="round" fill="none"/><circle cx="8" cy="4" r="2" stroke="white" stroke-width="1.3"/></svg>
+        </div>
+        <div>
+          <p class="map-tab-name" style="color:#7A4A20;">Harvest</p>
+          <p class="map-tab-role" style="color:var(--terra);">Tab 3 · Log &amp; recipes</p>
+        </div>
+      </div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:var(--terra);"></div><div><p class="map-screen-name">Harvest log</p><p class="map-screen-sub">All past harvests, yield data</p></div></div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:var(--terra);"></div><div><p class="map-screen-name">Recipes</p><p class="map-screen-sub">Based on what's ready</p></div></div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:var(--terra);"></div><div><p class="map-screen-name">Meals powered</p><p class="map-screen-sub">Cumulative food impact</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Log a harvest sheet</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Recipe detail sheet</p></div></div>
+    </div>
+
+    <!-- COMMUNITY -->
+    <div class="map-col">
+      <div class="map-tab-header" style="background:rgba(83,74,183,0.08);">
+        <div class="map-tab-icon" style="background:#3A4E78;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5.5" r="2.5" stroke="white" stroke-width="1.3"/><circle cx="11" cy="5.5" r="2" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="white" stroke-width="1.3" stroke-linecap="round"/><path d="M13 13c0-1.65-.9-3.1-2.24-3.87" stroke="rgba(255,255,255,0.6)" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <p class="map-tab-name" style="color:#2A3858;">Community</p>
+          <p class="map-tab-role" style="color:#5A7AB0;">Tab 4 · Other growers</p>
+        </div>
+      </div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:#3A4E78;"></div><div><p class="map-screen-name">Feed</p><p class="map-screen-sub">Verified pod results</p></div></div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:#3A4E78;"></div><div><p class="map-screen-name">Challenges</p><p class="map-screen-sub">Growing competitions</p></div></div>
+      <div class="map-screen"><div class="map-screen-dot" style="background:#3A4E78;"></div><div><p class="map-screen-name">Compare pods</p><p class="map-screen-sub">Your data vs others</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Grower profile sheet</p></div></div>
+      <div class="map-sheet"><div class="map-screen-dot" style="background:var(--th);"></div><div><p class="map-screen-name" style="font-size:11px;color:var(--ts);">Challenge detail sheet</p></div></div>
+    </div>
+
+  </div><!-- end app-map -->
+
+  <!-- Global overlays -->
+  <div style="margin-top:16px;">
+    <p class="map-label" style="margin-bottom:10px;">Global — accessible from header (not tabs)</p>
+    <div class="global-row" style="margin:0;">
+      <div class="global-card">
+        <p class="global-card-label">Profile &amp; settings</p>
+        <p class="global-card-title">Opens from avatar in header</p>
+        <p class="global-card-desc">Full-screen slide-up: account, pod settings, notifications, plant history, app preferences.</p>
+      </div>
+      <div class="global-card">
+        <p class="global-card-label">Notifications</p>
+        <p class="global-card-title">Bell icon in Garden header</p>
+        <p class="global-card-desc">Bottom sheet listing recent alerts. Water low, milestone reached, harvest ready, community mentions.</p>
+      </div>
+      <div class="global-card">
+        <p class="global-card-label">Onboarding</p>
+        <p class="global-card-title">One-time flow at first launch</p>
+        <p class="global-card-desc">7 screens designed previously. Transitions into Garden tab on completion. Never shown again.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     4 PHONE STATES — NAV IN CONTEXT
+═══════════════════════════════════ -->
+<div class="phones-section">
+  <p class="map-label" style="max-width:1400px;margin:0 auto 1.5rem;">Bottom navigation in context — all 4 active states</p>
+  <div class="phones-grid">
+
+    <!-- ── PHONE 1: GARDEN (active) ── -->
+    <div class="phone-wrap">
+      <div class="screen-meta">
+        <p class="screen-num">Tab 01</p>
+        <p class="screen-title">Garden — home base</p>
+        <p class="screen-note">Active tab. Linen background. Nav uses light frosted treatment. Active icon in Mist bg, Canopy color.</p>
+      </div>
+      <div class="phone" style="background:var(--linen);">
+        <div class="sb light"><span>9:41</span><div style="display:flex;gap:5px;align-items:center;opacity:0.7;"><svg width="16" height="12" viewBox="0 0 16 12" fill="var(--td)"><rect x="0" y="4" width="3" height="8" rx="1" opacity="0.45"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" opacity="0.65"/><rect x="9" y="0.5" width="3" height="11.5" rx="1" opacity="0.88"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg></div></div>
+
+        <!-- Garden hero (abbreviated) -->
+        <div class="garden-hero">
+          <div class="garden-hero-glow"></div>
+          <div style="position:absolute;top:56px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:center;z-index:3;">
+            <div>
+              <p style="font-size:12px;color:rgba(168,200,160,0.75);font-weight:400;">Good morning</p>
+              <p style="font-family:var(--fd);font-size:22px;color:rgba(255,255,255,0.95);letter-spacing:-0.02em;">Amara</p>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;position:relative;">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6v2.5L2 11h12l-1.5-2.5V6c0-2.49-2.01-4.5-4.5-4.5z" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" stroke-linejoin="round"/><path d="M6.5 11v.5a1.5 1.5 0 003 0V11" stroke="rgba(255,255,255,0.7)" stroke-width="1.2"/></svg>
+                <div style="position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--terra);border:1.5px solid var(--canopy);"></div>
+              </div>
+              <div style="width:38px;height:38px;border-radius:50%;background:rgba(168,200,160,0.2);border:1px solid rgba(168,200,160,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:rgba(168,200,160,0.9);">A</div>
+            </div>
+          </div>
+          <!-- plant -->
+          <div style="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);z-index:3;">
+            <svg width="100" height="115" viewBox="0 0 100 115" fill="none">
+              <path d="M50 113 Q48 90 50 72 Q52 54 50 38 Q49 26 50 14" stroke="#5A9060" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M50 90 Q32 76 28 56 Q40 50 50 70" fill="#2D5535" opacity="0.75"/>
+              <path d="M50 74 Q68 58 72 38 Q60 32 50 54" fill="#3D6A42" opacity="0.8"/>
+              <path d="M50 56 Q34 42 32 24 Q44 18 50 40" fill="#4A7A50" opacity="0.85"/>
+              <path d="M50 38 Q66 22 68 6 Q56 2 50 22" fill="#6A9E72"/>
+            </svg>
+          </div>
+          <!-- pod -->
+          <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:2;">
+            <svg width="160" height="55" viewBox="0 0 160 55" fill="none">
+              <rect x="14" y="16" width="132" height="36" rx="9" fill="rgba(29,58,32,0.75)" stroke="rgba(168,200,160,0.2)" stroke-width="0.75"/>
+              <rect x="22" y="4" width="116" height="14" rx="6" fill="rgba(40,70,44,0.75)" stroke="rgba(168,200,160,0.15)" stroke-width="0.75"/>
+              <circle cx="46" cy="11" r="3" fill="#6A9E72" opacity="0.9"/>
+              <circle cx="80" cy="11" r="3" fill="#6A9E72" opacity="0.9"/>
+              <circle cx="114" cy="11" r="3" fill="#6A9E72" opacity="0.9"/>
+              <circle cx="24" cy="28" r="2.5" fill="#6A9E72" opacity="0.85"/>
+              <circle cx="24" cy="38" r="2.5" fill="rgba(196,149,106,0.7)"/>
+            </svg>
+          </div>
+          <!-- progress -->
+          <div style="position:absolute;bottom:20px;left:20px;right:20px;z-index:5;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+              <span style="font-family:var(--fd);font-size:16px;color:rgba(255,255,255,0.95);"><em style="font-style:italic;color:var(--clay);">Vesper</em> · Basil</span>
+              <span style="font-size:11px;color:rgba(168,200,160,0.7);font-weight:300;">Day 7 of 21</span>
+            </div>
+            <div style="height:3px;background:rgba(255,255,255,0.12);border-radius:2px;"><div style="width:33%;height:100%;background:var(--leaf);border-radius:2px;"></div></div>
+          </div>
+        </div>
+
+        <!-- abbreviated body -->
+        <div style="flex:1;overflow:hidden;padding:16px 20px 0;background:var(--linen);">
+          <!-- insight card -->
+          <div style="background:var(--canopy);border-radius:20px;padding:16px 18px;margin-bottom:12px;">
+            <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(168,200,160,0.15);border-radius:100px;margin-bottom:8px;">
+              <div style="width:5px;height:5px;border-radius:50%;background:var(--leaf);"></div>
+              <span style="font-size:10px;font-weight:500;color:rgba(168,200,160,0.85);letter-spacing:0.06em;text-transform:uppercase;">Botanist insight</span>
+            </div>
+            <p style="font-family:var(--fd);font-size:13px;font-style:italic;color:rgba(255,255,255,0.88);line-height:1.6;">"Vesper is in her second true-leaf stage. Her roots are quietly doubling — this is exactly where she should be."</p>
+          </div>
+          <!-- mini sensor row -->
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;background:var(--white);border-radius:14px;border:0.5px solid rgba(0,0,0,0.07);padding:10px 12px;">
+              <p style="font-size:9px;color:var(--th);text-transform:uppercase;letter-spacing:0.04em;">Humidity</p>
+              <p style="font-size:18px;font-weight:500;color:var(--leaf);letter-spacing:-0.02em;">67<span style="font-size:10px;font-weight:300;color:var(--th);">%</span></p>
+              <p style="font-size:9px;color:var(--leaf);">Ideal</p>
+            </div>
+            <div style="flex:1;background:var(--white);border-radius:14px;border:0.5px solid rgba(0,0,0,0.07);padding:10px 12px;">
+              <p style="font-size:9px;color:var(--th);text-transform:uppercase;letter-spacing:0.04em;">Temp</p>
+              <p style="font-size:18px;font-weight:500;color:var(--leaf);letter-spacing:-0.02em;">24<span style="font-size:10px;font-weight:300;color:var(--th);">°C</span></p>
+              <p style="font-size:9px;color:var(--leaf);">Optimal</p>
+            </div>
+            <div style="flex:1;background:rgba(237,217,192,0.3);border-radius:14px;border:0.5px solid rgba(196,149,106,0.35);padding:10px 12px;">
+              <p style="font-size:9px;color:var(--th);text-transform:uppercase;letter-spacing:0.04em;">Water</p>
+              <p style="font-size:18px;font-weight:500;color:var(--terra);letter-spacing:-0.02em;">34<span style="font-size:10px;font-weight:300;color:var(--th);">%</span></p>
+              <p style="font-size:9px;color:var(--terra);">Refill</p>
+            </div>
+            <div style="flex:1;background:var(--white);border-radius:14px;border:0.5px solid rgba(0,0,0,0.07);padding:10px 12px;">
+              <p style="font-size:9px;color:var(--th);text-transform:uppercase;letter-spacing:0.04em;">Light</p>
+              <p style="font-size:18px;font-weight:500;color:var(--leaf);letter-spacing:-0.02em;">14<span style="font-size:10px;font-weight:300;color:var(--th);">h</span></p>
+              <p style="font-size:9px;color:var(--leaf);">On track</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM NAV — Garden active -->
+        <div class="bnav">
+          <div class="ni active">
+            <div class="ni-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L4 7v9a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1V7L10 2z" stroke="#2D4A30" stroke-width="1.4" stroke-linejoin="round" fill="none"/></svg>
+            </div>
+            <span class="ni-label">Garden</span>
+          </div>
+          <div class="ni">
+            <div class="ni-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3L13.5 9.5A4.5 4.5 0 016.5 9.5L10 3z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/><path d="M10 13v3.5M8.5 16.5h3" stroke="#A8A89E" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <span class="ni-label">Grow</span>
+          </div>
+          <div class="ni">
+            <div class="ni-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16l3-6 3.5 3.5 2.5-5 3.5 7.5H4z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/><circle cx="10" cy="5" r="2.5" stroke="#A8A89E" stroke-width="1.4"/></svg>
+            </div>
+            <span class="ni-label">Harvest</span>
+          </div>
+          <div class="ni">
+            <div class="ni-icon" style="position:relative;">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7.5" cy="7" r="3" stroke="#A8A89E" stroke-width="1.4"/><circle cx="13.5" cy="7" r="2.5" stroke="#A8A89E" stroke-width="1.3"/><path d="M1.5 17c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke="#A8A89E" stroke-width="1.4" stroke-linecap="round"/><path d="M16 17c0-1.93-1.06-3.63-2.64-4.55" stroke="#A8A89E" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <div class="nav-badge"></div>
+            </div>
+            <span class="ni-label">Community</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PHONE 2: GROW (active) ── -->
+    <div class="phone-wrap">
+      <div class="screen-meta">
+        <p class="screen-num">Tab 02</p>
+        <p class="screen-title">Grow — charts &amp; progress</p>
+        <p class="screen-note">Active tab. Canopy header. Grow icon lit in mist bg. Growth timeline and environment charts below.</p>
+      </div>
+      <div class="phone" style="background:var(--linen);">
+        <div class="sb dark"><span>9:41</span></div>
+        <div class="grow-header">
+          <div class="grow-header-glow"></div>
+          <div style="position:relative;z-index:2;">
+            <p class="h-label">Your growth data</p>
+            <p class="h-title">Vesper</p>
+            <p class="h-sub">Day 7 · True leaf stage · 14 days to harvest</p>
+          </div>
+        </div>
+        <div class="grow-body">
+          <!-- Stage pills -->
+          <div style="display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;">
+            <div style="padding:5px 12px;background:var(--mist);border-radius:100px;font-size:11px;font-weight:500;color:var(--canopy);white-space:nowrap;">All time</div>
+            <div style="padding:5px 12px;background:var(--white);border-radius:100px;font-size:11px;color:var(--th);border:0.5px solid rgba(0,0,0,0.08);white-space:nowrap;">This week</div>
+            <div style="padding:5px 12px;background:var(--white);border-radius:100px;font-size:11px;color:var(--th);border:0.5px solid rgba(0,0,0,0.08);white-space:nowrap;">Today</div>
+          </div>
+          <!-- Chart card -->
+          <div class="chart-ph">
+            <p class="chart-ph-label">Temperature — last 7 days</p>
+            <div class="chart-bars">
+              <div class="cb" style="height:55%;background:rgba(106,158,114,0.18);"></div>
+              <div class="cb" style="height:65%;background:rgba(106,158,114,0.25);"></div>
+              <div class="cb" style="height:60%;background:rgba(106,158,114,0.18);"></div>
+              <div class="cb" style="height:80%;background:rgba(106,158,114,0.35);"></div>
+              <div class="cb" style="height:70%;background:rgba(106,158,114,0.25);"></div>
+              <div class="cb" style="height:75%;background:rgba(106,158,114,0.3);"></div>
+              <div class="cb" style="height:85%;background:var(--leaf);"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;">
+              <span style="font-size:9px;color:var(--th);">Mon</span>
+              <span style="font-size:9px;color:var(--th);">Tue</span>
+              <span style="font-size:9px;color:var(--th);">Wed</span>
+              <span style="font-size:9px;color:var(--th);">Thu</span>
+              <span style="font-size:9px;color:var(--th);">Fri</span>
+              <span style="font-size:9px;color:var(--th);">Sat</span>
+              <span style="font-size:9px;color:var(--td);font-weight:500;">Today</span>
+            </div>
+          </div>
+          <!-- Stat row -->
+          <div class="mini-stat-row">
+            <div class="mini-stat"><p class="mini-stat-val">7</p><p class="mini-stat-lbl">Days grown</p></div>
+            <div class="mini-stat"><p class="mini-stat-val">14</p><p class="mini-stat-lbl">To harvest</p></div>
+            <div class="mini-stat"><p class="mini-stat-val" style="color:var(--leaf);">98%</p><p class="mini-stat-lbl">Pod health</p></div>
+          </div>
+          <div class="preview-card">
+            <p class="preview-card-title">Next milestone in ~3 days</p>
+            <p class="preview-card-sub">Vesper will develop her 3rd and 4th true leaves. You'll see the plant double in visual density.</p>
+          </div>
+        </div>
+        <!-- BOTTOM NAV — Grow active -->
+        <div class="bnav">
+          <div class="ni">
+            <div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L4 7v9a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1V7L10 2z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/></svg></div>
+            <span class="ni-label">Garden</span>
+          </div>
+          <div class="ni active">
+            <div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3L13.5 9.5A4.5 4.5 0 016.5 9.5L10 3z" stroke="#2D4A30" stroke-width="1.4" stroke-linejoin="round" fill="none"/><path d="M10 13v3.5M8.5 16.5h3" stroke="#2D4A30" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+            <span class="ni-label">Grow</span>
+          </div>
+          <div class="ni">
+            <div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16l3-6 3.5 3.5 2.5-5 3.5 7.5H4z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/><circle cx="10" cy="5" r="2.5" stroke="#A8A89E" stroke-width="1.4"/></svg></div>
+            <span class="ni-label">Harvest</span>
+          </div>
+          <div class="ni">
+            <div class="ni-icon" style="position:relative;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7.5" cy="7" r="3" stroke="#A8A89E" stroke-width="1.4"/><circle cx="13.5" cy="7" r="2.5" stroke="#A8A89E" stroke-width="1.3"/><path d="M1.5 17c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke="#A8A89E" stroke-width="1.4" stroke-linecap="round"/><path d="M16 17c0-1.93-1.06-3.63-2.64-4.55" stroke="#A8A89E" stroke-width="1.3" stroke-linecap="round"/></svg><div class="nav-badge"></div></div>
+            <span class="ni-label">Community</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PHONE 3: HARVEST (active) ── -->
+    <div class="phone-wrap">
+      <div class="screen-meta">
+        <p class="screen-num">Tab 03</p>
+        <p class="screen-title">Harvest — log &amp; recipes</p>
+        <p class="screen-note">Active tab. Warm terracotta header. Harvest icon lit. Log of past yields + recipe cards below.</p>
+      </div>
+      <div class="phone" style="background:var(--linen);">
+        <div class="sb dark"><span>9:41</span></div>
+        <div class="harvest-header">
+          <div class="harvest-header-glow"></div>
+          <div style="position:relative;z-index:2;">
+            <p class="h-label">Your harvest story</p>
+            <p class="h-title" style="font-size:22px;">3 harvests so far</p>
+            <p class="h-sub">127g of food grown in your home</p>
+          </div>
+        </div>
+        <div class="harvest-body">
+          <div style="display:flex;gap:8px;margin-bottom:14px;">
+            <div style="flex:1;background:var(--white);border-radius:14px;border:0.5px solid rgba(0,0,0,0.07);padding:10px 12px;">
+              <p style="font-size:18px;font-weight:500;color:var(--terra-d);letter-spacing:-0.02em;">127<span style="font-size:11px;font-weight:300;color:var(--th);">g</span></p>
+              <p style="font-size:10px;color:var(--th);text-transform:uppercase;letter-spacing:0.04em;margin-top:2px;">Total yield</p>
+            </div>
+            <div style="flex:1;background:var(--white);border-radius:14px;border:0.5px solid rgba(0,0,0,0.07);padding:10px 12px;">
+              <p style="font-size:18px;font-weight:500;color:var(--terra-d);letter-spacing:-0.02em;">5</p>
+              <p style="font-size:10px;color:var(--th);text-transform:uppercase;letter-spacing:0.04em;margin-top:2px;">Meals made</p>
+            </div>
+            <div style="flex:1;background:var(--white);border-radius:14px;border:0.5px solid rgba(0,0,0,0.07);padding:10px 12px;">
+              <p style="font-size:18px;font-weight:500;color:var(--leaf);letter-spacing:-0.02em;">14</p>
+              <p style="font-size:10px;color:var(--th);text-transform:uppercase;letter-spacing:0.04em;margin-top:2px;">Days left</p>
+            </div>
+          </div>
+          <p style="font-size:11px;font-weight:500;color:var(--td);margin-bottom:8px;">Past harvests</p>
+          <div class="harvest-item">
+            <div class="harvest-thumb" style="background:linear-gradient(160deg,#1a3320,#2d5535);">
+              <svg width="24" height="28" viewBox="0 0 24 28" fill="none"><path d="M12 27 Q11 20 12 14 Q13 8 12 4" stroke="#5A9060" stroke-width="2" stroke-linecap="round"/><path d="M12 18 Q6 14 4 8 Q9 6 12 14" fill="#2D5535" opacity="0.85"/><path d="M12 12 Q18 8 20 2 Q15 0 12 8" fill="#4A7A50"/></svg>
+            </div>
+            <div>
+              <p class="harvest-item-name">Genovese Basil — Vesper</p>
+              <p class="harvest-item-date">Apr 3 · Cycle 1, week 3</p>
+            </div>
+            <p class="harvest-item-yield">42g</p>
+          </div>
+          <div class="harvest-item">
+            <div class="harvest-thumb" style="background:linear-gradient(160deg,#163328,#215040);">
+              <svg width="22" height="26" viewBox="0 0 22 26" fill="none"><path d="M11 25 Q10 18 11 12 Q12 7 11 3" stroke="#3A7850" stroke-width="2" stroke-linecap="round"/><path d="M11 16 Q5 12 3 6 Q8 4 11 12" fill="#1E5535" opacity="0.8"/><path d="M11 10 Q17 6 18 1 Q13 -1 11 7" fill="#357848"/></svg>
+            </div>
+            <div>
+              <p class="harvest-item-name">Spearmint — Sage</p>
+              <p class="harvest-item-date">Mar 18 · Cycle 1, week 2</p>
+            </div>
+            <p class="harvest-item-yield">55g</p>
+          </div>
+          <div class="preview-card" style="margin-top:4px;">
+            <p class="preview-card-title">3 recipes ready for your basil</p>
+            <p class="preview-card-sub">Caprese salad, pesto pasta, basil lemonade — all sized for Vesper's typical yield.</p>
+          </div>
+        </div>
+        <!-- BOTTOM NAV — Harvest active -->
+        <div class="bnav">
+          <div class="ni"><div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L4 7v9a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1V7L10 2z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/></svg></div><span class="ni-label">Garden</span></div>
+          <div class="ni"><div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3L13.5 9.5A4.5 4.5 0 016.5 9.5L10 3z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/><path d="M10 13v3.5M8.5 16.5h3" stroke="#A8A89E" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="ni-label">Grow</span></div>
+          <div class="ni active"><div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16l3-6 3.5 3.5 2.5-5 3.5 7.5H4z" stroke="#2D4A30" stroke-width="1.4" stroke-linejoin="round" fill="none"/><circle cx="10" cy="5" r="2.5" stroke="#2D4A30" stroke-width="1.4"/></svg></div><span class="ni-label">Harvest</span></div>
+          <div class="ni"><div class="ni-icon" style="position:relative;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7.5" cy="7" r="3" stroke="#A8A89E" stroke-width="1.4"/><circle cx="13.5" cy="7" r="2.5" stroke="#A8A89E" stroke-width="1.3"/><path d="M1.5 17c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke="#A8A89E" stroke-width="1.4" stroke-linecap="round"/><path d="M16 17c0-1.93-1.06-3.63-2.64-4.55" stroke="#A8A89E" stroke-width="1.3" stroke-linecap="round"/></svg><div class="nav-badge"></div></div><span class="ni-label">Community</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PHONE 4: COMMUNITY (active) ── -->
+    <div class="phone-wrap">
+      <div class="screen-meta">
+        <p class="screen-num">Tab 04</p>
+        <p class="screen-title">Community — other growers</p>
+        <p class="screen-note">Active tab. Deep navy header. Community icon lit. Notification badge clears once viewed.</p>
+      </div>
+      <div class="phone" style="background:var(--linen);">
+        <div class="sb dark"><span>9:41</span></div>
+        <div class="community-header">
+          <div style="position:relative;z-index:2;">
+            <p class="h-label">14 growers nearby</p>
+            <p class="h-title" style="font-size:22px;">Community</p>
+            <p class="h-sub">Pod-verified results only</p>
+          </div>
+        </div>
+        <div class="community-body">
+          <div style="display:flex;gap:8px;margin-bottom:14px;">
+            <div style="padding:5px 12px;background:var(--mist);border-radius:100px;font-size:11px;font-weight:500;color:var(--canopy);">Feed</div>
+            <div style="padding:5px 12px;background:var(--white);border-radius:100px;font-size:11px;color:var(--th);border:0.5px solid rgba(0,0,0,0.08);">Challenges</div>
+            <div style="padding:5px 12px;background:var(--white);border-radius:100px;font-size:11px;color:var(--th);border:0.5px solid rgba(0,0,0,0.08);">Compare pods</div>
+          </div>
+          <div class="preview-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <div style="width:30px;height:30px;border-radius:50%;background:rgba(45,74,48,0.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--canopy);">K</div>
+              <div>
+                <p style="font-size:12px;font-weight:500;color:var(--td);">Kofi harvested Basil</p>
+                <p style="font-size:11px;color:var(--th);font-weight:300;">Lagos · Day 19 · 68g yield</p>
+              </div>
+              <div style="margin-left:auto;padding:3px 8px;background:var(--mist);border-radius:100px;font-size:10px;font-weight:500;color:var(--canopy);">Verified</div>
+            </div>
+            <p class="preview-card-sub">"Kept humidity at 70% the whole cycle. The flavor was incredible."</p>
+          </div>
+          <div class="preview-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <div style="width:30px;height:30px;border-radius:50%;background:rgba(196,149,106,0.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--terra-d);">Z</div>
+              <div>
+                <p style="font-size:12px;font-weight:500;color:var(--td);">Zara grew Microgreens</p>
+                <p style="font-size:11px;color:var(--th);font-weight:300;">Nairobi · Day 12 · 95g yield</p>
+              </div>
+              <div style="margin-left:auto;padding:3px 8px;background:var(--mist);border-radius:100px;font-size:10px;font-weight:500;color:var(--canopy);">Verified</div>
+            </div>
+            <p class="preview-card-sub">"Microgreens are my favourite — fastest cycle, most satisfying crunch."</p>
+          </div>
+          <div style="background:linear-gradient(135deg,rgba(45,74,48,0.06),rgba(106,158,114,0.08));border-radius:16px;padding:14px 16px;border:0.5px solid rgba(45,74,48,0.1);">
+            <p style="font-size:12px;font-weight:500;color:var(--canopy);margin-bottom:3px;">April challenge — fastest basil</p>
+            <p style="font-size:11px;font-weight:300;color:var(--ts);margin-bottom:10px;">38 growers competing · 12 days left</p>
+            <div style="padding:8px 16px;background:var(--canopy);border-radius:100px;display:inline-block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.95);">Join challenge</div>
+          </div>
+        </div>
+        <!-- BOTTOM NAV — Community active -->
+        <div class="bnav">
+          <div class="ni"><div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L4 7v9a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1V7L10 2z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/></svg></div><span class="ni-label">Garden</span></div>
+          <div class="ni"><div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3L13.5 9.5A4.5 4.5 0 016.5 9.5L10 3z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/><path d="M10 13v3.5M8.5 16.5h3" stroke="#A8A89E" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="ni-label">Grow</span></div>
+          <div class="ni"><div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16l3-6 3.5 3.5 2.5-5 3.5 7.5H4z" stroke="#A8A89E" stroke-width="1.4" stroke-linejoin="round" fill="none"/><circle cx="10" cy="5" r="2.5" stroke="#A8A89E" stroke-width="1.4"/></svg></div><span class="ni-label">Harvest</span></div>
+          <div class="ni active"><div class="ni-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7.5" cy="7" r="3" stroke="#2D4A30" stroke-width="1.4"/><circle cx="13.5" cy="7" r="2.5" stroke="#2D4A30" stroke-width="1.3"/><path d="M1.5 17c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke="#2D4A30" stroke-width="1.4" stroke-linecap="round"/><path d="M16 17c0-1.93-1.06-3.63-2.64-4.55" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg></div><span class="ni-label">Community</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end phones-grid -->
+
+  <!-- ══ FULL SPEC ══ -->
+  <div style="max-width:1400px;margin:4rem auto 0;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+
+    <div class="spec-section">
+      <div class="spec-hd"><div class="spec-hd-dot" style="background:var(--canopy);"></div><div><p class="spec-hd-title">Bottom nav — dimensions &amp; structure</p><p class="spec-hd-sub">Every measurement, every state</p></div></div>
+      <table class="spec-t">
+        <tr><td>Total height</td><td><code>82px</code> — 10px top padding + 28px icon zone + 4px gap + 10px label + 30px iOS home indicator area</td></tr>
+        <tr><td>Position</td><td><code>absolute bottom:0</code>, <code>left:0</code>, <code>right:0</code>, z-index <code>30</code></td></tr>
+        <tr><td>Background — light screens</td><td><code>rgba(247,243,237,0.97)</code> frosted linen + <code>backdrop-filter: blur(12px)</code></td></tr>
+        <tr><td>Background — dark screens</td><td><code>rgba(28,46,30,0.96)</code> + blur. Used when header bg extends to full screen.</td></tr>
+        <tr><td>Top border</td><td>Light: <code>0.5px solid rgba(0,0,0,0.08)</code> · Dark: <code>0.5px solid rgba(255,255,255,0.07)</code></td></tr>
+        <tr><td>Tab item width</td><td><code>flex:1</code>, equal distribution, centered content</td></tr>
+        <tr><td>Tab item padding</td><td><code>4px 16px</code> — top/bottom breathing room, horizontal tap target</td></tr>
+        <tr><td>Minimum tap target</td><td><code>44×44px</code> — icon wrap + surrounding padding combined</td></tr>
+      </table>
+    </div>
+
+    <div class="spec-section">
+      <div class="spec-hd"><div class="spec-hd-dot" style="background:var(--leaf);"></div><div><p class="spec-hd-title">Nav icon states</p><p class="spec-hd-sub">Active, inactive, badge — all color values</p></div></div>
+      <table class="spec-t">
+        <tr><td>Icon size</td><td><code>20×20px</code> SVG, stroke-width <code>1.4px</code>, no fill — outline only</td></tr>
+        <tr><td>Icon wrap size</td><td><code>28×28px</code>, border-radius <code>10px</code></td></tr>
+        <tr><td>Active icon color</td><td><span class="cd" style="background:#2D4A30;"></span><code>#2D4A30</code> Canopy on light nav</td></tr>
+        <tr><td>Active icon color — dark nav</td><td><span class="cd" style="background:#A8C8A0;"></span><code>rgba(168,200,160,0.9)</code></td></tr>
+        <tr><td>Active icon bg</td><td><span class="cd" style="background:#EFF5EC;"></span><code>#EFF5EC</code> Mist · Dark nav: <code>rgba(106,158,114,0.18)</code></td></tr>
+        <tr><td>Inactive icon color</td><td><span class="cd" style="background:#A8A89E;"></span><code>#A8A89E</code> — same in light and dark</td></tr>
+        <tr><td>Inactive icon bg</td><td>None — transparent</td></tr>
+        <tr><td>Active indicator dot</td><td><code>4×4px</code> circle, <code>bottom:-2px</code> of tab item. Color: <code>#2D4A30</code> light / <code>#6A9E72</code> dark</td></tr>
+      </table>
+    </div>
+
+    <div class="spec-section">
+      <div class="spec-hd"><div class="spec-hd-dot" style="background:var(--terra);"></div><div><p class="spec-hd-title">Nav labels</p><p class="spec-hd-sub">Typography, active/inactive states</p></div></div>
+      <table class="spec-t">
+        <tr><td>Font</td><td>DM Sans, <code>10px</code></td></tr>
+        <tr><td>Active label weight</td><td><code>500</code> medium</td></tr>
+        <tr><td>Inactive label weight</td><td><code>400</code> regular</td></tr>
+        <tr><td>Active label color</td><td><span class="cd" style="background:#2D4A30;"></span><code>#2D4A30</code> Canopy</td></tr>
+        <tr><td>Active label — dark nav</td><td><code>rgba(168,200,160,0.9)</code></td></tr>
+        <tr><td>Inactive label color</td><td><span class="cd" style="background:#A8A89E;"></span><code>#A8A89E</code></td></tr>
+        <tr><td>Inactive — dark nav</td><td><code>rgba(168,200,160,0.45)</code></td></tr>
+        <tr><td>Letter spacing</td><td><code>0.01em</code></td></tr>
+        <tr><td>Gap icon → label</td><td><code>4px</code></td></tr>
+        <tr><td>Tab names (exact)</td><td>Garden · Grow · Harvest · Community</td></tr>
+      </table>
+    </div>
+
+    <div class="spec-section">
+      <div class="spec-hd"><div class="spec-hd-dot" style="background:var(--terra);"></div><div><p class="spec-hd-title">Notification badge</p><p class="spec-hd-sub">Community tab only · rules</p></div></div>
+      <table class="spec-t">
+        <tr><td>Size</td><td><code>8×8px</code> circle</td></tr>
+        <tr><td>Position</td><td><code>top:-2px</code>, <code>right:-2px</code> of icon wrap</td></tr>
+        <tr><td>Color</td><td><span class="cd" style="background:#C4956A;"></span><code>#C4956A</code> Terracotta — consistent with all alert signals</td></tr>
+        <tr><td>Border</td><td>Light nav: <code>1.5px solid #F7F3ED</code> linen · Dark nav: <code>1.5px solid #1C2E1E</code> soil</td></tr>
+        <tr><td>When shown</td><td>New community activity (verified harvests, challenge updates, mentions). Never for system alerts.</td></tr>
+        <tr><td>When cleared</td><td>On Community tab tap — badge disappears with <code>opacity 0</code> + <code>scale(0)</code> 200ms ease</td></tr>
+        <tr><td>No count label</td><td>Badge is presence-only. No number. Keeps nav clean and calm.</td></tr>
+      </table>
+    </div>
+
+    <div class="spec-section" style="grid-column:1/-1;">
+      <div class="spec-hd"><div class="spec-hd-dot" style="background:var(--soil);"></div><div><p class="spec-hd-title">Tab transitions &amp; navigation behaviour</p><p class="spec-hd-sub">How the app moves between tabs</p></div></div>
+      <table class="spec-t">
+        <tr><td>Tab switch animation</td><td>Screen content crossfades — <code>opacity 0→1</code>, <code>200ms ease-out</code>. No slide. Tabs are not ordered sequentially so a slide direction is meaningless.</td></tr>
+        <tr><td>Icon tap feedback</td><td>Icon scale <code>1→1.12→1.0</code> over <code>160ms</code>. Active bg fades in <code>120ms</code>.</td></tr>
+        <tr><td>Scroll-to-top on re-tap</td><td>Tapping the active tab a second time scrolls the content back to top. Standard iOS pattern, expected by users.</td></tr>
+        <tr><td>Nav visibility</td><td>Nav is always visible — never hides on scroll. Content scrolls behind it. Scroll body has <code>padding-bottom: 100px</code> so last item is never hidden.</td></tr>
+        <tr><td>Header color per tab</td><td>Garden: <code>#2D4A30</code> Canopy · Grow: <code>#2D4A30</code> Canopy · Harvest: <code>#3A2818</code> dark terra · Community: <code>#1C2838</code> deep navy</td></tr>
+        <tr><td>Nav bg adapts</td><td>When a tab has a dark header that fills the screen, nav switches to dark treatment. Linen tabs use light frosted nav.</td></tr>
+        <tr><td>Profile/Settings access</td><td>Avatar in Garden header only. Tapping opens a full-screen slide-up sheet — does not change active tab or tab state.</td></tr>
+        <tr><td>Back navigation</td><td>Sheets (sensor detail, task detail, harvest log, recipe) use drag-to-dismiss + close button. No back arrow in nav bar — keeps header clean.</td></tr>
+      </table>
+    </div>
+
+    <div class="spec-section" style="grid-column:1/-1;">
+      <div class="spec-hd"><div class="spec-hd-dot" style="background:var(--leaf);"></div><div><p class="spec-hd-title">Tab icon reference — SVG paths</p><p class="spec-hd-sub">Exact icon design for each tab, inactive and active stroke color</p></div></div>
+      <table class="spec-t">
+        <tr><td>Garden icon</td><td>House silhouette. Path: <code>M10 2L4 7v9a1 1 0 001 1h4v-5h2v5h4a1 1 0 001-1V7L10 2z</code>. No fill, outline only. Represents "home base" for the plant.</td></tr>
+        <tr><td>Grow icon</td><td>Leaf + stem. Teardrop path from bottom point up + a short stem with horizontal end-cap. Represents growth and the plant lifecycle.</td></tr>
+        <tr><td>Harvest icon</td><td>Mountain/yield graph shape + circle above. Rising peaks reference harvest data over time. Circle = the fruit/yield.</td></tr>
+        <tr><td>Community icon</td><td>Two overlapping people silhouettes — larger in front, smaller behind. Foreground person fully opaque, background person at 80% opacity.</td></tr>
+        <tr><td>Stroke width</td><td><code>1.4px</code> for all icons. Consistent visual weight across all 4. No filled icons — always outline.</td></tr>
+        <tr><td>Icon design rule</td><td>Icons are legible at 20×20px with no label. The label confirms — it doesn't explain. If the icon needs the label to be understood, redesign the icon.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
