@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greendore — Profile & Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --soil:#1C2E1E; --canopy:#2D4A30; --canopy-m:#3D5E40;
+  --leaf:#6A9E72; --sprout:#A8C8A0; --mist:#EFF5EC;
+  --terra:#C4956A; --terra-d:#9E6E45; --terra-l:#EDD9C0;
+  --linen:#F7F3ED; --linen-d:#EDE8E0; --clay:#E8D5B0;
+  --wgray:#8A8478;
+  --td:#1A1F1B; --tm:#4A5248; --ts:#7A8278; --th:#A8A89E;
+  --white:#FFFFFF;
+  --danger:#D94F4F; --danger-l:#FDEAEA;
+  --fd:'DM Serif Display',Georgia,serif;
+  --fs:'DM Sans',system-ui,sans-serif;
+  --rc:20px; --rb:14px; --rp:100px;
+}
+body{background:#E4E0D8;font-family:var(--fs);color:var(--td);padding:2.5rem 1.5rem 6rem}
+
+.pg-hd{max-width:1500px;margin:0 auto 2.5rem;display:flex;align-items:baseline;gap:1rem;border-bottom:.5px solid rgba(45,74,48,.2);padding-bottom:1.25rem}
+.pg-hd h1{font-family:var(--fd);font-size:26px;font-weight:400;color:var(--canopy);letter-spacing:-.02em}
+.pg-hd span{font-size:13px;color:var(--ts);font-weight:300}
+
+/* ── SCREEN GRID ── */
+.screens-grid{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(375px,1fr));gap:2.5rem 2rem;justify-items:center}
+
+/* PHONE SHELL */
+.pw{display:flex;flex-direction:column;align-items:center;gap:1.25rem;width:375px}
+.sm{width:100%}
+.sn{font-size:11px;font-weight:500;color:var(--terra);letter-spacing:.08em;text-transform:uppercase}
+.st{font-size:15px;font-weight:500;color:var(--td);margin:2px 0;letter-spacing:-.01em}
+.sd{font-size:12px;color:var(--ts);font-weight:300;line-height:1.5}
+.phone{width:375px;height:812px;border-radius:44px;overflow:hidden;position:relative;border:1px solid rgba(0,0,0,.09);box-shadow:0 2px 0 rgba(0,0,0,.05),0 12px 48px rgba(0,0,0,.14),inset 0 0 0 1px rgba(255,255,255,.1);display:flex;flex-direction:column;background:var(--linen)}
+
+/* STATUS BAR */
+.sb{position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 8px;z-index:20;font-size:12px;font-weight:500;pointer-events:none;color:var(--td)}
+.sb.d{color:rgba(255,255,255,.88)}
+
+/* BACK NAV BAR */
+.nav-bar{display:flex;align-items:center;gap:12px;padding:58px 20px 14px;flex-shrink:0}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--linen-d);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.nav-bar-title{font-size:16px;font-weight:500;color:var(--td);letter-spacing:-.01em}
+
+/* SCROLL BODY */
+.scroll{flex:1;overflow-y:auto;padding-bottom:40px}
+.scroll::-webkit-scrollbar{display:none}
+
+/* SECTION LABEL */
+.sec-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--th);padding:20px 20px 8px}
+
+/* SETTINGS GROUP */
+.group{background:var(--white);border-radius:var(--rc);border:.5px solid rgba(0,0,0,.07);margin:0 16px 10px;overflow:hidden}
+.group-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:.5px solid rgba(0,0,0,.05);cursor:pointer;transition:background .15s}
+.group-item:last-child{border-bottom:none}
+.group-item:active{background:var(--linen)}
+.gi-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gi-text{flex:1}
+.gi-label{font-size:14px;font-weight:400;color:var(--td);letter-spacing:-.01em}
+.gi-sub{font-size:12px;font-weight:300;color:var(--th);margin-top:1px}
+.gi-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.gi-value{font-size:13px;font-weight:300;color:var(--th)}
+.gi-chevron{opacity:.3}
+.gi-badge{padding:3px 8px;border-radius:var(--rp);font-size:10px;font-weight:500}
+
+/* TOGGLE */
+.toggle-track{position:relative;width:44px;height:26px;border-radius:13px;background:rgba(0,0,0,.12);cursor:pointer;flex-shrink:0;transition:background .25s}
+.toggle-track.on{background:var(--leaf)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--white);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.toggle-track.on .toggle-thumb{transform:translateX(18px)}
+
+/* SLIDER */
+.slider-wrap{padding:0 16px 16px}
+.slider-label-row{display:flex;justify-content:space-between;margin-bottom:8px}
+.slider-lbl{font-size:12px;font-weight:300;color:var(--th)}
+.slider-val{font-size:12px;font-weight:500;color:var(--td)}
+input[type=range]{width:100%;height:4px;accent-color:var(--leaf);cursor:pointer}
+
+/* STAT CHIPS */
+.stat-row{display:flex;gap:8px;padding:16px}
+.stat-chip{flex:1;background:var(--linen);border-radius:12px;padding:10px 8px;text-align:center}
+.stat-chip-val{font-size:18px;font-weight:500;color:var(--td);letter-spacing:-.02em;display:block}
+.stat-chip-lbl{font-size:10px;font-weight:300;color:var(--th);text-transform:uppercase;letter-spacing:.04em;display:block;margin-top:2px}
+
+/* AVATAR EDIT */
+.avatar-lg{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:28px;font-weight:400;position:relative}
+.avatar-edit-btn{position:absolute;bottom:0;right:0;width:24px;height:24px;border-radius:50%;background:var(--canopy);display:flex;align-items:center;justify-content:center}
+
+/* PLANT HISTORY CARDS */
+.plant-hist-card{background:var(--white);border-radius:16px;border:.5px solid rgba(0,0,0,.07);padding:12px 14px;display:flex;gap:12px;align-items:center;margin:0 16px 8px}
+.ph-thumb{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ph-info{flex:1}
+.ph-name{font-size:13px;font-weight:500;color:var(--td);margin-bottom:2px}
+.ph-meta{font-size:11px;font-weight:300;color:var(--th)}
+.ph-badge{padding:3px 8px;border-radius:var(--rp);font-size:10px;font-weight:500}
+
+/* POD CARD */
+.pod-card{background:var(--canopy);border-radius:20px;margin:0 16px 10px;padding:18px 20px;position:relative;overflow:hidden}
+.pod-card-glow{position:absolute;inset:0;background:radial-gradient(ellipse 200px 140px at 80% -10%,rgba(168,200,160,.15) 0%,transparent 60%);pointer-events:none}
+.pod-card-name{font-family:var(--fd);font-size:18px;color:rgba(255,255,255,.95);letter-spacing:-.01em;margin-bottom:3px}
+.pod-card-meta{font-size:12px;font-weight:300;color:rgba(168,200,160,.65)}
+.pod-card-stats{display:flex;gap:8px;margin-top:14px}
+.pod-stat{flex:1;padding:8px 10px;background:rgba(255,255,255,.08);border-radius:10px;border:1px solid rgba(255,255,255,.1)}
+.pod-stat-val{font-size:14px;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:-.01em}
+.pod-stat-lbl{font-size:9px;font-weight:300;color:rgba(168,200,160,.55);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.pod-led-row{display:flex;gap:5px;margin-top:12px}
+.pod-led{width:7px;height:7px;border-radius:50%;background:var(--leaf);box-shadow:0 0 5px rgba(106,158,114,.7)}
+
+/* NOTIFICATION ITEM */
+.notif-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:.5px solid rgba(0,0,0,.05)}
+.notif-item:last-child{border-bottom:none}
+.notif-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-text{flex:1}
+.notif-label{font-size:14px;font-weight:400;color:var(--td)}
+.notif-sub{font-size:12px;font-weight:300;color:var(--th);margin-top:1px;line-height:1.4}
+
+/* DANGER ZONE */
+.danger-btn{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer}
+.danger-label{font-size:14px;font-weight:400;color:var(--danger)}
+
+/* HELP ITEM */
+.help-item{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border-bottom:.5px solid rgba(0,0,0,.05)}
+.help-item:last-child{border-bottom:none}
+.help-q{font-size:13px;font-weight:500;color:var(--td);margin-bottom:4px}
+.help-a{font-size:12px;font-weight:300;color:var(--ts);line-height:1.6}
+
+/* SPEC PANELS */
+.spec-panels{max-width:1500px;margin:4rem auto 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.spec-block{background:var(--white);border-radius:16px;border:.5px solid rgba(0,0,0,.07);overflow:hidden}
+.spec-hd{padding:12px 18px;background:var(--linen);border-bottom:.5px solid rgba(0,0,0,.07);display:flex;align-items:center;gap:8px}
+.spec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.spec-ttl{font-size:13px;font-weight:500;color:var(--td)}
+.spec-sub{font-size:11px;font-weight:300;color:var(--ts);margin-top:1px}
+.spec-t{width:100%;border-collapse:collapse}
+.spec-t tr{border-bottom:.5px solid rgba(0,0,0,.05)}
+.spec-t tr:last-child{border-bottom:none}
+.spec-t td{padding:8px 18px;font-size:11.5px;vertical-align:top;line-height:1.55}
+.spec-t td:first-child{color:var(--ts);font-weight:300;width:36%;white-space:nowrap}
+.spec-t td:last-child{color:var(--td);font-weight:400}
+code{background:var(--linen);border-radius:4px;padding:1px 5px;font-size:10.5px;font-family:'SF Mono','Fira Code',monospace;color:var(--canopy)}
+.cd{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle;border:.5px solid rgba(0,0,0,.1)}
+
+/* SECTION DIVIDER LABEL */
+.section-divider{max-width:1500px;margin:3rem auto 1.5rem;display:flex;align-items:center;gap:12px}
+.section-divider-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--th);white-space:nowrap}
+.section-divider-line{flex:1;height:.5px;background:rgba(0,0,0,.1)}
+</style>
+</head>
+<body>
+
+<div class="pg-hd">
+  <h1>Greendore — Profile & Settings</h1>
+  <span>Main screen + 7 sub-screens · full design specification · every section in detail</span>
+</div>
+
+<!-- ══════════════════════════
+  ROW 1: MAIN + PROFILE IDENTITY
+══════════════════════════ -->
+<div class="section-divider"><span class="section-divider-label">Main screen & identity</span><div class="section-divider-line"></div></div>
+<div class="screens-grid">
+
+<!-- ── MAIN SETTINGS SCREEN ── -->
+<div class="pw">
+  <div class="sm"><p class="sn">Main · Profile & Settings</p><p class="st">The root settings screen</p><p class="sd">Pushed in from right when user taps their avatar in the Garden header. Contains the profile hero, stats, and all 7 section rows leading to sub-screens.</p></div>
+  <div class="phone">
+    <div class="sb"><span>9:41</span></div>
+
+    <!-- Nav bar with back -->
+    <div class="nav-bar">
+      <div class="back-btn">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="nav-bar-title">Profile & Settings</span>
+    </div>
+
+    <div class="scroll">
+
+      <!-- PROFILE HERO -->
+      <div style="display:flex;flex-direction:column;align-items:center;padding:10px 20px 24px;border-bottom:.5px solid rgba(0,0,0,.06)">
+        <div style="position:relative;margin-bottom:14px">
+          <div class="avatar-lg" style="background:linear-gradient(145deg,#2D4A30,#3D6A40);color:rgba(255,255,255,.95);letter-spacing:-.01em">A
+            <div class="avatar-edit-btn">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5L10.5 3.5L4 10H2v-2L8.5 1.5z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+        <p style="font-family:var(--fd);font-size:22px;color:var(--td);letter-spacing:-.02em;margin-bottom:3px">Amara</p>
+        <p style="font-size:13px;font-weight:300;color:var(--th)">Member since March 2025</p>
+
+        <!-- Growing stats strip -->
+        <div class="stat-row" style="width:100%;padding:14px 0 0">
+          <div class="stat-chip"><span class="stat-chip-val">3</span><span class="stat-chip-lbl">Harvests</span></div>
+          <div class="stat-chip"><span class="stat-chip-val">127g</span><span class="stat-chip-lbl">Grown</span></div>
+          <div class="stat-chip"><span class="stat-chip-val">47</span><span class="stat-chip-lbl">Days</span></div>
+          <div class="stat-chip"><span class="stat-chip-val">#4</span><span class="stat-chip-lbl">Rank</span></div>
+        </div>
+      </div>
+
+      <!-- SECTION: MY POD -->
+      <p class="sec-label">My pod</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.1)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="7" width="12" height="9" rx="3" stroke="#2D4A30" stroke-width="1.3"/><rect x="5" y="3" width="8" height="5" rx="2.5" stroke="#2D4A30" stroke-width="1.3"/><circle cx="6" cy="5.5" r="1.5" fill="#6A9E72"/><circle cx="9" cy="5.5" r="1.5" fill="#6A9E72"/><circle cx="12" cy="5.5" r="1.5" fill="#6A9E72"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">My pods</p><p class="gi-sub">Greendore Pod 01 · Connected</p></div>
+          <div class="gi-right"><div style="width:8px;height:8px;border-radius:50%;background:var(--leaf);box-shadow:0 0 5px rgba(106,158,114,.6)"></div><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(196,149,106,.12)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="3" stroke="#9E6E45" stroke-width="1.3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.41 1.41M13.37 13.37l1.41 1.41M3.22 14.78l1.41-1.41M13.37 4.63l1.41-1.41" stroke="#9E6E45" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Pod settings</p><p class="gi-sub">Light schedule, water, automation</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- SECTION: MY GARDEN -->
+      <p class="sec-label">My garden</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:var(--mist)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L12 8.5A4.5 4.5 0 015 8.5L9 2z" stroke="#2D4A30" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 12v4M7.5 16h3" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Plant history</p><p class="gi-sub">3 plants grown</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- SECTION: PREFERENCES -->
+      <p class="sec-label">Preferences</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(232,213,176,.3)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a7 7 0 100 14A7 7 0 009 2z" stroke="#9E6E45" stroke-width="1.3"/><path d="M9 5v4l2.5 2.5" stroke="#9E6E45" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Notifications</p><p class="gi-sub">4 of 6 enabled</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- SECTION: ACCOUNT -->
+      <p class="sec-label">Account</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3.5" stroke="#2D4A30" stroke-width="1.3"/><path d="M2.5 16c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Account & privacy</p><p class="gi-sub">amara@email.com</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#2D4A30" stroke-width="1.3"/><path d="M9 8v5M9 6v.5" stroke="#2D4A30" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Help & support</p><p class="gi-sub">FAQs, contact, guides</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- LOG OUT -->
+      <div class="group" style="margin-top:4px">
+        <div class="danger-btn">
+          <div class="gi-icon" style="background:var(--danger-l)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 9h7M11.5 6.5L14 9l-2.5 2.5" stroke="#D94F4F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 4H4a1 1 0 00-1 1v8a1 1 0 001 1h6" stroke="#D94F4F" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <p class="danger-label">Log out</p>
+        </div>
+      </div>
+
+      <!-- APP VERSION -->
+      <p style="text-align:center;font-size:11px;font-weight:300;color:var(--th);padding:20px 0 8px">Greendore v1.0.0 · Made with care</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROFILE IDENTITY EDIT ── -->
+<div class="pw">
+  <div class="sm"><p class="sn">Sub-screen · Profile identity</p><p class="st">Edit profile</p><p class="sd">Opened by tapping the avatar or name on the main settings screen. Edit name, upload photo, view member stats.</p></div>
+  <div class="phone">
+    <div class="sb"><span>9:41</span></div>
+    <div class="nav-bar">
+      <div class="back-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="nav-bar-title">Edit profile</span>
+      <div style="margin-left:auto;padding:6px 14px;background:var(--canopy);border-radius:var(--rp);font-size:12px;font-weight:500;color:rgba(255,255,255,.95)">Save</div>
+    </div>
+    <div class="scroll">
+
+      <!-- Avatar section -->
+      <div style="display:flex;flex-direction:column;align-items:center;padding:16px 20px 24px">
+        <div style="position:relative;margin-bottom:16px">
+          <div class="avatar-lg" style="background:linear-gradient(145deg,#2D4A30,#3D6A40);color:rgba(255,255,255,.95);font-size:28px;width:96px;height:96px">A
+            <div class="avatar-edit-btn" style="width:28px;height:28px;bottom:2px;right:2px">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2L12 4.5L4.5 12H2v-2.5L9.5 2z" stroke="white" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:12px;font-weight:300;color:var(--th)">Tap avatar to change photo</p>
+      </div>
+
+      <!-- Name field -->
+      <p class="sec-label" style="padding-top:0">Display name</p>
+      <div class="group">
+        <div style="padding:12px 16px">
+          <p style="font-size:11px;font-weight:400;color:var(--th);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">First name</p>
+          <div style="padding:14px 16px;background:var(--linen);border-radius:12px;border:1.5px solid var(--leaf)">
+            <p style="font-size:15px;font-weight:400;color:var(--td)">Amara</p>
+          </div>
+          <p style="font-size:11px;font-weight:300;color:var(--th);margin-top:6px">This is how the app addresses you in every message and insight.</p>
+        </div>
+      </div>
+
+      <!-- Stats (read-only) -->
+      <p class="sec-label">Your growing record</p>
+      <div class="group" style="overflow:visible">
+        <div class="stat-row" style="padding:16px">
+          <div class="stat-chip"><span class="stat-chip-val">3</span><span class="stat-chip-lbl">Harvests</span></div>
+          <div class="stat-chip"><span class="stat-chip-val">127g</span><span class="stat-chip-lbl">Grown</span></div>
+          <div class="stat-chip"><span class="stat-chip-val">47</span><span class="stat-chip-lbl">Days</span></div>
+          <div class="stat-chip" style="background:rgba(45,74,48,.08)"><span class="stat-chip-val" style="color:var(--canopy)">#4</span><span class="stat-chip-lbl">Rank</span></div>
+        </div>
+        <div style="padding:0 16px 14px">
+          <p style="font-size:12px;font-weight:300;color:var(--th);line-height:1.55">Member since March 2025 · Community rank updates weekly based on pod-verified harvest data.</p>
+        </div>
+      </div>
+
+      <!-- Account linked -->
+      <p class="sec-label">Linked account</p>
+      <div class="group">
+        <div class="group-item" style="cursor:default">
+          <div style="width:32px;height:32px;border-radius:8px;background:#fff;border:.5px solid rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Google account</p><p class="gi-sub">amara@gmail.com</p></div>
+          <div class="gi-badge" style="background:var(--mist);color:var(--canopy)">Linked</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end row 1 -->
+
+<!-- ══════════════════════════
+  ROW 2: PODS + POD SETTINGS
+══════════════════════════ -->
+<div class="section-divider"><span class="section-divider-label">Pod management</span><div class="section-divider-line"></div></div>
+<div class="screens-grid">
+
+<!-- ── MY PODS ── -->
+<div class="pw">
+  <div class="sm"><p class="sn">Sub-screen · My pods</p><p class="st">My pods</p><p class="sd">All connected Greendore pods. Live connection status, current plant, rename pod, add a new pod. One pod shown with live green LED indicator.</p></div>
+  <div class="phone">
+    <div class="sb"><span>9:41</span></div>
+    <div class="nav-bar">
+      <div class="back-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="nav-bar-title">My pods</span>
+    </div>
+    <div class="scroll">
+
+      <!-- Connected pod card -->
+      <p class="sec-label">Connected</p>
+      <div class="pod-card">
+        <div class="pod-card-glow"></div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2px;position:relative;z-index:2">
+          <div>
+            <p class="pod-card-name">Greendore Pod 01</p>
+            <p class="pod-card-meta">Connected · 3.2m away · firmware v2.1.4</p>
+          </div>
+          <div style="padding:4px 10px;background:rgba(106,158,114,.25);border-radius:var(--rp);font-size:10px;font-weight:500;color:rgba(168,200,160,.9);border:1px solid rgba(106,158,114,.3)">Online</div>
+        </div>
+        <!-- Pod illustration -->
+        <div style="position:relative;z-index:2;text-align:center;padding:10px 0">
+          <svg width="160" height="55" viewBox="0 0 160 55" fill="none">
+            <rect x="14" y="16" width="132" height="36" rx="9" fill="rgba(29,58,32,.75)" stroke="rgba(168,200,160,.2)" stroke-width=".75"/>
+            <rect x="22" y="4" width="116" height="14" rx="6" fill="rgba(40,70,44,.75)" stroke="rgba(168,200,160,.15)" stroke-width=".75"/>
+            <circle cx="46" cy="11" r="3" fill="#6A9E72" opacity=".9"/>
+            <circle cx="80" cy="11" r="3" fill="#6A9E72" opacity=".9"/>
+            <circle cx="114" cy="11" r="3" fill="#6A9E72" opacity=".9"/>
+            <circle cx="24" cy="28" r="2.5" fill="#6A9E72" opacity=".85"/>
+            <circle cx="24" cy="38" r="2.5" fill="rgba(196,149,106,.7)"/>
+            <rect x="134" y="24" width="8" height="22" rx="3" fill="rgba(106,158,114,.12)" stroke="rgba(106,158,114,.25)" stroke-width=".5"/>
+            <rect x="135" y="36" width="6" height="9" rx="2" fill="rgba(106,158,114,.4)"/>
+            <path d="M46 16 Q44 10 42 6 Q46 4 48 10 Q49 13 46 16Z" fill="#3A6040" opacity=".6"/>
+            <path d="M80 16 Q78 9 76 5 Q81 3 83 9 Q84 13 80 16Z" fill="#4A7A50" opacity=".7"/>
+            <path d="M114 16 Q112 10 110 6 Q114 4 116 10 Q117 13 114 16Z" fill="#3A6040" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="pod-card-stats" style="position:relative;z-index:2">
+          <div class="pod-stat"><p class="pod-stat-val">67%</p><p class="pod-stat-lbl">Humidity</p></div>
+          <div class="pod-stat"><p class="pod-stat-val">24°C</p><p class="pod-stat-lbl">Temp</p></div>
+          <div class="pod-stat"><p class="pod-stat-val">34%</p><p class="pod-stat-lbl">Water</p></div>
+          <div class="pod-stat"><p class="pod-stat-val">Day 7</p><p class="pod-stat-lbl">Growing</p></div>
+        </div>
+        <div class="pod-led-row" style="position:relative;z-index:2">
+          <div class="pod-led"></div>
+          <div class="pod-led"></div>
+          <div class="pod-led"></div>
+          <p style="font-size:10px;font-weight:300;color:rgba(168,200,160,.5);margin-left:6px">All systems normal</p>
+        </div>
+      </div>
+
+      <!-- Pod actions -->
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:var(--mist)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9.5 2L11.5 4H15a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1h3.5L8.5 2h1z" stroke="#2D4A30" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 8v4M7 10h4" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Rename pod</p><p class="gi-sub">Currently "Greendore Pod 01"</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:var(--mist)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M9 3v12" stroke="#2D4A30" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Add another pod</p><p class="gi-sub">Connect a second Greendore pod</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Disconnect -->
+      <div class="group" style="margin-top:4px">
+        <div class="group-item">
+          <div class="gi-icon" style="background:var(--danger-l)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 9h6M9 3v2M9 13v2M3 6l1.4 1.4M13.6 10.6L15 12M3 12l1.4-1.4M13.6 7.4L15 6" stroke="#D94F4F" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label" style="color:var(--danger)">Disconnect pod</p><p class="gi-sub">Pod data will remain in the app</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── POD SETTINGS ── -->
+<div class="pw">
+  <div class="sm"><p class="sn">Sub-screen · Pod settings</p><p class="st">Pod settings</p><p class="sd">Light schedule, water automation, temperature target, grow mode. Every setting that controls the physical pod behaviour.</p></div>
+  <div class="phone">
+    <div class="sb"><span>9:41</span></div>
+    <div class="nav-bar">
+      <div class="back-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="nav-bar-title">Pod settings</span>
+    </div>
+    <div class="scroll">
+
+      <!-- Light schedule -->
+      <p class="sec-label">Grow light</p>
+      <div class="group">
+        <div class="group-item" style="cursor:default">
+          <div class="gi-icon" style="background:rgba(255,200,50,.12)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="3" stroke="#9E7A10" stroke-width="1.3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.41 1.41M13.37 13.37l1.41 1.41M3.22 14.78l1.41-1.41M13.37 4.63l1.41-1.41" stroke="#9E7A10" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Daily light hours</p></div>
+          <p class="gi-value">14h / day</p>
+        </div>
+        <div class="slider-wrap">
+          <div class="slider-label-row"><span class="slider-lbl">8h minimum</span><span class="slider-val">14 hours</span></div>
+          <input type="range" min="8" max="18" value="14">
+          <div class="slider-label-row" style="margin-top:4px"><span class="slider-lbl">Lights on: 6:00 AM</span><span class="slider-lbl">Off: 8:00 PM</span></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(255,200,50,.12)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#9E7A10" stroke-width="1.3"/><path d="M9 5v4l2.5 2.5" stroke="#9E7A10" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Light start time</p><p class="gi-sub">When lights turn on each day</p></div>
+          <div class="gi-right"><p class="gi-value">6:00 AM</p><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Water -->
+      <p class="sec-label">Watering</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(106,158,114,.12)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L13.5 9A4.5 4.5 0 014.5 9L9 2z" stroke="#2D4A30" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Auto-water</p><p class="gi-sub">Pod tops up water automatically</p></div>
+          <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(196,149,106,.1)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a7 7 0 100 14A7 7 0 009 2z" stroke="#9E6E45" stroke-width="1.3"/><path d="M9 8v5M9 6v.5" stroke="#9E6E45" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Low water alert</p><p class="gi-sub">Notify when below threshold</p></div>
+          <div class="gi-right"><p class="gi-value">Below 30%</p><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Temperature -->
+      <p class="sec-label">Climate</p>
+      <div class="group">
+        <div class="group-item" style="cursor:default">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="7" y="1" width="4" height="10" rx="2" stroke="#2D4A30" stroke-width="1.3"/><circle cx="9" cy="14" r="3" stroke="#2D4A30" stroke-width="1.3"/><line x1="9" y1="11" x2="9" y2="8" stroke="#2D4A30" stroke-width="1.3"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Target temperature</p></div>
+          <p class="gi-value">22–26°C</p>
+        </div>
+        <div class="slider-wrap">
+          <div class="slider-label-row"><span class="slider-lbl">Min: 18°C</span><span class="slider-val">24°C target</span></div>
+          <input type="range" min="18" max="30" value="24">
+          <div class="slider-label-row" style="margin-top:4px"><span class="slider-lbl">Optimal for basil: 22–26°C</span></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9L15 9M9 3L9 15" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/><circle cx="9" cy="9" r="2" fill="#2D4A30"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">AI climate control</p><p class="gi-sub">Automatically adjusts for your plant</p></div>
+          <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
+
+      <!-- Grow mode -->
+      <p class="sec-label">Grow mode</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:var(--mist)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L12 8.5A4.5 4.5 0 015 8.5L9 2z" stroke="#2D4A30" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 12v4" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Current plant</p><p class="gi-sub">Settings optimised for Genovese Basil</p></div>
+          <div class="gi-right"><p class="gi-value">Basil</p><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:var(--mist)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 5.5H17l-4.9 3.6 1.9 5.8L9 13.4l-5 3.5 1.9-5.8L1 7.5h6.2L9 2z" stroke="#2D4A30" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Expert mode</p><p class="gi-sub">Manual control of all pod settings</p></div>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- end row 2 -->
+
+<!-- ══════════════════════════
+  ROW 3: PLANT HISTORY + NOTIFICATIONS
+══════════════════════════ -->
+<div class="section-divider"><span class="section-divider-label">Garden history & preferences</span><div class="section-divider-line"></div></div>
+<div class="screens-grid">
+
+<!-- ── PLANT HISTORY ── -->
+<div class="pw">
+  <div class="sm"><p class="sn">Sub-screen · Plant history</p><p class="st">Plant history</p><p class="sd">Every plant ever grown in the pod. Name, cycle dates, harvest yield, completion status. Tap any to see full data.</p></div>
+  <div class="phone">
+    <div class="sb"><span>9:41</span></div>
+    <div class="nav-bar">
+      <div class="back-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="nav-bar-title">Plant history</span>
+    </div>
+    <div class="scroll">
+
+      <!-- Currently growing -->
+      <p class="sec-label">Currently growing</p>
+      <div class="plant-hist-card" style="border:.5px solid rgba(45,74,48,.2);background:rgba(45,74,48,.03)">
+        <div class="ph-thumb" style="background:linear-gradient(160deg,#1a3320,#2d5535)">
+          <svg width="24" height="32" viewBox="0 0 24 32" fill="none"><path d="M12 31 Q11 22 12 16 Q13 10 12 5" stroke="#5A9060" stroke-width="2" stroke-linecap="round"/><path d="M12 22 Q6 16 4 10 Q9 7 12 16" fill="#2D5535" opacity=".85"/><path d="M12 15 Q18 9 20 3 Q15 1 12 10" fill="#4A7A50"/></svg>
+        </div>
+        <div class="ph-info">
+          <p class="ph-name">Genovese Basil — Vesper</p>
+          <p class="ph-meta">Started Apr 10 · Day 7 of 21</p>
+          <div style="height:4px;background:rgba(0,0,0,.08);border-radius:2px;margin-top:6px;overflow:hidden"><div style="width:33%;height:100%;background:var(--leaf);border-radius:2px"></div></div>
+        </div>
+        <div class="ph-badge" style="background:var(--mist);color:var(--canopy)">Active</div>
+      </div>
+
+      <!-- Completed -->
+      <p class="sec-label">Completed</p>
+
+      <div class="plant-hist-card">
+        <div class="ph-thumb" style="background:linear-gradient(160deg,#163328,#215040)">
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none"><path d="M11 27 Q10 20 11 14 Q12 8 11 3" stroke="#3A7850" stroke-width="2" stroke-linecap="round"/><path d="M11 18 Q5 12 3 7 Q8 4 11 13" fill="#1E5535" opacity=".8"/><path d="M11 11 Q17 6 18 2 Q13 -1 11 8" fill="#357848"/></svg>
+        </div>
+        <div class="ph-info">
+          <p class="ph-name">Spearmint — Sage</p>
+          <p class="ph-meta">Mar 1–18 · 18 days · 55g yield</p>
+        </div>
+        <svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="plant-hist-card">
+        <div class="ph-thumb" style="background:linear-gradient(160deg,#2a3a1a,#3d5522)">
+          <svg width="22" height="26" viewBox="0 0 22 26" fill="none"><path d="M5 25 Q4 18 6 12" stroke="#7AAA40" stroke-width="1.5" stroke-linecap="round"/><path d="M11 25 Q10 17 12 11" stroke="#6A9830" stroke-width="1.5" stroke-linecap="round"/><path d="M17 25 Q16 18 18 12" stroke="#7AAA40" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="6" cy="10" rx="4" ry="2.5" fill="#6A9E30" transform="rotate(-15 6 10)"/><ellipse cx="12" cy="8" rx="4" ry="2.5" fill="#7AB840" transform="rotate(10 12 8)"/><ellipse cx="18" cy="10" rx="4" ry="2.5" fill="#6A9E30" transform="rotate(-10 18 10)"/></svg>
+        </div>
+        <div class="ph-info">
+          <p class="ph-name">Sunflower Microgreens</p>
+          <p class="ph-meta">Feb 18–Mar 2 · 12 days · 30g yield</p>
+        </div>
+        <svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- Cumulative summary -->
+      <p class="sec-label">All-time summary</p>
+      <div class="group">
+        <div class="stat-row" style="padding:16px">
+          <div class="stat-chip"><span class="stat-chip-val">3</span><span class="stat-chip-lbl">Plants grown</span></div>
+          <div class="stat-chip"><span class="stat-chip-val">85g</span><span class="stat-chip-lbl">Completed yield</span></div>
+          <div class="stat-chip"><span class="stat-chip-val">30</span><span class="stat-chip-lbl">Days completed</span></div>
+        </div>
+      </div>
+
+      <!-- Start new plant CTA -->
+      <div style="margin:4px 16px 0">
+        <div style="padding:15px 18px;background:var(--canopy);border-radius:14px;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <p style="font-size:14px;font-weight:500;color:rgba(255,255,255,.95)">Grow something new</p>
+            <p style="font-size:12px;font-weight:300;color:rgba(168,200,160,.65);margin-top:1px">Browse the plant encyclopedia</p>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M12 7l3 3-3 3" stroke="rgba(255,255,255,.8)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── NOTIFICATIONS ── -->
+<div class="pw">
+  <div class="sm"><p class="sn">Sub-screen · Notifications</p><p class="st">Notification preferences</p><p class="sd">Toggle individual notification types. Each notification is explained in plain language — not just a label. 4 of 6 currently enabled.</p></div>
+  <div class="phone">
+    <div class="sb"><span>9:41</span></div>
+    <div class="nav-bar">
+      <div class="back-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="nav-bar-title">Notifications</span>
+    </div>
+    <div class="scroll">
+
+      <!-- Master toggle -->
+      <div style="margin:8px 16px 0;padding:14px 16px;background:var(--canopy);border-radius:16px;display:flex;align-items:center;gap:14px">
+        <div>
+          <p style="font-size:14px;font-weight:500;color:rgba(255,255,255,.95)">All notifications</p>
+          <p style="font-size:12px;font-weight:300;color:rgba(168,200,160,.65);margin-top:1px">Pause all alerts temporarily</p>
+        </div>
+        <div style="margin-left:auto" class="toggle-track on"><div class="toggle-thumb"></div></div>
+      </div>
+
+      <!-- Plant care -->
+      <p class="sec-label">Plant care</p>
+      <div class="group">
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(196,149,106,.12)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L12.5 8A3.5 3.5 0 015.5 8L9 2z" stroke="#9E6E45" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 11v4" stroke="#9E6E45" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="notif-text">
+            <p class="notif-label">Water reminder</p>
+            <p class="notif-sub">When reservoir drops below 30%. Gives 18 hours notice before it's critical.</p>
+          </div>
+          <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:var(--mist)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L12 8.5A4.5 4.5 0 015 8.5L9 2z" stroke="#2D4A30" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="notif-text">
+            <p class="notif-label">Growth milestone</p>
+            <p class="notif-sub">When Vesper reaches a new growth stage — sprouting, true leaves, harvest-ready.</p>
+          </div>
+          <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 16l3-6 3.5 3.5 2.5-5 3.5 7H4z" stroke="#2D4A30" stroke-width="1.3" stroke-linejoin="round" fill="none"/><circle cx="9" cy="4.5" r="2.5" stroke="#2D4A30" stroke-width="1.3"/></svg>
+          </div>
+          <div class="notif-text">
+            <p class="notif-label">Harvest ready</p>
+            <p class="notif-sub">3-day advance notice before estimated harvest date.</p>
+          </div>
+          <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="3" stroke="#2D4A30" stroke-width="1.3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.41 1.41M13.37 13.37l1.41 1.41M3.22 14.78l1.41-1.41M13.37 4.63l1.41-1.41" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="notif-text">
+            <p class="notif-label">Condition alert</p>
+            <p class="notif-sub">If temperature or humidity stays outside ideal range for more than 2 hours.</p>
+          </div>
+          <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
+
+      <!-- Community -->
+      <p class="sec-label">Community</p>
+      <div class="group">
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(58,78,120,.1)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="6" cy="5.5" r="2.5" stroke="#3A4E78" stroke-width="1.3"/><circle cx="12" cy="5.5" r="2" stroke="#3A4E78" stroke-width="1.2"/><path d="M1 14c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="#3A4E78" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="notif-text">
+            <p class="notif-label">Community activity</p>
+            <p class="notif-sub">When someone replies to your post or your settings are saved by another grower.</p>
+          </div>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(58,78,120,.1)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 5.5H17l-4.9 3.6 1.9 5.8L9 13.4l-5 3.5 1.9-5.8L1 7.5h6.2L9 2z" stroke="#3A4E78" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg>
+          </div>
+          <div class="notif-text">
+            <p class="notif-label">Challenge updates</p>
+            <p class="notif-sub">Your rank changes or a challenge you joined is about to start.</p>
+          </div>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- end row 3 -->
+
+<!-- ══════════════════════════
+  ROW 4: ACCOUNT + HELP
+══════════════════════════ -->
+<div class="section-divider"><span class="section-divider-label">Account & support</span><div class="section-divider-line"></div></div>
+<div class="screens-grid">
+
+<!-- ── ACCOUNT & PRIVACY ── -->
+<div class="pw">
+  <div class="sm"><p class="sn">Sub-screen · Account & privacy</p><p class="st">Account & privacy</p><p class="sd">Email, password, data controls, privacy settings. Delete account option at the bottom with full confirmation flow.</p></div>
+  <div class="phone">
+    <div class="sb"><span>9:41</span></div>
+    <div class="nav-bar">
+      <div class="back-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="nav-bar-title">Account & privacy</span>
+    </div>
+    <div class="scroll">
+
+      <p class="sec-label">Account details</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14l2-3h8l2 3H3zM9 3a4 4 0 100 8A4 4 0 009 3z" stroke="#2D4A30" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Email address</p><p class="gi-sub">amara@gmail.com</p></div>
+          <div class="gi-right"><p style="font-size:11px;color:var(--leaf);font-weight:500">Change</p></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="8" width="12" height="9" rx="2" stroke="#2D4A30" stroke-width="1.3"/><path d="M6 8V6a3 3 0 016 0v2" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/><circle cx="9" cy="13" r="1.5" fill="#2D4A30"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Password</p><p class="gi-sub">Last changed 2 months ago</p></div>
+          <div class="gi-right"><p style="font-size:11px;color:var(--leaf);font-weight:500">Update</p></div>
+        </div>
+      </div>
+
+      <p class="sec-label">Your data</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15 11v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1h3M10 3h5v5M7.5 10.5l7.5-7.5" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Export my data</p><p class="gi-sub">Download all pod data, harvests, photos</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#2D4A30" stroke-width="1.3"/><path d="M9 8v5M9 6v.5" stroke="#2D4A30" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Privacy policy</p><p class="gi-sub">How we use your grow data</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a7 7 0 107 7" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/><path d="M16 2l-7 7M12 2h4v4" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Community data sharing</p><p class="gi-sub">Your pod data contributes to community comparisons</p></div>
+          <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
+
+      <!-- Danger zone -->
+      <p class="sec-label">Danger zone</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:var(--danger-l)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 15L9 3l6 12H3z" stroke="#D94F4F" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 9v3M9 14v.5" stroke="#D94F4F" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label" style="color:var(--danger)">Delete account</p><p class="gi-sub">Permanently removes all data. Cannot be undone.</p></div>
+        </div>
+      </div>
+
+      <p style="text-align:center;font-size:11px;font-weight:300;color:var(--th);padding:16px 20px">Your grow data is never sold or shared with third parties outside of the anonymous community comparisons you can opt out of above.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── HELP & SUPPORT ── -->
+<div class="pw">
+  <div class="sm"><p class="sn">Sub-screen · Help & support</p><p class="st">Help & support</p><p class="sd">FAQs in the botanist voice. Contact options. Troubleshooting for pod issues. Every answer written as a calm guide.</p></div>
+  <div class="phone">
+    <div class="sb"><span>9:41</span></div>
+    <div class="nav-bar">
+      <div class="back-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#4A5248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="nav-bar-title">Help & support</span>
+    </div>
+    <div class="scroll">
+
+      <!-- Search -->
+      <div style="padding:8px 16px 0">
+        <div style="display:flex;align-items:center;gap:10px;background:var(--white);border-radius:12px;border:.5px solid rgba(0,0,0,.1);padding:11px 14px">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#A8A89E" stroke-width="1.4"/><path d="M11 11l3 3" stroke="#A8A89E" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <p style="font-size:14px;font-weight:300;color:var(--th)">Search for help…</p>
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <p class="sec-label">Common questions</p>
+      <div class="group">
+        <div class="help-item">
+          <div class="gi-icon" style="background:rgba(196,149,106,.1);width:32px;height:32px;border-radius:9px;flex-shrink:0">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L11 7.5A4 4 0 014 7.5L8 2z" stroke="#9E6E45" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          </div>
+          <div style="flex:1">
+            <p class="help-q">Why isn't my plant growing?</p>
+            <p class="help-a">Slow growth above soil is almost always root development happening below. If it's been fewer than 5 days since sprouting, this is completely normal.</p>
+          </div>
+          <svg class="gi-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="help-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08);width:32px;height:32px;border-radius:9px;flex-shrink:0">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L11 7.5A4 4 0 014 7.5L8 2z" stroke="#2D4A30" stroke-width="1.2" stroke-linejoin="round" fill="rgba(106,158,114,.15)"/><path d="M8 5v4M8 11v.5" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div style="flex:1">
+            <p class="help-q">My pod won't connect</p>
+            <p class="help-a">Move your phone within 2m of the pod, ensure Bluetooth is on, and check the pod has power — the front LED should pulse green when ready.</p>
+          </div>
+          <svg class="gi-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="help-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08);width:32px;height:32px;border-radius:9px;flex-shrink:0">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#2D4A30" stroke-width="1.2"/><path d="M8 7v4M8 5v.5" stroke="#2D4A30" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <div style="flex:1">
+            <p class="help-q">How long until my first harvest?</p>
+            <p class="help-a">It depends on what you're growing. Basil takes 21–28 days, mint 18–24, microgreens as little as 10. Your home screen shows the exact countdown for Vesper.</p>
+          </div>
+          <svg class="gi-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <p class="sec-label">Get in touch</p>
+      <div class="group">
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12a1 1 0 011 1v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1z" stroke="#2D4A30" stroke-width="1.3"/><path d="M2 6l7 5 7-5" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Email support</p><p class="gi-sub">We reply within one working day</p></div>
+          <div class="gi-right"><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="group-item">
+          <div class="gi-icon" style="background:rgba(45,74,48,.08)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 3h12a1 1 0 011 1v8a1 1 0 01-1 1H5l-3 3V4a1 1 0 011-1z" stroke="#2D4A30" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 7h6M6 10h4" stroke="#2D4A30" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="gi-text"><p class="gi-label">Live chat</p><p class="gi-sub">Available 9am–5pm weekdays</p></div>
+          <div class="gi-right"><div class="gi-badge" style="background:var(--mist);color:var(--canopy)">Online</div><svg class="gi-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1A1F1B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- App info -->
+      <p class="sec-label">App info</p>
+      <div class="group">
+        <div class="group-item" style="cursor:default">
+          <div class="gi-text"><p class="gi-label">Version</p></div>
+          <p class="gi-value">Greendore v1.0.0</p>
+        </div>
+        <div class="group-item" style="cursor:default">
+          <div class="gi-text"><p class="gi-label">Pod firmware</p></div>
+          <p class="gi-value">v2.1.4 · Up to date</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- end row 4 -->
+
+<!-- ══════════════════
+  SPEC PANELS
+══════════════════ -->
+<div class="spec-panels">
+
+  <div class="spec-block">
+    <div class="spec-hd"><div class="spec-dot" style="background:var(--canopy)"></div><div><p class="spec-ttl">Entry transition</p><p class="spec-sub">How settings opens from the Garden header</p></div></div>
+    <table class="spec-t">
+      <tr><td>Trigger</td><td>Tap avatar (40×40px circle, top-right of Garden hero)</td></tr>
+      <tr><td>Animation</td><td>Push right — current screen slides left <code>translateX(0→-30%)</code>, Settings slides in from right <code>translateX(100%→0)</code>. Both 300ms <code>cubic-bezier(.25,.46,.45,.94)</code></td></tr>
+      <tr><td>Back</td><td>Back arrow top-left. Reverse push animation. Bottom nav remains visible throughout.</td></tr>
+      <tr><td>Status bar</td><td>Switches from dark (Garden hero) to light on push. Color transitions during animation.</td></tr>
+      <tr><td>Background</td><td><code>#F7F3ED</code> Linen — same as all light screens. No dark treatment.</td></tr>
+    </table>
+  </div>
+
+  <div class="spec-block">
+    <div class="spec-hd"><div class="spec-dot" style="background:var(--canopy)"></div><div><p class="spec-ttl">Profile hero — main settings screen</p><p class="spec-sub">Avatar, name, stats strip</p></div></div>
+    <table class="spec-t">
+      <tr><td>Avatar size</td><td>80×80px circle. Background: <code>linear-gradient(145deg, #2D4A30, #3D6A40)</code></td></tr>
+      <tr><td>Avatar initial</td><td>DM Serif Display 28px, <code>rgba(255,255,255,.95)</code></td></tr>
+      <tr><td>Edit button on avatar</td><td>24×24px circle <code>#2D4A30</code> canopy. Position: <code>bottom:0, right:0</code>. Pencil icon 12×12px white.</td></tr>
+      <tr><td>Display name</td><td>DM Serif Display 22px, <code>#1A1F1B</code>, -0.02em</td></tr>
+      <tr><td>Member since</td><td>DM Sans 13px 300, <code>#A8A89E</code></td></tr>
+      <tr><td>Stats strip</td><td>4 chips, flex row, full width. bg <code>#EDE8E0</code> linen-dark, border-radius 12px. Value: 18px 500 <code>#1A1F1B</code>. Label: 10px 300 <code>#A8A89E</code></td></tr>
+      <tr><td>Section border below</td><td><code>.5px solid rgba(0,0,0,.06)</code> — separates hero from sections</td></tr>
+    </table>
+  </div>
+
+  <div class="spec-block">
+    <div class="spec-hd"><div class="spec-dot" style="background:var(--leaf)"></div><div><p class="spec-ttl">Settings group component</p><p class="spec-sub">The core repeated component across all screens</p></div></div>
+    <table class="spec-t">
+      <tr><td>Group bg</td><td><code>#FFFFFF</code>, border-radius <code>20px</code>, border <code>.5px rgba(0,0,0,.07)</code>, margin <code>0 16px 10px</code></td></tr>
+      <tr><td>Item padding</td><td><code>14px 16px</code></td></tr>
+      <tr><td>Item divider</td><td><code>.5px solid rgba(0,0,0,.05)</code> between items, none on last</td></tr>
+      <tr><td>Icon size</td><td>36×36px, border-radius 10px. Each section has its own background tint.</td></tr>
+      <tr><td>Label</td><td>DM Sans 14px 400, <code>#1A1F1B</code>, -0.01em tracking</td></tr>
+      <tr><td>Sub-label</td><td>DM Sans 12px 300, <code>#A8A89E</code>, margin-top 1px</td></tr>
+      <tr><td>Right value text</td><td>DM Sans 13px 300, <code>#A8A89E</code></td></tr>
+      <tr><td>Chevron</td><td>16×16px SVG, opacity .3. Only shown on tappable items that navigate.</td></tr>
+      <tr><td>Active tap state</td><td>bg <code>#F7F3ED</code> linen, 150ms ease. Releases immediately on lift.</td></tr>
+      <tr><td>Section label above group</td><td>DM Sans 11px 500 uppercase, <code>#A8A89E</code>, 0.08em tracking. Padding <code>20px 20px 8px</code></td></tr>
+    </table>
+  </div>
+
+  <div class="spec-block">
+    <div class="spec-hd"><div class="spec-dot" style="background:var(--leaf)"></div><div><p class="spec-ttl">Toggle component</p><p class="spec-sub">Used across pod settings & notifications</p></div></div>
+    <table class="spec-t">
+      <tr><td>Track size</td><td>44×26px, border-radius 13px</td></tr>
+      <tr><td>Track — off</td><td>bg <code>rgba(0,0,0,.12)</code></td></tr>
+      <tr><td>Track — on</td><td>bg <code>#6A9E72</code> New leaf</td></tr>
+      <tr><td>Thumb size</td><td>20×20px circle, bg <code>#FFFFFF</code></td></tr>
+      <tr><td>Thumb position — off</td><td><code>top:3px, left:3px</code></td></tr>
+      <tr><td>Thumb position — on</td><td><code>translateX(18px)</code></td></tr>
+      <tr><td>Toggle animation</td><td>Track: <code>background .25s ease</code>. Thumb: <code>transform .25s cubic-bezier(.34,1.56,.64,1)</code> — slight spring overshoot makes it feel physical.</td></tr>
+      <tr><td>Haptic</td><td>Trigger light haptic on toggle (iOS: <code>UIImpactFeedbackGenerator.light</code>, Android: <code>VibrationEffect.EFFECT_CLICK</code>)</td></tr>
+    </table>
+  </div>
+
+  <div class="spec-block">
+    <div class="spec-hd"><div class="spec-dot" style="background:var(--terra)"></div><div><p class="spec-ttl">Slider component</p><p class="spec-sub">Used in pod settings for light hours and temperature</p></div></div>
+    <table class="spec-t">
+      <tr><td>Track height</td><td>4px, border-radius 2px, bg <code>rgba(0,0,0,.08)</code></td></tr>
+      <tr><td>Fill color</td><td><code>accent-color: #6A9E72</code> — fills left portion in leaf green</td></tr>
+      <tr><td>Thumb</td><td>18px circle. Browser default styled via <code>accent-color</code></td></tr>
+      <tr><td>Label row above</td><td>Left: DM Sans 12px 300 <code>#A8A89E</code> (min value). Right: DM Sans 12px 500 <code>#1A1F1B</code> (current value — updates live)</td></tr>
+      <tr><td>Context labels below</td><td>DM Sans 11px 300 <code>#A8A89E</code> — shows derived info (e.g. "Lights on: 6:00 AM · Off: 8:00 PM")</td></tr>
+      <tr><td>Padding wrap</td><td><code>0 16px 16px</code> inside the group card</td></tr>
+    </table>
+  </div>
+
+  <div class="spec-block">
+    <div class="spec-hd"><div class="spec-dot" style="background:var(--canopy)"></div><div><p class="spec-ttl">Pod card — My pods screen</p><p class="spec-sub">The premium dark card showing live pod status</p></div></div>
+    <table class="spec-t">
+      <tr><td>Background</td><td><code>#2D4A30</code> Canopy. Same as Garden hero — creates visual continuity.</td></tr>
+      <tr><td>Glow overlay</td><td>radial-gradient 200×140px at 80% -10%, <code>rgba(168,200,160,.15)</code></td></tr>
+      <tr><td>Pod name</td><td>DM Serif Display 18px, <code>rgba(255,255,255,.95)</code></td></tr>
+      <tr><td>Meta line</td><td>DM Sans 12px 300, <code>rgba(168,200,160,.65)</code></td></tr>
+      <tr><td>Online badge</td><td>bg <code>rgba(106,158,114,.25)</code>, border <code>rgba(106,158,114,.3)</code>, text <code>rgba(168,200,160,.9)</code> 10px 500</td></tr>
+      <tr><td>Stats row</td><td>4 chips: bg <code>rgba(255,255,255,.08)</code>, border <code>rgba(255,255,255,.1)</code>. Value 14px 500 <code>rgba(255,255,255,.9)</code>. Label 9px 300 <code>rgba(168,200,160,.55)</code></td></tr>
+      <tr><td>LED dots</td><td>3×7px circles, bg <code>#6A9E72</code>, box-shadow <code>0 0 5px rgba(106,158,114,.7)</code></td></tr>
+      <tr><td>Border-radius</td><td><code>20px</code></td></tr>
+      <tr><td>Margin</td><td><code>0 16px 10px</code> — matches group cards exactly</td></tr>
+    </table>
+  </div>
+
+  <div class="spec-block">
+    <div class="spec-hd"><div class="spec-dot" style="background:var(--danger)"></div><div><p class="spec-ttl">Danger actions — log out & delete</p><p class="spec-sub">Color, copy, and confirmation behaviour</p></div></div>
+    <table class="spec-t">
+      <tr><td>Log out icon bg</td><td><code>#FDEAEA</code> danger-light — warm red tint, not harsh</td></tr>
+      <tr><td>Log out icon color</td><td><code>#D94F4F</code> — used only here and delete account</td></tr>
+      <tr><td>Log out label</td><td>DM Sans 14px 400, <code>#D94F4F</code>. No sub-label needed.</td></tr>
+      <tr><td>Log out tap</td><td>Opens a confirmation bottom sheet: "Log out of Greendore? Your pod will keep running." Two buttons: "Log out" (red) + "Cancel" (dismiss).</td></tr>
+      <tr><td>Delete account label</td><td>DM Sans 14px 400, <code>#D94F4F</code>. Sub-label: "Permanently removes all data. Cannot be undone."</td></tr>
+      <tr><td>Delete account tap</td><td>Two-step: first sheet explains what is deleted. "Continue to delete" goes to second sheet asking user to type "DELETE" to confirm. Prevents accidental deletion.</td></tr>
+      <tr><td>Design rule</td><td>Never use bright red backgrounds. Danger is communicated through text and icon color only, on a pale background. Calm the user, don't alarm them.</td></tr>
+    </table>
+  </div>
+
+  <div class="spec-block">
+    <div class="spec-hd"><div class="spec-dot" style="background:var(--th)"></div><div><p class="spec-ttl">Navigation rules — settings screens</p><p class="spec-sub">How all sub-screens behave</p></div></div>
+    <table class="spec-t">
+      <tr><td>Sub-screen entry</td><td>All settings sub-screens use push-right 300ms ease-out. Same animation as the main settings push from Garden.</td></tr>
+      <tr><td>Back from sub-screen</td><td>Back arrow top-left. Returns to main Settings screen with push-left. Main settings scroll position is preserved.</td></tr>
+      <tr><td>Save actions</td><td>"Save" button appears top-right only when there is unsaved state (Edit Profile, Pod Settings). It is absent when the screen is read-only or auto-saves.</td></tr>
+      <tr><td>Auto-save</td><td>Toggles and sliders save immediately on change — no Save button needed. A small toast "Saved" appears bottom-center for 1.6s to confirm.</td></tr>
+      <tr><td>Bottom nav</td><td>Visible on all settings screens. Tapping any tab dismisses the entire settings stack and navigates to that tab. Settings push is not remembered — re-entering settings always starts from the main settings screen.</td></tr>
+      <tr><td>Deepest level</td><td>Settings has maximum 2 levels: Main Settings → Sub-screen. There are no third-level screens. Everything resolves within a sub-screen or a bottom sheet.</td></tr>
+    </table>
+  </div>
+
+</div><!-- end spec panels -->
+
+</body>
+</html>
