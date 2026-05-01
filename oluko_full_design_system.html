@@ -1,0 +1,433 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Satoshi:wght@300;400;500;700&family=Cabinet+Grotesk:wght@400;500;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body,html{font-family:'Satoshi',sans-serif;background:transparent;}
+
+.doc{padding:8px 0 32px;display:flex;flex-direction:column;gap:40px;}
+
+.section-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;}
+
+/* PHONE SHELL */
+.phone{width:320px;margin:0 auto;background:#0C0B1A;border-radius:44px;padding:12px;box-shadow:0 0 0 1px #1E1D32,0 2px 0 2px #16152A;}
+.screen{border-radius:34px;overflow:hidden;position:relative;}
+
+/* ── TOKENS ── */
+:root{
+  --ink:#0C0B1A;
+  --ink2:#1E1D30;
+  --indigo:#3730A3;
+  --indigo-mid:#4F46E5;
+  --purple:#7C3AED;
+  --purple-lt:#EDE9FE;
+  --purple-mid:#A78BFA;
+  --mist:#F5F4FF;
+  --fog:#EEEDF9;
+  --chalk:#FAFAFA;
+  --line:rgba(55,48,163,0.12);
+  --text-main:#111018;
+  --text-2:#504E6B;
+  --text-3:#9896B0;
+}
+
+/* ═══════════════════════════
+   SCREEN 1 — ONBOARDING A
+═══════════════════════════ */
+.s1{background:#0C0B1A;min-height:620px;display:flex;flex-direction:column;}
+.s1 .sb{padding:12px 20px 0;display:flex;justify-content:space-between;align-items:center;}
+.s1 .sb-time{font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);}
+.s1-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:32px 24px 32px;}
+.s1-orb-wrap{position:relative;margin-bottom:28px;}
+.s1-orb{width:72px;height:72px;border-radius:50%;background:#1E1D32;border:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;justify-content:center;}
+.s1-orb-ring{position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(124,58,237,0.12);}
+.s1-orb-ring2{position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(124,58,237,0.06);}
+.s1-wordmark{font-family:'Cabinet Grotesk',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(167,139,250,0.6);margin-bottom:36px;}
+.s1-headline{font-family:'Cabinet Grotesk',sans-serif;font-size:28px;font-weight:800;color:#fff;text-align:center;line-height:1.15;margin-bottom:12px;}
+.s1-headline em{color:#A78BFA;font-style:normal;}
+.s1-sub{font-size:14px;color:rgba(255,255,255,0.38);text-align:center;line-height:1.6;margin-bottom:36px;max-width:240px;}
+.s1-feel-label{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.25);align-self:flex-start;margin-bottom:12px;}
+.s1-moods{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px;}
+.mood{background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.07);border-radius:16px;padding:14px 12px;display:flex;flex-direction:column;gap:6px;}
+.mood.sel{background:rgba(124,58,237,0.12);border-color:rgba(124,58,237,0.35);}
+.mood-dot{width:8px;height:8px;border-radius:50%;}
+.mood-name{font-size:13px;color:rgba(255,255,255,0.75);font-weight:400;}
+.mood-desc{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.4;}
+.s1-cta{width:100%;padding:16px;border-radius:20px;background:#4F46E5;border:none;color:#fff;font-family:'Satoshi',sans-serif;font-size:15px;font-weight:500;text-align:center;cursor:pointer;margin-bottom:14px;}
+.s1-skip{font-size:12px;color:rgba(255,255,255,0.22);text-align:center;}
+
+/* ═══════════════════════════
+   SCREEN 2 — ONBOARDING B
+═══════════════════════════ */
+.s2{background:#F5F4FF;min-height:620px;display:flex;flex-direction:column;}
+.s2 .sb{padding:12px 20px 0;display:flex;justify-content:space-between;align-items:center;}
+.s2 .sb-time{font-size:13px;font-weight:500;color:var(--text-3);}
+.s2 .sb-back{font-size:13px;color:var(--indigo-mid);font-weight:500;}
+.s2-body{flex:1;padding:24px 20px 28px;display:flex;flex-direction:column;}
+.s2-step{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;}
+.s2-headline{font-family:'Cabinet Grotesk',sans-serif;font-size:24px;font-weight:800;color:var(--text-main);line-height:1.2;margin-bottom:6px;}
+.s2-sub{font-size:13px;color:var(--text-2);margin-bottom:28px;line-height:1.55;}
+.s2-section-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;}
+.s2-exams{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+.exam-row{background:#fff;border:0.5px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+.exam-row.sel{border-color:rgba(79,70,229,0.4);background:rgba(79,70,229,0.04);}
+.exam-left{display:flex;align-items:center;gap:12px;}
+.exam-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.exam-name{font-size:13px;font-weight:500;color:var(--text-main);}
+.exam-date{font-size:11px;color:var(--text-3);margin-top:1px;}
+.exam-check{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(79,70,229,0.25);display:flex;align-items:center;justify-content:center;}
+.exam-check.on{background:#4F46E5;border-color:#4F46E5;}
+.s2-add{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:0.5px solid var(--line);}
+.s2-add-txt{font-size:13px;color:var(--indigo-mid);}
+.s2-cta{width:100%;padding:16px;border-radius:20px;background:#0C0B1A;border:none;color:#fff;font-family:'Satoshi',sans-serif;font-size:15px;font-weight:500;margin-top:auto;cursor:pointer;}
+
+/* ═══════════════════════════
+   SCREEN 3 — AI CHAT
+═══════════════════════════ */
+.s3{background:#FAFAFD;min-height:640px;display:flex;flex-direction:column;}
+.s3 .topbar{background:#fff;border-bottom:0.5px solid var(--line);padding:10px 18px 12px;display:flex;align-items:center;gap:12px;}
+.s3 .sb{padding:10px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#fff;}
+.s3 .sb-time{font-size:13px;font-weight:500;color:var(--text-3);}
+.oluko-avatar{width:36px;height:36px;border-radius:50%;background:#0C0B1A;display:flex;align-items:center;justify-content:center;}
+.oluko-name-wrap{flex:1;}
+.oluko-name{font-size:14px;font-weight:500;color:var(--text-main);}
+.oluko-status{font-size:11px;color:#22C55E;display:flex;align-items:center;gap:4px;margin-top:1px;}
+.alive-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;}
+.s3-msgs{flex:1;padding:16px 16px 80px;display:flex;flex-direction:column;gap:14px;overflow:hidden;}
+
+/* Guide card — NOT a chat bubble */
+.guide-card{background:#fff;border:0.5px solid var(--line);border-radius:4px 20px 20px 20px;padding:14px 16px;max-width:248px;}
+.guide-intro{font-size:13px;color:var(--text-2);line-height:1.55;margin-bottom:10px;}
+.guide-highlight{background:var(--fog);border-radius:10px;padding:10px 12px;margin-bottom:10px;}
+.guide-hl-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--indigo-mid);margin-bottom:4px;}
+.guide-hl-text{font-size:13px;font-weight:500;color:var(--text-main);}
+.guide-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+.gchip{font-size:11px;padding:5px 11px;border-radius:20px;border:0.5px solid rgba(79,70,229,0.25);color:#4F46E5;background:rgba(79,70,229,0.05);cursor:pointer;}
+.gchip.sel{background:#4F46E5;color:#fff;border-color:#4F46E5;}
+
+/* user bubble */
+.user-bubble{background:#0C0B1A;border-radius:20px 4px 20px 20px;padding:12px 16px;font-size:13px;color:#fff;line-height:1.5;max-width:220px;align-self:flex-end;}
+
+/* typing */
+.typing-wrap{display:flex;align-items:center;gap:4px;padding:10px 14px;background:#fff;border:0.5px solid var(--line);border-radius:4px 16px 16px 16px;width:fit-content;}
+.tydot{width:5px;height:5px;border-radius:50%;background:#A78BFA;animation:ty 1.2s ease-in-out infinite;}
+.tydot:nth-child(2){animation-delay:.2s;}
+.tydot:nth-child(3){animation-delay:.4s;}
+@keyframes ty{0%,80%,100%{opacity:.3;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+
+.s3-input-area{background:#fff;border-top:0.5px solid var(--line);padding:10px 14px 20px;display:flex;gap:8px;align-items:center;}
+.s3-input{flex:1;background:#F0EFF8;border:none;border-radius:20px;padding:10px 14px;font-size:13px;color:var(--text-main);font-family:'Satoshi',sans-serif;outline:none;}
+.s3-send{width:36px;height:36px;border-radius:50%;background:#4F46E5;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+
+/* ═══════════════════════════
+   SCREEN 4 — STUDY PLAN
+═══════════════════════════ */
+.s4{background:#FAFAFD;min-height:680px;display:flex;flex-direction:column;}
+.s4-header{background:#fff;border-bottom:0.5px solid var(--line);padding:16px 20px 18px;}
+.s4 .sb{display:flex;justify-content:space-between;background:#fff;padding:10px 20px 0;}
+.s4 .sb-time{font-size:13px;font-weight:500;color:var(--text-3);}
+.s4-back{font-size:12px;color:var(--text-3);margin-bottom:12px;display:flex;align-items:center;gap:4px;}
+.s4-subject{font-family:'Cabinet Grotesk',sans-serif;font-size:22px;font-weight:800;color:var(--text-main);margin-bottom:2px;}
+.s4-meta{font-size:12px;color:var(--text-3);margin-bottom:16px;}
+.s4-progress-row{display:flex;align-items:center;gap:10px;}
+.s4-bar{flex:1;height:4px;background:var(--fog);border-radius:2px;overflow:hidden;}
+.s4-bar-fill{height:100%;width:28%;background:#4F46E5;border-radius:2px;}
+.s4-prog-num{font-size:12px;font-weight:500;color:var(--indigo-mid);}
+.s4-body{padding:16px;display:flex;flex-direction:column;gap:16px;}
+.s4-day-label{font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:8px;}
+.task-list{display:flex;flex-direction:column;gap:8px;}
+.task{background:#fff;border:0.5px solid var(--line);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;}
+.task.t-done{background:var(--chalk);border-color:rgba(0,0,0,0.05);}
+.task.t-active{border-color:rgba(79,70,229,0.3);background:rgba(79,70,229,0.03);}
+.t-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.t-check.done{background:#0C0B1A;border-color:#0C0B1A;}
+.t-check.active{border-color:#4F46E5;}
+.t-info{flex:1;}
+.t-name{font-size:13px;color:var(--text-main);margin-bottom:2px;}
+.t-name.struck{color:var(--text-3);text-decoration:line-through;}
+.t-time{font-size:11px;color:var(--text-3);}
+.t-time.active-t{color:#4F46E5;}
+.t-badge{font-size:10px;padding:4px 10px;border-radius:20px;font-weight:500;}
+.b-done{background:#F0FDF4;color:#166534;}
+.b-now{background:#EEEDFE;color:#3730A3;}
+.b-up{background:var(--fog);color:var(--text-3);}
+
+.insight-card{background:#EEEDFE;border-radius:16px;padding:14px;display:flex;gap:10px;align-items:flex-start;}
+.insight-icon{width:28px;height:28px;border-radius:8px;background:rgba(79,70,229,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.insight-body{font-size:12px;color:#3730A3;line-height:1.55;}
+.insight-body strong{font-weight:500;color:#1E1B6B;}
+
+.s4-cta{background:#0C0B1A;border:none;border-radius:20px;color:#fff;font-family:'Satoshi',sans-serif;font-size:14px;font-weight:500;padding:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+</style>
+
+<h2 class="sr-only">Oluko app design system — four screen mockups: onboarding welcome, exam setup, AI chat, and study plan</h2>
+
+<div class="doc">
+
+  <!-- ── SCREEN 1 ── -->
+  <div>
+    <p class="section-label">Screen 01 · Onboarding — Welcome</p>
+    <div class="phone">
+      <div class="screen s1">
+        <div class="sb">
+          <span class="sb-time">9:41</span>
+          <svg width="52" height="12" viewBox="0 0 52 12" fill="none"><rect x="0" y="4" width="4" height="8" rx="1" fill="rgba(255,255,255,0.4)"/><rect x="6" y="2.5" width="4" height="9.5" rx="1" fill="rgba(255,255,255,0.4)"/><rect x="12" y="0" width="4" height="12" rx="1" fill="rgba(255,255,255,0.7)"/><rect x="18" y="0" width="3" height="12" rx="1" fill="rgba(255,255,255,0.2)"/><rect x="28" y="2" width="12" height="8" rx="2" stroke="rgba(255,255,255,0.4)" stroke-width="1"/><rect x="30" y="4" width="7" height="4" rx="1" fill="rgba(255,255,255,0.6)"/><rect x="41" y="4.5" width="1.5" height="3" rx="0.75" fill="rgba(255,255,255,0.3)"/><path d="M46 9C46 6.79 47.79 5 50 5C52.21 5 54 6.79 54 9" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="none"/><path d="M47.3 9C47.3 7.5 48.5 6.3 50 6.3C51.5 6.3 52.7 7.5 52.7 9" stroke="rgba(255,255,255,0.5)" stroke-width="1" fill="none"/><path d="M48.6 9C48.6 8.2 49.2 7.6 50 7.6C50.8 7.6 51.4 8.2 51.4 9" stroke="rgba(255,255,255,0.9)" stroke-width="1" fill="none"/></svg>
+        </div>
+        <div class="s1-body">
+          <div class="s1-orb-wrap">
+            <div class="s1-orb-ring2"></div>
+            <div class="s1-orb-ring"></div>
+            <div class="s1-orb">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4C14 4 10 8 10 13C10 15.76 11.34 18.22 13.4 19.76" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round"/><path d="M14 4C14 4 18 8 18 13C18 15.76 16.66 18.22 14.6 19.76" stroke="#7C3AED" stroke-width="1.5" stroke-linecap="round"/><circle cx="14" cy="21" r="2.5" fill="#A78BFA"/><line x1="14" y1="23.5" x2="14" y2="26" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <p class="s1-wordmark">Oluko</p>
+          <h1 class="s1-headline">Feeling lost<br>before you even<br><em>start?</em></h1>
+          <p class="s1-sub">Oluko meets you where you are and walks you through — one step at a time.</p>
+          <p class="s1-feel-label">How are you right now?</p>
+          <div class="s1-moods">
+            <div class="mood sel">
+              <div class="mood-dot" style="background:#A78BFA;"></div>
+              <span class="mood-name">Overwhelmed</span>
+              <span class="mood-desc">Too much, don't know where to start</span>
+            </div>
+            <div class="mood">
+              <div class="mood-dot" style="background:#F59E0B;"></div>
+              <span class="mood-name">Anxious</span>
+              <span class="mood-desc">Worried about time running out</span>
+            </div>
+            <div class="mood">
+              <div class="mood-dot" style="background:#60A5FA;"></div>
+              <span class="mood-name">Unsure</span>
+              <span class="mood-desc">Not sure what's important</span>
+            </div>
+            <div class="mood">
+              <div class="mood-dot" style="background:#34D399;"></div>
+              <span class="mood-name">Motivated</span>
+              <span class="mood-desc">Ready to go, just need a plan</span>
+            </div>
+          </div>
+          <button class="s1-cta">Let's figure it out together</button>
+          <p class="s1-skip">Already have an account? Sign in</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 2 ── -->
+  <div>
+    <p class="section-label">Screen 02 · Onboarding — Exam setup</p>
+    <div class="phone">
+      <div class="screen s2">
+        <div class="sb">
+          <span class="sb-time">9:41</span>
+          <span class="sb-back">← Back</span>
+        </div>
+        <div class="s2-body">
+          <p class="s2-step">Step 2 of 2</p>
+          <h2 class="s2-headline">What are you<br>studying for?</h2>
+          <p class="s2-sub">Choose one or more. We'll build your plan around these.</p>
+          <p class="s2-section-lbl">Upcoming exams</p>
+          <div class="s2-exams">
+            <div class="exam-row sel">
+              <div class="exam-left">
+                <div class="exam-icon" style="background:#EEEDFE;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#4F46E5" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <p class="exam-name">Biology</p>
+                  <p class="exam-date">Exam in 3 days</p>
+                </div>
+              </div>
+              <div class="exam-check on">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4.2 7.2L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="exam-row sel">
+              <div class="exam-left">
+                <div class="exam-icon" style="background:#FEF3C7;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#D97706" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="#D97706" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <p class="exam-name">Chemistry</p>
+                  <p class="exam-date">Exam in 7 days</p>
+                </div>
+              </div>
+              <div class="exam-check on">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4.2 7.2L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="exam-row">
+              <div class="exam-left">
+                <div class="exam-icon" style="background:#D1FAE5;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L8 4L12 12" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 9.5h5" stroke="#059669" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <p class="exam-name">Mathematics</p>
+                  <p class="exam-date">Exam in 10 days</p>
+                </div>
+              </div>
+              <div class="exam-check"></div>
+            </div>
+          </div>
+          <div class="s2-add">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#4F46E5" stroke-width="1"/><path d="M8 5v6M5 8h6" stroke="#4F46E5" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span class="s2-add-txt">Add another subject</span>
+          </div>
+          <button class="s2-cta">Build my study plan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 3 ── -->
+  <div>
+    <p class="section-label">Screen 03 · AI Guide chat</p>
+    <div class="phone">
+      <div class="screen s3">
+        <div class="sb" style="background:#fff;padding:10px 20px 0;">
+          <span class="sb-time" style="color:var(--text-3);">9:41</span>
+          <svg width="52" height="12" viewBox="0 0 52 12" fill="none"><rect x="0" y="4" width="4" height="8" rx="1" fill="rgba(15,14,30,0.3)"/><rect x="6" y="2.5" width="4" height="9.5" rx="1" fill="rgba(15,14,30,0.3)"/><rect x="12" y="0" width="4" height="12" rx="1" fill="rgba(15,14,30,0.5)"/><rect x="18" y="0" width="3" height="12" rx="1" fill="rgba(15,14,30,0.15)"/></svg>
+        </div>
+        <div class="topbar">
+          <div class="oluko-avatar">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2C8 2 5.5 4.5 5.5 7.5C5.5 9.18 6.34 10.68 7.6 11.58" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/><path d="M8 2C8 2 10.5 4.5 10.5 7.5C10.5 9.18 9.66 10.68 8.4 11.58" stroke="#7C3AED" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="12.5" r="1.5" fill="#A78BFA"/></svg>
+          </div>
+          <div class="oluko-name-wrap">
+            <p class="oluko-name">Oluko</p>
+            <p class="oluko-status"><span class="alive-dot"></span> Here with you</p>
+          </div>
+          <svg width="18" height="4" viewBox="0 0 18 4" fill="none"><circle cx="2" cy="2" r="2" fill="#9896B0"/><circle cx="9" cy="2" r="2" fill="#9896B0"/><circle cx="16" cy="2" r="2" fill="#9896B0"/></svg>
+        </div>
+
+        <div class="s3-msgs">
+
+          <div class="guide-card">
+            <p class="guide-intro">Hey. Sounds like you've got a lot going on. Let's slow down for a second — what's weighing on you most?</p>
+            <div class="guide-highlight">
+              <p class="guide-hl-label">Your upcoming exam</p>
+              <p class="guide-hl-text">Biology · Friday · 3 days away</p>
+            </div>
+            <p style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Which part feels most unclear?</p>
+            <div class="guide-chips">
+              <span class="gchip sel">Cell division</span>
+              <span class="gchip sel">Genetics</span>
+              <span class="gchip">Photosynthesis</span>
+              <span class="gchip">Ecosystems</span>
+            </div>
+          </div>
+
+          <div class="user-bubble">Cell division and genetics — I haven't touched them at all 😬</div>
+
+          <div class="guide-card">
+            <p class="guide-intro">That's okay — we have 3 days and those two topics are very learnable. I'll keep it focused. Here's what I suggest:</p>
+            <div class="guide-chips" style="margin-top:4px;">
+              <span class="gchip sel">See my plan</span>
+              <span class="gchip">Tell me more</span>
+            </div>
+          </div>
+
+          <div class="typing-wrap">
+            <div class="tydot"></div>
+            <div class="tydot"></div>
+            <div class="tydot"></div>
+          </div>
+
+        </div>
+
+        <div class="s3-input-area">
+          <input class="s3-input" type="text" placeholder="Say anything..." readonly/>
+          <div class="s3-send">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 7L12.5 1.5L7.5 13L6.2 8L1.5 7Z" fill="white"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 4 ── -->
+  <div>
+    <p class="section-label">Screen 04 · Study plan</p>
+    <div class="phone">
+      <div class="screen s4">
+        <div class="sb" style="background:#fff;padding:10px 20px 0;">
+          <span class="sb-time" style="color:var(--text-3);">9:41</span>
+        </div>
+        <div class="s4-header">
+          <p class="s4-back">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:inline;vertical-align:middle;"><path d="M9 3L5 7L9 11" stroke="#9896B0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back to chat
+          </p>
+          <h2 class="s4-subject">Biology Plan</h2>
+          <p class="s4-meta">3 days · Built by Oluko · 7 tasks</p>
+          <div class="s4-progress-row">
+            <div class="s4-bar"><div class="s4-bar-fill"></div></div>
+            <span class="s4-prog-num">2 / 7</span>
+          </div>
+        </div>
+
+        <div class="s4-body">
+          <div>
+            <p class="s4-day-label">Today — Day 1</p>
+            <div class="task-list">
+              <div class="task t-done">
+                <div class="t-check done">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4.2 7L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="t-info">
+                  <p class="t-name struck">Watch: Cell division intro</p>
+                  <p class="t-time">18 min · Video</p>
+                </div>
+                <span class="t-badge b-done">Done</span>
+              </div>
+
+              <div class="task t-done">
+                <div class="t-check done">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4.2 7L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="t-info">
+                  <p class="t-name struck">Flashcards: Mitosis phases</p>
+                  <p class="t-time">12 min · Practice</p>
+                </div>
+                <span class="t-badge b-done">Done</span>
+              </div>
+
+              <div class="task t-active">
+                <div class="t-check active">
+                  <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="#4F46E5"/></svg>
+                </div>
+                <div class="t-info">
+                  <p class="t-name">Read: Genetics — Chapter 5</p>
+                  <p class="t-time active-t">30 min · Reading · Up next</p>
+                </div>
+                <span class="t-badge b-now">Now</span>
+              </div>
+
+              <div class="task">
+                <div class="t-check"></div>
+                <div class="t-info">
+                  <p class="t-name">Mini quiz: Cell division</p>
+                  <p class="t-time">10 min · Test yourself</p>
+                </div>
+                <span class="t-badge b-up">Later</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2C4.24 2 2 4.24 2 7C2 9.76 4.24 12 7 12C9.76 12 12 9.76 12 7" stroke="#4F46E5" stroke-width="1.2" stroke-linecap="round"/><path d="M7 5v2.5l1.5 1.5" stroke="#4F46E5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="#4F46E5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <p class="insight-body"><strong>Oluko says:</strong> You're moving well. A 10-min break before genetics will improve how much you retain. Take your time.</p>
+          </div>
+
+          <button class="s4-cta">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="rgba(255,255,255,0.4)" stroke-width="1"/><path d="M6.5 5.5L10.5 8L6.5 10.5V5.5Z" fill="white"/></svg>
+            Start: Genetics chapter
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
