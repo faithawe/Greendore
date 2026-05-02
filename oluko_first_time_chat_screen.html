@@ -1,0 +1,176 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Satoshi:wght@300;400;500;700&family=Cabinet+Grotesk:wght@700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Satoshi',sans-serif;}
+:root{
+  --ink:#0C0B1A;
+  --indigo:#4F46E5;
+  --purple:#A78BFA;
+  --fog:#EEEDF9;
+  --mist:#F5F4FF;
+  --line:rgba(55,48,163,0.1);
+  --txt1:#111018;
+  --txt2:#504E6B;
+  --txt3:#9896B0;
+}
+.phone{width:320px;margin:0 auto;background:#0C0B1A;border-radius:44px;padding:12px;box-shadow:0 0 0 1px #1E1D32,0 2px 0 2px #16152A;}
+.screen{border-radius:34px;overflow:hidden;background:#FAFAFD;min-height:680px;display:flex;flex-direction:column;position:relative;}
+
+.sb{background:#fff;padding:10px 20px 0;display:flex;justify-content:space-between;align-items:center;}
+.sb-t{font-size:13px;font-weight:500;color:var(--txt3);}
+
+.topbar{background:#fff;border-bottom:0.5px solid var(--line);padding:10px 18px 12px;display:flex;align-items:center;gap:10px;}
+.av{width:38px;height:38px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.av-name{font-size:14px;font-weight:500;color:var(--txt1);}
+.av-sub{font-size:11px;color:#22C55E;display:flex;align-items:center;gap:4px;margin-top:1px;}
+.live{width:6px;height:6px;border-radius:50%;background:#22C55E;}
+.more{display:flex;gap:3px;margin-left:auto;}
+.more span{width:4px;height:4px;border-radius:50%;background:var(--txt3);}
+
+.body{flex:1;display:flex;flex-direction:column;align-items:center;padding:28px 20px 20px;}
+
+.welcome-orb{width:56px;height:56px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative;}
+.orb-ring{position:absolute;inset:-6px;border-radius:50%;border:0.5px solid rgba(167,139,250,0.2);}
+.orb-ring2{position:absolute;inset:-12px;border-radius:50%;border:0.5px solid rgba(167,139,250,0.09);}
+
+.welcome-name{font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:800;color:var(--txt1);margin-bottom:6px;}
+.welcome-tagline{font-size:13px;color:var(--txt2);text-align:center;line-height:1.55;max-width:230px;margin-bottom:28px;}
+
+.first-msg{background:#fff;border:0.5px solid var(--line);border-radius:4px 20px 20px 20px;padding:14px 16px;width:100%;margin-bottom:18px;}
+.first-msg-top{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.first-msg-badge{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;background:var(--fog);color:#3730A3;padding:3px 10px;border-radius:20px;}
+.first-msg-text{font-size:13px;color:var(--txt2);line-height:1.6;margin-bottom:14px;}
+.first-msg-text strong{font-weight:500;color:var(--txt1);}
+
+.divider-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--txt3);margin-bottom:10px;align-self:flex-start;}
+.starters{width:100%;display:flex;flex-direction:column;gap:8px;}
+.starter{background:#fff;border:0.5px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.starter-left{display:flex;align-items:center;gap:10px;}
+.starter-icon{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.starter-text{font-size:13px;color:var(--txt1);}
+.starter-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.starter-arr{color:var(--txt3);}
+
+.inputbar{background:#fff;border-top:0.5px solid var(--line);padding:10px 14px 22px;display:flex;gap:8px;align-items:center;}
+.inp{flex:1;background:var(--fog);border:none;border-radius:20px;padding:11px 16px;font-size:13px;color:var(--txt1);font-family:'Satoshi',sans-serif;outline:none;}
+.send-btn{width:38px;height:38px;border-radius:50%;background:#E8E7F8;border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+.mood-row{display:flex;gap:6px;width:100%;margin-bottom:18px;overflow:hidden;}
+.mood-pill{flex:1;background:#fff;border:0.5px solid var(--line);border-radius:20px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.mood-dot{width:8px;height:8px;border-radius:50%;}
+.mood-lbl{font-size:10px;color:var(--txt2);text-align:center;line-height:1.3;}
+</style>
+
+<h2 class="sr-only">Oluko AI chat screen — first-time user empty state with welcome message and conversation starters</h2>
+
+<div class="phone">
+  <div class="screen">
+
+    <div class="sb">
+      <span class="sb-t">9:41</span>
+      <svg width="52" height="12" viewBox="0 0 52 12" fill="none"><rect x="0" y="4" width="4" height="8" rx="1" fill="rgba(15,14,30,0.25)"/><rect x="6" y="2.5" width="4" height="9.5" rx="1" fill="rgba(15,14,30,0.25)"/><rect x="12" y="0" width="4" height="12" rx="1" fill="rgba(15,14,30,0.4)"/><rect x="18" y="0" width="3" height="12" rx="1" fill="rgba(15,14,30,0.1)"/><rect x="28" y="2" width="12" height="8" rx="2" stroke="rgba(15,14,30,0.3)" stroke-width="1"/><rect x="30" y="4" width="7" height="4" rx="1" fill="rgba(15,14,30,0.35)"/><rect x="41" y="4.5" width="1.5" height="3" rx="0.75" fill="rgba(15,14,30,0.2)"/></svg>
+    </div>
+
+    <div class="topbar">
+      <div class="av">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 6.5 4.5 6.5 8C6.5 9.8 7.34 11.4 8.6 12.38" stroke="#A78BFA" stroke-width="1.3" stroke-linecap="round"/><path d="M9 2C9 2 11.5 4.5 11.5 8C11.5 9.8 10.66 11.4 9.4 12.38" stroke="#7C3AED" stroke-width="1.3" stroke-linecap="round"/><circle cx="9" cy="13.5" r="1.8" fill="#A78BFA"/><line x1="9" y1="15.3" x2="9" y2="17" stroke="#A78BFA" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </div>
+      <div style="flex:1;">
+        <p class="av-name">Oluko</p>
+        <p class="av-sub"><span class="live"></span> Here with you</p>
+      </div>
+      <div class="more"><span></span><span></span><span></span></div>
+    </div>
+
+    <div class="body">
+
+      <div class="welcome-orb">
+        <div class="orb-ring2"></div>
+        <div class="orb-ring"></div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3C12 3 9 6 9 10C9 11.93 9.9 13.68 11.3 14.83" stroke="#A78BFA" stroke-width="1.4" stroke-linecap="round"/><path d="M12 3C12 3 15 6 15 10C15 11.93 14.1 13.68 12.7 14.83" stroke="#7C3AED" stroke-width="1.4" stroke-linecap="round"/><circle cx="12" cy="16" r="2" fill="#A78BFA"/></svg>
+      </div>
+
+      <p class="welcome-name">Good morning, Ade</p>
+      <p class="welcome-tagline">I'm Oluko — your study guide. No pressure, no rush. Let's figure out where to start together.</p>
+
+      <div class="first-msg">
+        <div class="first-msg-top">
+          <div class="first-msg-badge">Oluko says</div>
+        </div>
+        <p class="first-msg-text">You told me you're feeling <strong>overwhelmed</strong> and have a <strong>Biology exam in 3 days.</strong> That's okay — I've seen this before. Let's not panic. Let's just take one small step right now.</p>
+
+        <p class="divider-lbl" style="margin-bottom:8px;">How are you feeling about studying today?</p>
+        <div class="mood-row">
+          <div class="mood-pill" style="border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.04);">
+            <div class="mood-dot" style="background:#A78BFA;"></div>
+            <span class="mood-lbl">Not ready</span>
+          </div>
+          <div class="mood-pill">
+            <div class="mood-dot" style="background:#F59E0B;"></div>
+            <span class="mood-lbl">A bit nervous</span>
+          </div>
+          <div class="mood-pill">
+            <div class="mood-dot" style="background:#60A5FA;"></div>
+            <span class="mood-lbl">I'll try</span>
+          </div>
+          <div class="mood-pill">
+            <div class="mood-dot" style="background:#34D399;"></div>
+            <span class="mood-lbl">Let's go</span>
+          </div>
+        </div>
+
+        <p class="divider-lbl">Or just pick where to start</p>
+        <div class="starters">
+          <div class="starter">
+            <div class="starter-left">
+              <div class="starter-icon" style="background:#EEEDFE;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#4F46E5" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <p class="starter-text">Build my study plan</p>
+                <p class="starter-sub">Breaks it down by day and topic</p>
+              </div>
+            </div>
+            <svg class="starter-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9896B0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+
+          <div class="starter">
+            <div class="starter-left">
+              <div class="starter-icon" style="background:#FEF3C7;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#D97706" stroke-width="1.4"/><path d="M8 5.5v3l1.5 1.5" stroke="#D97706" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <p class="starter-text">What's most important to study?</p>
+                <p class="starter-sub">I'll rank the topics by priority</p>
+              </div>
+            </div>
+            <svg class="starter-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9896B0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+
+          <div class="starter">
+            <div class="starter-left">
+              <div class="starter-icon" style="background:#D1FAE5;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M4 8h8" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <p class="starter-text">I don't know where to begin</p>
+                <p class="starter-sub">Let's talk through it together</p>
+              </div>
+            </div>
+            <svg class="starter-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#9896B0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="inputbar">
+      <input class="inp" type="text" placeholder="Type anything, or tap above..." readonly/>
+      <div class="send-btn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8L14 2L9 14L7.5 9L2 8Z" fill="#9896B0"/></svg>
+      </div>
+    </div>
+
+  </div>
+</div>
