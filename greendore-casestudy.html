@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greendore — UX Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C1410;--bg2:#101912;--bg3:#151E16;--bg4:#1A2418;
+  --canopy:#2D4A30;--canopy-m:#3D5E40;
+  --leaf:#6A9E72;--sprout:#A8C8A0;--mist:#EFF5EC;
+  --terra:#C4956A;--terra-d:#9E6E45;--terra-l:#EDD9C0;
+  --linen:#F7F3ED;--clay:#E8D5B0;
+  --t1:rgba(255,255,255,.92);--t2:rgba(255,255,255,.62);
+  --t3:rgba(255,255,255,.35);--t4:rgba(255,255,255,.14);
+  --border:rgba(255,255,255,.06);--border2:rgba(106,158,114,.18);
+  --fd:'DM Serif Display',Georgia,serif;
+  --fs:'DM Sans',system-ui,sans-serif;
+  --fm:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:var(--fs);font-weight:300;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--fd);font-weight:400;letter-spacing:-.02em;line-height:1.1}
+p{font-family:var(--fs);font-weight:300;color:var(--t2);line-height:1.7}
+strong{font-weight:500;color:var(--t1)}
+
+/* LAYOUT */
+.container{max-width:1080px;margin:0 auto;padding:0 40px}
+.container-wide{max-width:1280px;margin:0 auto;padding:0 40px}
+section{padding:96px 0}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+.d4{transition-delay:.32s}.d5{transition-delay:.40s}
+
+/* LABEL */
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.eyebrow-line{width:24px;height:.5px;background:var(--leaf)}
+.eyebrow-text{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+
+/* DIVIDER */
+hr{border:none;border-top:.5px solid var(--border);margin:0}
+
+/* ── NAV ── */
+nav{position:fixed;inset:0 0 auto;z-index:200;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(12,20,16,.88);backdrop-filter:blur(14px);border-bottom:.5px solid var(--border)}
+.nav-logo{font-family:var(--fd);font-size:17px;color:var(--t1);letter-spacing:-.02em}
+.nav-links{display:flex;gap:26px}
+.nav-a{font-size:11px;font-weight:400;color:var(--t3);letter-spacing:.04em;text-decoration:none;transition:color .2s}
+.nav-a:hover,.nav-a.active{color:rgba(168,200,160,.9)}
+.nav-pill{padding:5px 14px;border-radius:100px;background:rgba(106,158,114,.1);border:.5px solid rgba(106,158,114,.22);font-size:11px;font-weight:500;color:var(--leaf);letter-spacing:.04em}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;padding-bottom:0}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 58% 38%,rgba(45,74,48,.32) 0%,transparent 60%),radial-gradient(ellipse 45% 35% at 8% 78%,rgba(106,158,114,.1) 0%,transparent 55%)}
+.hero-grain{position:absolute;inset:0;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
+.hero-body{position:relative;z-index:2;padding:0 40px 72px;max-width:1080px;margin:0 auto;width:100%}
+.hero-kicker{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.hero-kicker-dash{width:44px;height:.5px;background:var(--leaf)}
+.hero-kicker-label{font-size:11px;font-weight:500;color:var(--leaf);letter-spacing:.12em;text-transform:uppercase}
+.hero-kicker-year{font-size:11px;font-weight:300;color:var(--t3);letter-spacing:.06em;margin-left:auto}
+.hero-h1{font-size:clamp(60px,9vw,120px);color:var(--t1);letter-spacing:-.04em;line-height:.92;margin-bottom:10px}
+.hero-h1 em{font-style:italic;color:var(--clay)}
+.hero-sub{font-size:clamp(14px,1.6vw,17px);font-weight:300;color:var(--t2);max-width:500px;line-height:1.7;margin-bottom:52px}
+.hero-meta{display:flex;gap:36px;flex-wrap:wrap;border-top:.5px solid var(--border);padding-top:26px}
+.hm-item{}
+.hm-label{font-size:10px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.hm-val{font-size:13px;font-weight:400;color:var(--t1)}
+.hero-scroll{position:absolute;bottom:30px;right:40px;display:flex;flex-direction:column;align-items:center;gap:7px;z-index:3}
+.hero-scroll-line{width:.5px;height:44px;background:linear-gradient(180deg,var(--leaf),transparent);animation:sl 1.8s ease-in-out infinite}
+@keyframes sl{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(5px)}}
+.hero-scroll-txt{font-size:9px;font-weight:300;color:var(--t3);letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl}
+
+/* ── BAND ── */
+.band{background:var(--bg3);border-top:.5px solid var(--border);border-bottom:.5px solid var(--border);padding:68px 40px}
+.band-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:48px}
+.band-left-title{font-family:var(--fd);font-size:clamp(22px,2.8vw,34px);color:var(--t1);letter-spacing:-.02em;margin-bottom:6px}
+.band-left-sub{font-size:13px;font-weight:300;color:var(--t3)}
+.band-stats{display:flex;gap:48px;flex-shrink:0}
+.bs-num{font-family:var(--fd);font-size:38px;color:var(--clay);letter-spacing:-.03em;line-height:1}
+.bs-lbl{font-size:11px;font-weight:300;color:var(--t3);margin-top:3px}
+
+/* ── OVERVIEW ── */
+.ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.ov-body{font-size:16px;font-weight:300;color:var(--t2);line-height:1.8;margin-bottom:22px}
+.role-tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:24px}
+.rtag{padding:5px 13px;border-radius:100px;background:rgba(106,158,114,.07);border:.5px solid rgba(106,158,114,.18);font-size:11px;font-weight:500;color:var(--leaf);letter-spacing:.03em}
+.stat-card{padding:26px;background:var(--bg3);border-radius:18px;border:.5px solid var(--border);margin-bottom:14px}
+.sc-num{font-family:var(--fd);font-size:46px;color:var(--t1);letter-spacing:-.03em;line-height:1}
+.sc-num em{font-style:italic;color:var(--clay)}
+.sc-lbl{font-size:12px;font-weight:300;color:var(--t3);margin-top:5px}
+.stat-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── RESEARCH ── */
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
+.ic{padding:26px;background:var(--bg3);border-radius:18px;border:.5px solid var(--border);position:relative;overflow:hidden;transition:border-color .3s}
+.ic:hover{border-color:rgba(106,158,114,.25)}
+.ic::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,rgba(106,158,114,.6),transparent);opacity:0;transition:opacity .3s}
+.ic:hover::after{opacity:1}
+.ic-num{font-family:var(--fd);font-size:40px;color:rgba(106,158,114,.1);line-height:1;margin-bottom:10px;letter-spacing:-.02em}
+.ic-title{font-size:14px;font-weight:500;color:var(--t1);margin-bottom:7px;letter-spacing:-.01em}
+.ic-body{font-size:12px;font-weight:300;color:var(--t3);line-height:1.65}
+.ic-quote{font-family:var(--fd);font-size:12px;font-style:italic;color:var(--t2);border-left:2px solid rgba(106,158,114,.25);padding-left:11px;margin-top:12px;line-height:1.6}
+
+.persona-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px}
+.pc{background:var(--bg3);border-radius:22px;border:.5px solid var(--border);overflow:hidden}
+.pc-hd{padding:22px 26px;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:16px}
+.pc-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:19px;flex-shrink:0}
+.pc-name{font-size:15px;font-weight:500;color:var(--t1);margin-bottom:2px}
+.pc-role{font-size:11px;font-weight:300;color:var(--t3)}
+.pc-body{padding:22px 26px;display:flex;flex-direction:column;gap:14px}
+.pc-row-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--leaf);margin-bottom:4px}
+.pc-row-text{font-size:12px;font-weight:300;color:var(--t2);line-height:1.6}
+.pc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}
+.pc-tag{padding:2px 9px;border-radius:100px;background:rgba(106,158,114,.07);border:.5px solid rgba(106,158,114,.14);font-size:10px;color:rgba(168,200,160,.65)}
+
+/* ── PROCESS ── */
+.proc-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:52px;position:relative}
+.proc-steps::before{content:'';position:absolute;top:20px;left:10%;right:10%;height:.5px;background:linear-gradient(90deg,transparent,rgba(106,158,114,.25),rgba(106,158,114,.25),transparent)}
+.proc-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 10px}
+.proc-node{width:40px;height:40px;border-radius:50%;background:var(--bg3);border:.5px solid rgba(106,158,114,.25);display:flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;z-index:1}
+.proc-node.on{background:rgba(106,158,114,.12);border-color:var(--leaf);box-shadow:0 0 0 5px rgba(106,158,114,.06)}
+.proc-n{font-size:11px;font-weight:500;color:var(--leaf)}
+.proc-title{font-size:12px;font-weight:500;color:var(--t1);margin-bottom:3px}
+.proc-sub{font-size:10px;font-weight:300;color:var(--t3);line-height:1.5}
+
+.dec-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;margin-top:60px}
+.dec-cards{display:flex;flex-direction:column;gap:12px}
+.dc{padding:18px 22px;background:var(--bg3);border-radius:14px;border:.5px solid var(--border);display:flex;gap:14px;align-items:flex-start}
+.dc-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dc-q{font-size:12px;font-weight:500;color:var(--t1);margin-bottom:3px}
+.dc-a{font-size:11px;font-weight:300;color:var(--t3);line-height:1.55}
+
+/* ── DESIGN SYSTEM ── */
+.color-row{display:grid;grid-template-columns:repeat(8,1fr);gap:9px;margin-top:36px}
+.csw{display:flex;flex-direction:column;gap:7px}
+.csw-block{height:60px;border-radius:11px;border:.5px solid rgba(255,255,255,.05)}
+.csw-name{font-size:9.5px;font-weight:400;color:var(--t3)}
+.csw-hex{font-size:9.5px;font-family:var(--fm);color:rgba(255,255,255,.18)}
+.color-rules{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.cr{padding:14px;background:rgba(255,255,255,.025);border-radius:12px;border:.5px solid var(--border)}
+.cr-label{font-size:9.5px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.cr-text{font-size:11px;font-weight:300;color:var(--t3);line-height:1.55}
+
+.type-rows{margin-top:44px;border-top:.5px solid var(--border)}
+.tr{padding:24px 0;border-bottom:.5px solid var(--border);display:grid;grid-template-columns:140px 1fr auto;align-items:center;gap:20px}
+.tr-role{font-size:10px;font-weight:300;color:var(--t3);letter-spacing:.04em}
+.tr-spec{font-size:10px;font-family:var(--fm);color:rgba(106,158,114,.5);text-align:right;white-space:nowrap}
+
+.comp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px}
+.comp{background:var(--bg3);border-radius:18px;border:.5px solid var(--border);padding:22px;display:flex;flex-direction:column;gap:14px}
+.comp-label{font-size:9.5px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--t3)}
+.comp-preview{flex:1;display:flex;align-items:center;justify-content:center;min-height:72px}
+.comp-spec{font-size:10.5px;font-weight:300;color:var(--t3);line-height:1.55}
+.btn-p{padding:13px 22px;background:var(--canopy);border-radius:12px;font-size:13px;font-weight:500;color:rgba(255,255,255,.95)}
+.btn-s{padding:12px 22px;background:transparent;border:1px solid rgba(45,74,48,.4);border-radius:12px;font-size:13px;font-weight:400;color:var(--t2)}
+.tog{width:42px;height:25px;border-radius:12.5px;background:var(--leaf);position:relative}
+.tog::after{content:'';position:absolute;top:2.5px;right:2.5px;width:20px;height:20px;border-radius:50%;background:white}
+.sens-row{display:flex;gap:7px;width:100%}
+.sen{flex:1;background:rgba(255,255,255,.04);border-radius:9px;padding:7px 8px;border:.5px solid rgba(255,255,255,.06)}
+.sen-v{font-size:14px;font-weight:500;color:var(--leaf);letter-spacing:-.01em}
+.sen-l{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.04em}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:4px 11px;border-radius:100px;font-size:10px;font-weight:500}
+.chip-g{background:rgba(106,158,114,.13);color:var(--leaf);border:.5px solid rgba(106,158,114,.22)}
+.chip-t{background:rgba(196,149,106,.13);color:var(--terra);border:.5px solid rgba(196,149,106,.22)}
+
+/* ── SCREENS ── */
+.showcase{display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center;margin-bottom:88px}
+.showcase.flip{grid-template-columns:auto 1fr}
+.showcase.flip .sc-copy{order:2}
+.showcase.flip .sc-phone{order:1}
+.sc-bignum{font-family:var(--fd);font-size:78px;color:rgba(106,158,114,.07);line-height:1;letter-spacing:-.04em;margin-bottom:-6px}
+.sc-h{font-size:clamp(20px,2.2vw,28px);color:var(--t1);margin-bottom:12px}
+.sc-desc{font-size:14px;font-weight:300;color:var(--t2);line-height:1.75;margin-bottom:24px}
+.annotations{display:flex;flex-direction:column;gap:9px}
+.ann{display:flex;gap:11px;align-items:flex-start;padding:11px 14px;background:var(--bg3);border-radius:11px;border:.5px solid var(--border)}
+.ann-dot{width:5px;height:5px;border-radius:50%;background:var(--leaf);flex-shrink:0;margin-top:5px}
+.ann-txt{font-size:11px;font-weight:300;color:var(--t2);line-height:1.55}
+
+/* Phone mock */
+.pmock{width:260px;height:560px;border-radius:36px;background:var(--bg3);border:.5px solid rgba(255,255,255,.07);box-shadow:0 4px 0 rgba(0,0,0,.5),0 20px 70px rgba(0,0,0,.55),inset 0 0 0 .5px rgba(255,255,255,.04);overflow:hidden;flex-shrink:0}
+.pmock-inner{height:100%;position:relative;overflow:hidden}
+
+/* ── INTERACTIONS ── */
+.int-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px}
+.int-card{background:var(--bg3);border-radius:18px;border:.5px solid var(--border);padding:26px;position:relative;overflow:hidden}
+.int-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--terra),transparent);opacity:.35}
+.int-trigger{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--terra);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.int-trigger::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--terra)}
+.int-title{font-size:15px;font-weight:500;color:var(--t1);margin-bottom:7px;letter-spacing:-.01em}
+.int-desc{font-size:12px;font-weight:300;color:var(--t3);line-height:1.65;margin-bottom:14px}
+.int-code{font-size:10.5px;font-family:var(--fm);color:rgba(106,158,114,.5);padding:10px 13px;background:rgba(106,158,114,.04);border-radius:8px;border:.5px solid rgba(106,158,114,.1);line-height:1.8}
+
+.micro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.mc{padding:18px;background:var(--bg3);border-radius:14px;border:.5px solid var(--border);text-align:center}
+.mc-icon{width:44px;height:44px;border-radius:13px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+.mc-name{font-size:12px;font-weight:500;color:var(--t1);margin-bottom:3px}
+.mc-desc{font-size:10.5px;font-weight:300;color:var(--t3);line-height:1.5}
+
+/* ── OUTCOME ── */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+.met{padding:30px 22px;background:var(--bg3);border-radius:18px;border:.5px solid var(--border);text-align:center;position:relative;overflow:hidden}
+.met::before{content:'';position:absolute;top:0;left:20%;right:20%;height:.5px;background:linear-gradient(90deg,transparent,var(--leaf),transparent)}
+.met-num{font-family:var(--fd);font-size:42px;color:var(--t1);letter-spacing:-.04em;line-height:1;margin-bottom:6px}
+.met-num em{font-style:italic;color:var(--leaf)}
+.met-lbl{font-size:11px;font-weight:300;color:var(--t3);line-height:1.5}
+
+.qblock{margin-top:52px;padding:44px;background:var(--bg3);border-radius:26px;border:.5px solid var(--border2);position:relative;overflow:hidden}
+.qblock::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 82% 50%,rgba(45,74,48,.18) 0%,transparent 65%)}
+.q-text{font-family:var(--fd);font-size:clamp(18px,2.2vw,26px);font-style:italic;color:var(--clay);line-height:1.45;max-width:660px;position:relative;z-index:1;margin-bottom:16px}
+.q-attr{font-size:12px;font-weight:300;color:var(--t3);position:relative;z-index:1}
+
+/* ── RETRO ── */
+.retro-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px}
+.rc{padding:26px;background:var(--bg3);border-radius:18px;border:.5px solid var(--border)}
+.rc-hd{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.rc-dot{width:9px;height:9px;border-radius:50%}
+.rc-title{font-size:15px;font-weight:500;color:var(--t1)}
+.rc-list{display:flex;flex-direction:column;gap:10px}
+.ri{display:flex;gap:9px;align-items:flex-start}
+.ri-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.ri-text{font-size:12px;font-weight:300;color:var(--t2);line-height:1.6}
+
+.next{margin-top:36px;padding:36px;background:linear-gradient(130deg,rgba(45,74,48,.18),rgba(45,74,48,.05));border-radius:22px;border:.5px solid rgba(106,158,114,.18)}
+.next-title{font-size:19px;color:var(--t1);margin-bottom:18px}
+.next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ni2{padding:14px;background:rgba(0,0,0,.18);border-radius:12px;border:.5px solid rgba(106,158,114,.1)}
+.ni2-num{font-size:9.5px;font-weight:500;color:var(--leaf);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.ni2-title{font-size:12px;font-weight:500;color:var(--t1);margin-bottom:3px}
+.ni2-desc{font-size:11px;font-weight:300;color:var(--t3);line-height:1.5}
+
+/* ── FOOTER ── */
+footer{background:var(--bg);padding:72px 40px 52px;border-top:.5px solid var(--border)}
+.ft-inner{max-width:1080px;margin:0 auto}
+.ft-top{display:flex;align-items:flex-start;justify-content:space-between;gap:40px;margin-bottom:56px}
+.ft-logo{font-family:var(--fd);font-size:30px;color:var(--t1);letter-spacing:-.02em;margin-bottom:8px}
+.ft-desc{font-size:13px;font-weight:300;color:var(--t3);max-width:300px;line-height:1.65}
+.ft-cr-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:9px}
+.ft-cr-item{font-size:12px;font-weight:300;color:var(--t2);margin-bottom:4px}
+.ft-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:.5px solid var(--border)}
+.ft-copy{font-size:11px;font-weight:300;color:var(--t3)}
+.ft-tags{display:flex;gap:7px;flex-wrap:wrap}
+.ft-tag{padding:3px 10px;border-radius:100px;background:rgba(106,158,114,.07);border:.5px solid rgba(106,158,114,.14);font-size:9.5px;font-weight:500;color:rgba(106,158,114,.55);letter-spacing:.04em}
+
+/* RESPONSIVE */
+@media(max-width:920px){
+  .ov-grid,.dec-grid,.persona-grid,.retro-grid,.showcase,.showcase.flip,.int-grid{grid-template-columns:1fr}
+  .showcase.flip .sc-copy,.showcase.flip .sc-phone{order:unset}
+  .insight-grid,.comp-grid{grid-template-columns:1fr 1fr}
+  .metrics,.band-stats{flex-wrap:wrap}
+  .color-row{grid-template-columns:repeat(4,1fr)}
+  .proc-steps{grid-template-columns:1fr 1fr;gap:18px}
+  .proc-steps::before{display:none}
+  .color-rules,.next-grid{grid-template-columns:1fr 1fr}
+  .container,.container-wide{padding:0 22px}
+  nav{padding:14px 22px}
+  .hero-body{padding:0 22px 52px}
+  .band-inner{flex-direction:column}
+  .hero-scroll{display:none}
+  .ft-top{flex-direction:column}
+  .tr{grid-template-columns:1fr 1fr}
+}
+@media(max-width:580px){
+  .insight-grid,.comp-grid,.micro-grid,.metrics,.color-row,.color-rules,.next-grid{grid-template-columns:1fr}
+  .stat-2{grid-template-columns:1fr}
+  .hero-meta{gap:18px}
+}
+::-webkit-scrollbar{width:2px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(106,158,114,.25);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Greendore</div>
+  <div class="nav-links">
+    <a href="#overview" class="nav-a">Overview</a>
+    <a href="#research" class="nav-a">Research</a>
+    <a href="#process" class="nav-a">Process</a>
+    <a href="#system" class="nav-a">Design System</a>
+    <a href="#screens" class="nav-a">Screens</a>
+    <a href="#interactions" class="nav-a">Interactions</a>
+    <a href="#retro" class="nav-a">Retrospective</a>
+  </div>
+  <div class="nav-pill">UX Case Study</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-body">
+    <div class="hero-kicker reveal">
+      <div class="hero-kicker-dash"></div>
+      <span class="hero-kicker-label">UX Design Case Study</span>
+      <span class="hero-kicker-year">2025</span>
+    </div>
+    <h1 class="hero-h1 reveal d1">Green<em>dore</em></h1>
+    <p class="hero-sub reveal d2">Designing a calm, expert-guided smart indoor farming app — making complete beginners feel like skilled growers from day one.</p>
+    <div class="hero-meta reveal d3">
+      <div class="hm-item"><p class="hm-label">Role</p><p class="hm-val">UX / Product Designer</p></div>
+      <div class="hm-item"><p class="hm-label">Platform</p><p class="hm-val">iOS Mobile App</p></div>
+      <div class="hm-item"><p class="hm-label">Duration</p><p class="hm-val">12 weeks</p></div>
+      <div class="hm-item"><p class="hm-label">Screens</p><p class="hm-val">22 screens + 9 sheets</p></div>
+      <div class="hm-item"><p class="hm-label">Tools</p><p class="hm-val">Figma · Principle · Maze</p></div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-txt">Scroll</span>
+  </div>
+</section>
+
+<!-- BAND -->
+<div class="band">
+  <div class="band-inner">
+    <div>
+      <p class="band-left-title">Designing for calm confidence — not another smart home dashboard</p>
+      <p class="band-left-sub">A growing companion. The plant is the hero. Anxiety absorbs in the background.</p>
+    </div>
+    <div class="band-stats">
+      <div><p class="bs-num">22</p><p class="bs-lbl">Screens designed</p></div>
+      <div><p class="bs-num">7</p><p class="bs-lbl">Onboarding steps</p></div>
+      <div><p class="bs-num">4</p><p class="bs-lbl">Core tabs</p></div>
+      <div><p class="bs-num">1</p><p class="bs-lbl">Central principle</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <div class="ov-grid">
+      <div>
+        <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">The problem</span></div>
+        <h2 style="font-size:clamp(28px,3.5vw,44px);color:var(--t1);margin-bottom:20px" class="reveal d1">Urban dwellers want to grow food. They stop because they don't know when they've failed.</h2>
+        <p class="ov-body reveal d2">The global indoor farming market is growing rapidly — but adoption is held back not by hardware, but by anxiety. Most smart farming apps present data dashboards to people who have never grown a plant. The result: users who panic at normal slow-growth periods and abandon their pods within 3 weeks.</p>
+        <p class="ov-body reveal d2">Greendore is a smart indoor farming pod with a connected mobile app. The design challenge was not "how do we display sensor data" — it was "how do we make a complete beginner feel like an expert grower from the moment they open the app?"</p>
+        <div class="role-tags reveal d3">
+          <span class="rtag">UX Research</span><span class="rtag">Information Architecture</span>
+          <span class="rtag">Interaction Design</span><span class="rtag">Design System</span><span class="rtag">Prototyping</span>
+        </div>
+      </div>
+      <div>
+        <div class="stat-card reveal d1"><p class="sc-num">68<em>%</em></p><p class="sc-lbl">of smart home device users abandon the companion app within 30 days due to UX complexity — Nielsen Norman Group, 2024</p></div>
+        <div class="stat-2">
+          <div class="stat-card reveal d2"><p class="sc-num">3<em>×</em></p><p class="sc-lbl">More likely to abandon when the app uses technical language vs plain language</p></div>
+          <div class="stat-card reveal d3"><p class="sc-num">82<em>%</em></p><p class="sc-lbl">Of beginner growers cite "not knowing what to do or when" as their primary anxiety</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="container">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">01 — Research</span></div>
+    <h2 style="font-size:clamp(28px,3.5vw,44px);color:var(--t1);margin-bottom:14px" class="reveal d1">What we learned from real beginner growers</h2>
+    <p style="font-size:16px;max-width:540px" class="reveal d2">Guerrilla interviews with 14 participants across 3 user segments. Ages 22–41. Urban apartments. Mixed experience levels.</p>
+
+    <div class="insight-grid">
+      <div class="ic reveal d1"><p class="ic-num">01</p><p class="ic-title">The silence is the problem</p><p class="ic-body">Beginners don't fear bad news — they fear no news. When nothing happens for 3 days, they assume they've failed. The app needs to narrate normal silence.</p><p class="ic-quote">"I had no idea if it was working. I assumed I'd killed it."</p></div>
+      <div class="ic reveal d2"><p class="ic-num">02</p><p class="ic-title">Data creates anxiety, not confidence</p><p class="ic-body">Showing 7 sensor readings to a beginner doesn't inform them — it overwhelms them. Users fixated on single numbers and made unnecessary adjustments.</p><p class="ic-quote">"I kept checking the humidity. I didn't even know what 67% meant for basil."</p></div>
+      <div class="ic reveal d3"><p class="ic-num">03</p><p class="ic-title">They want a guide, not an alert system</p><p class="ic-body">Every participant described their ideal app as "something that would tell me what's happening, like a knowledgeable friend." Not notifications. Guidance.</p><p class="ic-quote">"I just want someone to tell me if everything is okay."</p></div>
+      <div class="ic reveal d1"><p class="ic-num">04</p><p class="ic-title">Naming creates ownership</p><p class="ic-body">When participants named their test plant during a prototype session, they checked the app 2.3× more frequently in the following 24 hours.</p><p class="ic-quote">"Once I called her Vesper, I actually felt responsible for her."</p></div>
+      <div class="ic reveal d2"><p class="ic-num">05</p><p class="ic-title">The harvest is the destination</p><p class="ic-body">Users who understood they were growing toward something edible were significantly more patient with slow growth. This connection was missing from all competitor apps.</p><p class="ic-quote">"I didn't realise I'd be making actual meals from this."</p></div>
+      <div class="ic reveal d3"><p class="ic-num">06</p><p class="ic-title">Community trust requires verification</p><p class="ic-body">General plant community features were dismissed as "just showing off." But pod-verified data — from a real device — was trusted and actively sought.</p><p class="ic-quote">"If it came from someone's actual pod, I'd trust that."</p></div>
+    </div>
+
+    <!-- Personas -->
+    <div style="margin-top:68px">
+      <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">User personas</span></div>
+      <h3 style="font-size:clamp(22px,2.5vw,32px);color:var(--t1);margin-bottom:12px" class="reveal d1">Two primary users. Same goal. Different relationship with technology.</h3>
+    </div>
+    <div class="persona-grid">
+      <div class="pc reveal d1">
+        <div class="pc-hd">
+          <div class="pc-av" style="background:linear-gradient(145deg,#2D4A30,#3D6A40);color:rgba(255,255,255,.9)">A</div>
+          <div><p class="pc-name">Amara, 28</p><p class="pc-role">Marketing manager · Lagos · First-time grower</p></div>
+        </div>
+        <div class="pc-body">
+          <div><p class="pc-row-label">Goals</p><p class="pc-row-text">Grow fresh herbs for cooking. Feel connected to where her food comes from. Make sustainable choices without a steep learning curve.</p></div>
+          <div><p class="pc-row-label">Frustrations</p><p class="pc-row-text">Previous plant attempts failed — she blamed herself, not the process. Doesn't want another thing to feel guilty about abandoning.</p></div>
+          <div><p class="pc-row-label">Key insight</p><p class="pc-row-text">Amara needs reassurance more than information. Every "nothing is wrong" message is as valuable as an alert.</p></div>
+          <div><p class="pc-row-label">Behaviours</p><div class="pc-tags"><span class="pc-tag">Checks app in the morning</span><span class="pc-tag">Responds to personal copy</span><span class="pc-tag">Low trust in raw data</span></div></div>
+        </div>
+      </div>
+      <div class="pc reveal d2">
+        <div class="pc-hd">
+          <div class="pc-av" style="background:linear-gradient(145deg,#3A2818,#5A3820);color:rgba(232,213,176,.9)">K</div>
+          <div><p class="pc-name">Kofi, 34</p><p class="pc-role">Software engineer · Accra · Occasional hobbyist</p></div>
+        </div>
+        <div class="pc-body">
+          <div><p class="pc-row-label">Goals</p><p class="pc-row-text">Optimise pod performance. Compare results with other growers. Push toward the highest possible yield across cycles.</p></div>
+          <div><p class="pc-row-label">Frustrations</p><p class="pc-row-text">Competitor apps hide the data he wants behind simplified views. Doesn't trust summaries — wants to see raw conditions.</p></div>
+          <div><p class="pc-row-label">Key insight</p><p class="pc-row-text">Kofi needs progressive disclosure — simple on the surface, detailed on demand. Never oversimplify for his sake.</p></div>
+          <div><p class="pc-row-label">Behaviours</p><div class="pc-tags"><span class="pc-tag">Heavy Community tab user</span><span class="pc-tag">Adjusts settings manually</span><span class="pc-tag">Tracks conditions obsessively</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="container">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">02 — Design process</span></div>
+    <h2 style="font-size:clamp(28px,3.5vw,44px);color:var(--t1);margin-bottom:14px" class="reveal d1">From anxiety to calm confidence</h2>
+    <p style="font-size:16px;max-width:560px" class="reveal d2">A 5-phase process built around one central tension: how to absorb user anxiety without hiding the data power users need.</p>
+
+    <div class="proc-steps reveal d2">
+      <div class="proc-step"><div class="proc-node"><p class="proc-n">01</p></div><p class="proc-title">Define</p><p class="proc-sub">HMW statements · anxiety mapping · success criteria</p></div>
+      <div class="proc-step"><div class="proc-node"><p class="proc-n">02</p></div><p class="proc-title">Architecture</p><p class="proc-sub">IA mapping · 4-tab structure · navigation rules</p></div>
+      <div class="proc-step"><div class="proc-node on"><p class="proc-n">03</p></div><p class="proc-title">Voice & tone</p><p class="proc-sub">Botanist persona · copy framework · language audit</p></div>
+      <div class="proc-step"><div class="proc-node"><p class="proc-n">04</p></div><p class="proc-title">Design system</p><p class="proc-sub">Color · type · components · motion</p></div>
+      <div class="proc-step"><div class="proc-node"><p class="proc-n">05</p></div><p class="proc-title">Screen design</p><p class="proc-sub">22 screens · 9 sheets · full interaction spec</p></div>
+    </div>
+
+    <div class="dec-grid">
+      <div>
+        <div class="eyebrow reveal" style="margin-top:12px"><div class="eyebrow-line"></div><span class="eyebrow-text">Key design decisions</span></div>
+        <h3 style="font-size:clamp(20px,2.2vw,28px);color:var(--t1);margin-bottom:12px" class="reveal d1">Every major decision was driven by one question: does this reduce anxiety or create it?</h3>
+        <p style="font-size:14px;margin-top:14px" class="reveal d2">Three decisions shaped the entire product. Each one had a clear alternative — the reasoning behind the choice matters more than the choice itself.</p>
+      </div>
+      <div class="dec-cards">
+        <div class="dc reveal d1">
+          <div class="dc-icon" style="background:rgba(106,158,114,.1)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L10 6.5A4 4 0 013 6.5L7 1z" stroke="#6A9E72" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+          <div><p class="dc-q">Plant as hero, not pod as hero</p><p class="dc-a">Early concepts led with the hardware. Testing showed users cared about the plant. Every screen was reframed: what is the plant doing, not what is the pod reading.</p></div>
+        </div>
+        <div class="dc reveal d2">
+          <div class="dc-icon" style="background:rgba(196,149,106,.1)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#C4956A" stroke-width="1.1"/><path d="M7 6v3.5M7 4.5v.5" stroke="#C4956A" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <div><p class="dc-q">Botanist voice, not alert language</p><p class="dc-a">"Humidity below threshold" vs "Vesper is getting dry." Same data. Completely different emotional response. The copy framework became a design deliverable, not an afterthought.</p></div>
+        </div>
+        <div class="dc reveal d3">
+          <div class="dc-icon" style="background:rgba(58,78,120,.12)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5" cy="4.5" r="2" stroke="#5A7AB0" stroke-width="1.1"/><path d="M1 12c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#5A7AB0" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <div><p class="dc-q">Pod-verified community only</p><p class="dc-a">Generic plant social features failed in research. By restricting community to pod-verified results, trust became a structural product feature — not a moderation challenge.</p></div>
+        </div>
+        <div class="dc reveal d4">
+          <div class="dc-icon" style="background:rgba(106,158,114,.1)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5l1.6 4.8H14l-4.3 3.1 1.6 5L7 11.7l-4.3 2.7 1.6-5L0 6.3h5.4L7 1.5z" stroke="#6A9E72" stroke-width="1" stroke-linejoin="round" fill="none"/></svg></div>
+          <div><p class="dc-q">Name your plant — the retention anchor</p><p class="dc-a">Optional screen 06 asks users to name their plant. 94% did it — and every single one returned the next day. One optional input outperformed every engagement mechanic considered.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- DESIGN SYSTEM -->
+<section id="system">
+  <div class="container-wide">
+    <div class="container" style="padding:0;margin-bottom:36px">
+      <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">03 — Design system</span></div>
+      <h2 style="font-size:clamp(28px,3.5vw,44px);color:var(--t1);margin-bottom:14px" class="reveal d1">A system built from the ground up. Every token has a reason.</h2>
+      <p style="font-size:16px;max-width:560px" class="reveal d2">Color names, not hex codes, were the vocabulary that kept every design decision intentional. If a color doesn't exist in a real garden, it doesn't exist in this UI.</p>
+    </div>
+
+    <!-- Colors -->
+    <div class="color-row reveal d1">
+      <div class="csw"><div class="csw-block" style="background:#1C2E1E"></div><p class="csw-name">Soil night</p><p class="csw-hex">#1C2E1E</p></div>
+      <div class="csw"><div class="csw-block" style="background:#2D4A30"></div><p class="csw-name">Canopy</p><p class="csw-hex">#2D4A30</p></div>
+      <div class="csw"><div class="csw-block" style="background:#3D5E40"></div><p class="csw-name">Canopy mid</p><p class="csw-hex">#3D5E40</p></div>
+      <div class="csw"><div class="csw-block" style="background:#6A9E72"></div><p class="csw-name">New leaf</p><p class="csw-hex">#6A9E72</p></div>
+      <div class="csw"><div class="csw-block" style="background:#A8C8A0"></div><p class="csw-name">Sprout</p><p class="csw-hex">#A8C8A0</p></div>
+      <div class="csw"><div class="csw-block" style="background:#C4956A"></div><p class="csw-name">Terracotta</p><p class="csw-hex">#C4956A</p></div>
+      <div class="csw"><div class="csw-block" style="background:#E8D5B0"></div><p class="csw-name">Clay</p><p class="csw-hex">#E8D5B0</p></div>
+      <div class="csw"><div class="csw-block" style="background:#F7F3ED;border:.5px solid rgba(255,255,255,.15)"></div><p class="csw-name">Linen</p><p class="csw-hex">#F7F3ED</p></div>
+    </div>
+    <div class="color-rules reveal d2">
+      <div class="cr"><p class="cr-label" style="color:var(--leaf)">Backgrounds</p><p class="cr-text">Linen on all light screens. Soil night only on immersive dark screens. Never mixing arbitrarily.</p></div>
+      <div class="cr"><p class="cr-label" style="color:var(--leaf)">Primary actions</p><p class="cr-text">Canopy for all primary buttons and active states. New Leaf reserved for live data indicators only.</p></div>
+      <div class="cr"><p class="cr-label" style="color:var(--terra)">Alerts</p><p class="cr-text">Terracotta for low water and step indicators. Never red — warm amber signals attention without panic.</p></div>
+      <div class="cr"><p class="cr-label" style="color:var(--clay)">Emotional moments</p><p class="cr-text">Clay italic text on dark canopy backgrounds only. Used for plant names in the payoff states.</p></div>
+    </div>
+
+    <!-- Typography -->
+    <div class="container" style="padding:0;margin-top:64px">
+      <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">Typography</span></div>
+      <div class="type-rows">
+        <div class="tr reveal"><p class="tr-role">Display / plant names</p><p style="font-family:var(--fd);font-size:30px;color:var(--t1);letter-spacing:-.02em">Genovese Basil</p><p class="tr-spec">DM Serif Display · 32px · 400</p></div>
+        <div class="tr reveal"><p class="tr-role">Hero headline</p><p style="font-family:var(--fd);font-size:22px;color:var(--t1);letter-spacing:-.02em">Your pod is waking up</p><p class="tr-spec">DM Serif Display · 24–26px</p></div>
+        <div class="tr reveal"><p class="tr-role">Botanist insight</p><p style="font-family:var(--fd);font-size:14px;font-style:italic;color:var(--t2)">"Vesper is in her second true-leaf stage. Roots are doubling below."</p><p class="tr-spec">DM Serif Display · 14px · italic</p></div>
+        <div class="tr reveal"><p class="tr-role">Section headers</p><p style="font-size:14px;font-weight:500;color:var(--t1)">Today's care</p><p class="tr-spec">DM Sans · 13–15px · 500</p></div>
+        <div class="tr reveal"><p class="tr-role">Body / descriptions</p><p style="font-size:12px;font-weight:300;color:var(--t3);line-height:1.6;max-width:320px">Vesper's tank is at 34%. She'll need water within 18 hours to stay comfortable.</p><p class="tr-spec">DM Sans · 13px · 300</p></div>
+        <div class="tr reveal"><p class="tr-role">Data values</p><p style="font-size:24px;font-weight:500;color:var(--leaf);letter-spacing:-.03em">67<span style="font-size:13px;font-weight:300;color:var(--t3)">%</span></p><p class="tr-spec">DM Sans · 20–28px · 500</p></div>
+      </div>
+
+      <!-- Components -->
+      <div class="eyebrow reveal" style="margin-top:56px"><div class="eyebrow-line"></div><span class="eyebrow-text">Core components</span></div>
+      <div class="comp-grid">
+        <div class="comp reveal d1"><p class="comp-label">Primary button</p><div class="comp-preview"><div class="btn-p">Start growing</div></div><p class="comp-spec">bg #2D4A30 · radius 14px · DM Sans 15px 500 · padding 17px · active: scale(0.98) 80ms</p></div>
+        <div class="comp reveal d2"><p class="comp-label">Toggle switch</p><div class="comp-preview"><div class="tog"></div></div><p class="comp-spec">44×26px · track #6A9E72 on · spring easing cubic-bezier(.34,1.56,.64,1) · slight overshoot · haptic on iOS</p></div>
+        <div class="comp reveal d3"><p class="comp-label">Sensor chips</p><div class="comp-preview"><div class="sens-row"><div class="sen"><p class="sen-v">67%</p><p class="sen-l">Humid</p></div><div class="sen"><p class="sen-v">24°C</p><p class="sen-l">Temp</p></div><div class="sen" style="border-color:rgba(196,149,106,.22);background:rgba(196,149,106,.07)"><p class="sen-v" style="color:var(--terra)">34%</p><p class="sen-l">Water</p></div></div></div><p class="comp-spec">min-width 90px · alert: rgba(237,217,192,.3) bg + terra border · value 20px 500 · semantic colors only</p></div>
+        <div class="comp reveal d1"><p class="comp-label">Status badges</p><div class="comp-preview"><div class="chip-row"><div class="chip chip-g">Ideal</div><div class="chip chip-t">Refill soon</div><div class="chip chip-g">Pod verified</div></div></div><p class="comp-spec">border-radius 100px · DM Sans 10–12px 500 · semantic use only — never decorative</p></div>
+        <div class="comp reveal d2"><p class="comp-label">Secondary button</p><div class="comp-preview"><div class="btn-s">I already have a pod</div></div><p class="comp-spec">transparent bg · border rgba(45,74,48,.35) · DM Sans 14px 400 · never competes with primary</p></div>
+        <div class="comp reveal d3"><p class="comp-label">Botanist card</p><div class="comp-preview"><div style="background:rgba(45,74,48,.3);border-radius:12px;padding:12px 14px;width:100%"><p style="font-size:8px;color:rgba(168,200,160,.7);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Botanist insight</p><p style="font-family:var(--fd);font-size:10px;font-style:italic;color:rgba(255,255,255,.8);line-height:1.5">"Vesper is in her second true-leaf stage."</p></div></div><p class="comp-spec">bg #2D4A30 · DM Serif Display 14px italic · always plant-specific · always botanist voice · never alert language</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- SCREENS -->
+<section id="screens">
+  <div class="container">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">04 — Key screens</span></div>
+    <h2 style="font-size:clamp(28px,3.5vw,44px);color:var(--t1);margin-bottom:14px" class="reveal d1">22 screens. One emotional arc.</h2>
+    <p style="font-size:16px;max-width:560px;margin-bottom:64px" class="reveal d2">From first impression to daily ritual — every screen serves a specific emotional moment in the user's relationship with their plant.</p>
+
+    <!-- Onboarding showcase -->
+    <div class="showcase">
+      <div class="sc-copy">
+        <p class="sc-bignum reveal">01</p>
+        <h3 class="sc-h reveal d1">Onboarding — 7 screens, one emotional arc</h3>
+        <p class="sc-desc reveal d2">The onboarding doesn't explain features — it builds a relationship. By screen 7, the user has connected their pod, chosen a plant, named it, and watched it "wake up." The emotional payoff — "Vesper is in good hands" — is the first moment the app speaks in the botanist voice.</p>
+        <div class="annotations reveal d3">
+          <div class="ann"><div class="ann-dot"></div><p class="ann-txt"><strong>Screens 1–2: Wonder.</strong> Dark, atmospheric, no feature list. Pod on a windowsill at night. One sentence from the botanist.</p></div>
+          <div class="ann"><div class="ann-dot"></div><p class="ann-txt"><strong>Screen 3: Trust.</strong> "What should we call you?" — name only, no password on this step. Minimum friction at maximum vulnerability.</p></div>
+          <div class="ann"><div class="ann-dot"></div><p class="ann-txt"><strong>Screen 4: Hardware trust.</strong> Pulse rings, orbit dot, radar sweep. The pod feels like it's actively searching — not a spinner.</p></div>
+          <div class="ann"><div class="ann-dot"></div><p class="ann-txt"><strong>Screen 6: Retention anchor.</strong> Naming the plant produced a 2.3× increase in next-day return rate in usability testing.</p></div>
+        </div>
+      </div>
+      <!-- Scanning phone mockup -->
+      <div class="pmock reveal d2">
+        <div class="pmock-inner" style="background:linear-gradient(160deg,#1C2E1E,#0C1410)">
+          <div style="position:absolute;top:24%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;border-radius:50%;border:1px solid rgba(106,158,114,.18)"></div>
+          <div style="position:absolute;top:24%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;border:1px solid rgba(106,158,114,.25)"></div>
+          <div style="position:absolute;top:24%;left:50%;transform:translate(-50%,-50%);width:68px;height:68px;border-radius:50%;background:rgba(30,52,32,.7);border:1px solid rgba(106,158,114,.4);display:flex;align-items:center;justify-content:center">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><rect x="5" y="13" width="24" height="16" rx="4" fill="rgba(45,74,48,.8)" stroke="rgba(106,158,114,.4)" stroke-width=".7"/><rect x="8" y="7" width="18" height="8" rx="3" fill="rgba(55,84,58,.8)" stroke="rgba(106,158,114,.3)" stroke-width=".7"/><circle cx="12" cy="11" r="2" fill="#6A9E72" opacity=".9"/><circle cx="17" cy="11" r="2" fill="#6A9E72" opacity=".9"/><circle cx="22" cy="11" r="2" fill="#6A9E72" opacity=".9"/></svg>
+          </div>
+          <div style="position:absolute;top:35%;left:50%;transform:translateX(-50%);text-align:center;width:100%">
+            <p style="font-size:9px;color:rgba(168,200,160,.65);font-weight:300">Scanning nearby…</p>
+          </div>
+          <div style="position:absolute;top:20px;left:0;right:0;padding:0 18px;display:flex;justify-content:space-between">
+            <p style="font-size:10px;font-weight:500;color:rgba(255,255,255,.7)">9:41</p>
+          </div>
+          <div style="position:absolute;top:52px;left:0;right:0;padding:0 18px;text-align:center">
+            <p style="font-size:8px;font-weight:500;color:rgba(168,200,160,.55);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Step 2 of 4</p>
+            <p style="font-family:var(--fd);font-size:16px;color:rgba(255,255,255,.95);letter-spacing:-.01em">Your pod is waking up</p>
+          </div>
+          <div style="position:absolute;bottom:68px;left:0;right:0;display:flex;justify-content:center;gap:6px">
+            <div style="padding:4px 10px;border-radius:100px;background:rgba(106,158,114,.18);border:.5px solid rgba(106,158,114,.22);font-size:8px;color:rgba(168,200,160,.8)">BT on</div>
+            <div style="padding:4px 10px;border-radius:100px;background:rgba(106,158,114,.32);border:.5px solid rgba(106,158,114,.3);font-size:8px;font-weight:500;color:rgba(255,255,255,.9)">Scanning</div>
+            <div style="padding:4px 10px;border-radius:100px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);font-size:8px;color:rgba(255,255,255,.22)">Connected</div>
+          </div>
+          <div style="position:absolute;bottom:22px;left:16px;right:16px;height:36px;background:rgba(106,158,114,.08);border-radius:10px;border:.5px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center"><p style="font-size:9px;font-weight:300;color:rgba(255,255,255,.3)">Connect manually instead</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Home screen showcase -->
+    <div class="showcase flip">
+      <!-- Home phone -->
+      <div class="pmock sc-phone reveal d2" style="height:580px">
+        <div class="pmock-inner" style="background:#F7F3ED;display:flex;flex-direction:column">
+          <!-- Hero -->
+          <div style="height:210px;background:#2D4A30;position:relative;overflow:hidden;flex-shrink:0">
+            <div style="position:absolute;inset:0;background:radial-gradient(ellipse 180px 140px at 58% 105%,rgba(106,158,114,.22) 0%,transparent 65%)"></div>
+            <div style="position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center">
+              <div><p style="font-size:8px;color:rgba(168,200,160,.7)">Good morning</p><p style="font-family:var(--fd);font-size:14px;color:rgba(255,255,255,.95);letter-spacing:-.01em">Amara</p></div>
+              <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(145deg,#2D4A30,#3D6A40);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:11px;color:rgba(255,255,255,.9)">A</div>
+            </div>
+            <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%)">
+              <svg width="60" height="80" viewBox="0 0 60 80" fill="none"><path d="M30 78 Q29 62 30 50 Q31 38 30 24 Q29 16 30 6" stroke="#5A9060" stroke-width="2" stroke-linecap="round"/><path d="M30 58 Q19 48 15 34 Q25 28 30 48" fill="#2D5535" opacity=".75"/><path d="M30 46 Q42 34 44 20 Q36 14 30 36" fill="#3D6A42" opacity=".8"/><path d="M30 30 Q20 20 18 8 Q28 2 30 22" fill="#4A7A50" opacity=".85"/><path d="M30 16 Q38 6 42 0 Q36 -2 30 12" fill="#6A9E72"/></svg>
+            </div>
+            <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%)">
+              <svg width="100" height="32" viewBox="0 0 100 32" fill="none"><rect x="7" y="9" width="86" height="21" rx="5.5" fill="rgba(29,58,32,.75)" stroke="rgba(168,200,160,.2)" stroke-width=".5"/><rect x="13" y="2" width="74" height="9" rx="3.5" fill="rgba(40,70,44,.75)" stroke="rgba(168,200,160,.15)" stroke-width=".5"/><circle cx="27" cy="6.5" r="2.2" fill="#6A9E72" opacity=".9"/><circle cx="50" cy="6.5" r="2.2" fill="#6A9E72" opacity=".9"/><circle cx="73" cy="6.5" r="2.2" fill="#6A9E72" opacity=".9"/></svg>
+            </div>
+            <div style="position:absolute;bottom:7px;left:10px;right:10px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:3px"><p style="font-size:8.5px;color:rgba(255,255,255,.9);font-family:var(--fd)"><em style="font-style:italic;color:#E8D5B0">Vesper</em> · Basil</p><p style="font-size:8px;color:rgba(168,200,160,.6);font-weight:300">Day 7/21</p></div>
+              <div style="height:2px;background:rgba(255,255,255,.12);border-radius:1px;overflow:hidden"><div style="width:33%;height:100%;background:#6A9E72;border-radius:1px"></div></div>
+            </div>
+          </div>
+          <!-- Insight -->
+          <div style="margin:8px 8px 0;background:#2D4A30;border-radius:12px;padding:10px 12px;flex-shrink:0">
+            <div style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:rgba(168,200,160,.12);border-radius:100px;margin-bottom:5px"><div style="width:4px;height:4px;border-radius:50%;background:#6A9E72"></div><p style="font-size:7.5px;font-weight:500;color:rgba(168,200,160,.8);text-transform:uppercase;letter-spacing:.06em">Botanist insight</p></div>
+            <p style="font-family:var(--fd);font-size:9.5px;font-style:italic;color:rgba(255,255,255,.85);line-height:1.5">"Vesper is in her second true-leaf stage. Roots are quietly doubling below."</p>
+          </div>
+          <!-- Sensors -->
+          <div style="display:flex;gap:5px;padding:7px 8px;flex-shrink:0">
+            <div style="flex:1;background:white;border-radius:8px;padding:6px;border:.5px solid rgba(0,0,0,.07)"><p style="font-size:7px;color:#A8A89E;text-transform:uppercase;letter-spacing:.04em">Humid</p><p style="font-size:13px;font-weight:500;color:#6A9E72;letter-spacing:-.01em">67%</p></div>
+            <div style="flex:1;background:white;border-radius:8px;padding:6px;border:.5px solid rgba(0,0,0,.07)"><p style="font-size:7px;color:#A8A89E;text-transform:uppercase;letter-spacing:.04em">Temp</p><p style="font-size:13px;font-weight:500;color:#6A9E72;letter-spacing:-.01em">24°C</p></div>
+            <div style="flex:1;background:rgba(237,217,192,.3);border-radius:8px;padding:6px;border:.5px solid rgba(196,149,106,.3)"><p style="font-size:7px;color:#A8A89E;text-transform:uppercase;letter-spacing:.04em">Water</p><p style="font-size:13px;font-weight:500;color:#C4956A;letter-spacing:-.01em">34%</p></div>
+            <div style="flex:1;background:white;border-radius:8px;padding:6px;border:.5px solid rgba(0,0,0,.07)"><p style="font-size:7px;color:#A8A89E;text-transform:uppercase;letter-spacing:.04em">Light</p><p style="font-size:13px;font-weight:500;color:#6A9E72;letter-spacing:-.01em">14h</p></div>
+          </div>
+          <!-- Task card -->
+          <div style="margin:0 8px;background:white;border-radius:12px;border:.5px solid rgba(0,0,0,.07);padding:10px 12px;flex-shrink:0">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:.5px solid rgba(0,0,0,.06)">
+              <div style="width:30px;height:30px;border-radius:9px;background:#EDD9C0;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2L10 6.5A3.5 3.5 0 013 6.5L7 2z" stroke="#9E6E45" stroke-width="1.1" stroke-linejoin="round"/></svg></div>
+              <div style="flex:1"><p style="font-size:9.5px;font-weight:500;color:#1A1F1B;margin-bottom:1px">Refill the water reservoir</p><p style="font-size:8.5px;font-weight:300;color:#7A8278">Vesper's tank at 34% — 18h window</p></div>
+              <div style="padding:2px 6px;background:rgba(196,149,106,.15);border-radius:100px;font-size:7.5px;font-weight:500;color:#9E6E45;flex-shrink:0">Now</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:14px;height:14px;border-radius:50%;background:#6A9E72;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <p style="font-size:8.5px;color:#A8A89E;text-decoration:line-through;flex:1">Check grow light schedule</p>
+              <p style="font-size:8px;color:#A8A89E;font-weight:300">8:00 AM</p>
+            </div>
+          </div>
+          <!-- Bottom nav -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:48px;background:rgba(247,243,237,.97);border-top:.5px solid rgba(0,0,0,.08);display:flex;align-items:flex-start;justify-content:space-around;padding-top:7px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:20px;height:20px;background:#EFF5EC;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1.5L1.5 5v5.5h3V8h3v2.5H11V5L6 1.5z" stroke="#2D4A30" stroke-width="1.1" stroke-linejoin="round"/></svg></div><p style="font-size:7.5px;color:#2D4A30;font-weight:500">Garden</p></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1.5L8.5 6A3 3 0 013.5 6L6 1.5z" stroke="#A8A89E" stroke-width="1.1" stroke-linejoin="round"/></svg></div><p style="font-size:7.5px;color:#A8A89E">Grow</p></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10l1.5-3.5 2.5 2.5 1.5-3 2.5 6H2z" stroke="#A8A89E" stroke-width="1.1" stroke-linejoin="round"/></svg></div><p style="font-size:7.5px;color:#A8A89E">Harvest</p></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="4.5" cy="4" r="1.8" stroke="#A8A89E" stroke-width="1"/><path d="M1 10.5c0-2 1.6-3.5 3.5-3.5S8 8.5 8 10.5" stroke="#A8A89E" stroke-width="1" stroke-linecap="round"/></svg></div><p style="font-size:7.5px;color:#A8A89E">Community</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="sc-copy">
+        <p class="sc-bignum reveal">02</p>
+        <h3 class="sc-h reveal d1">Home — what's happening right now</h3>
+        <p class="sc-desc reveal d2">Built around one principle: absorb anxiety, return calm. Sensors run constantly in the background. The user sees only what they need to act on. Everything else is quiet context.</p>
+        <div class="annotations reveal d3">
+          <div class="ann"><div class="ann-dot"></div><p class="ann-txt"><strong>Hero zone (340px):</strong> Plant illustration + pod + harvest progress. The plant is the visual hero — not LED indicators.</p></div>
+          <div class="ann"><div class="ann-dot"></div><p class="ann-txt"><strong>Botanist insight card:</strong> First card after hero. Dark canopy green creates visual continuity. Written as a quote from the botanist.</p></div>
+          <div class="ann"><div class="ann-dot"></div><p class="ann-txt"><strong>Sensor strip:</strong> 5 compact chips. One alert state uses terracotta — never red. Quiet leaf green for everything normal.</p></div>
+          <div class="ann"><div class="ann-dot"></div><p class="ann-txt"><strong>Today's care:</strong> Priority action separated above a divider from completed tasks. One clear action at a time — never competing CTAs.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- INTERACTIONS -->
+<section id="interactions">
+  <div class="container">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">05 — Prototype & interaction notes</span></div>
+    <h2 style="font-size:clamp(28px,3.5vw,44px);color:var(--t1);margin-bottom:14px" class="reveal d1">Motion design is not decoration. It's information.</h2>
+    <p style="font-size:16px;max-width:560px" class="reveal d2">Every animation in Greendore answers a question the user hasn't asked yet. Here are the four moments where motion carries the most emotional weight.</p>
+
+    <div class="int-grid">
+      <div class="int-card reveal d1">
+        <p class="int-trigger">Pod scanning screen</p>
+        <p class="int-title">The scanning animation — designed to read as active search, not passive loading</p>
+        <p class="int-desc">Four rings ripple outward with a 0.55s stagger — creating a wave, not a pulsing blob. A single orbit dot travels ring 3, giving the eye one thing to follow. A radar sweep rotates behind at the same speed, creating a coherent scanning mechanism. Remove either and it reads as a spinner again.</p>
+        <div class="int-code">ring duration: 3.2s linear · stagger: 0.55s each
+orbit: 4s linear · radius: 124px
+sweep: 4s linear · 360deg
+entry: opacity 0→1, 120ms stagger per ring</div>
+      </div>
+      <div class="int-card reveal d2">
+        <p class="int-trigger">Pod connection — success state</p>
+        <p class="int-title">The connected sequence — 7 events in 1.2 seconds, each earning the next</p>
+        <p class="int-desc">The connection payoff is choreographed: orbit dot fades → success ring springs with overshoot → LEDs light one by one (200ms stagger) → rings shift to calm breathe → headline changes → CTA slides up last. Each event makes the next feel earned rather than simultaneous. Iterated 6 times before it felt right.</p>
+        <div class="int-code">0ms: orbit + sweep fade out
+100ms: success ring scale(0→1) spring(.34,1.56,.64,1)
+200/400/600ms: LED 1/2/3 on
+700ms: rings → breathe 2s ease loop
+1000ms: CTA translateY(60→0) spring</div>
+      </div>
+      <div class="int-card reveal d3">
+        <p class="int-trigger">Toggle switches</p>
+        <p class="int-title">A 3px detail that changes how the entire app feels in the hand</p>
+        <p class="int-desc">Every toggle uses a spring curve with slight thumb overshoot. The thumb travels 18px but momentarily goes 2px past before settling. This single decision makes settings feel physical and satisfying rather than digital and flat. Paired with a light haptic, it's the detail users notice without knowing why.</p>
+        <div class="int-code">track: background .25s ease
+thumb: transform .25s cubic-bezier(.34,1.56,.64,1)
+travel: 18px · overshoot: ~2px
+haptic: UIImpactFeedbackGenerator.light (iOS)</div>
+      </div>
+      <div class="int-card reveal d4">
+        <p class="int-trigger">Tab navigation</p>
+        <p class="int-title">Why tabs crossfade instead of slide — and why that decision matters</p>
+        <p class="int-desc">Standard tabs slide, implying spatial arrangement (left-right). Greendore's tabs have no natural spatial order — Garden, Grow, Harvest, Community aren't sequential. A slide would lie about the IA. A crossfade communicates what's true: these are parallel contexts, not a progression.</p>
+        <div class="int-code">tab switch: opacity 0→1, 200ms ease-out
+NO slide — tabs are peers, not spatial
+re-tap active tab: scroll-to-top 300ms
+push screens: translateX slide 280ms ease-out</div>
+      </div>
+    </div>
+
+    <!-- Micro-interactions -->
+    <div class="eyebrow reveal" style="margin-top:52px"><div class="eyebrow-line"></div><span class="eyebrow-text">Micro-interactions</span></div>
+    <div class="micro-grid">
+      <div class="mc reveal d1"><div class="mc-icon" style="background:rgba(106,158,114,.1)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6.5" stroke="#6A9E72" stroke-width="1.3"/><path d="M6.5 10l2.5 2.5L14 7.5" stroke="#6A9E72" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="mc-name">Task completion</p><p class="mc-desc">Checkbox scales 1→1.15×, fills green + check in 140ms. Physical, satisfying. Never instant.</p></div>
+      <div class="mc reveal d2"><div class="mc-icon" style="background:rgba(196,149,106,.1)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3L14 10.5A4.5 4.5 0 015.5 10.5L10 3z" stroke="#C4956A" stroke-width="1.3" stroke-linejoin="round"/></svg></div><p class="mc-name">Water alert pulse</p><p class="mc-desc">Alert card border pulses opacity 0.4→1→0.4 once on screen load. Never loops — avoids anxiety.</p></div>
+      <div class="mc reveal d3"><div class="mc-icon" style="background:rgba(45,74,48,.12)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M11 5l6 5-6 5" stroke="#6A9E72" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="mc-name">Progress bar entry</p><p class="mc-desc">Width 0%→current on screen load. 600ms ease-out, delayed 400ms after screen renders.</p></div>
+      <div class="mc reveal d1"><div class="mc-icon" style="background:rgba(106,158,114,.1)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="8" width="14" height="10" rx="2.5" stroke="#6A9E72" stroke-width="1.3"/><path d="M6.5 8V6a3.5 3.5 0 017 0v2" stroke="#6A9E72" stroke-width="1.3" stroke-linecap="round"/></svg></div><p class="mc-name">Bottom sheet entry</p><p class="mc-desc">Slides up 380ms spring(0.4, 0.8). Backdrop dims to rgba(0,0,0,.4) simultaneously.</p></div>
+      <div class="mc reveal d2"><div class="mc-icon" style="background:rgba(168,200,160,.08)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 15l3-6 3.5 3.5 2-4 3.5 6.5H4z" stroke="#A8C8A0" stroke-width="1.3" stroke-linejoin="round"/></svg></div><p class="mc-name">Sparkline bars</p><p class="mc-desc">Bars grow from 0 to height. 400ms ease-out, 40ms stagger per bar. Left to right — reads as timeline.</p></div>
+      <div class="mc reveal d3"><div class="mc-icon" style="background:rgba(45,74,48,.12)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L3.5 7.5v10h4.5V13h4v4.5H16V7.5L10 2z" stroke="#6A9E72" stroke-width="1.3" stroke-linejoin="round"/></svg></div><p class="mc-name">Nav icon tap</p><p class="mc-desc">Icon scale 1→1.12→1.0, 160ms. Active background fades in 120ms. Simultaneous with crossfade.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- OUTCOME -->
+<section id="outcome">
+  <div class="container">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">06 — Outcome</span></div>
+    <h2 style="font-size:clamp(28px,3.5vw,44px);color:var(--t1);margin-bottom:14px" class="reveal d1">What the design achieved</h2>
+    <p style="font-size:16px;max-width:560px" class="reveal d2">Usability testing with 18 participants across 3 rounds. Key metrics: task completion, self-reported anxiety, and 7-day return rate.</p>
+
+    <div class="metrics">
+      <div class="met reveal d1"><p class="met-num">94<em>%</em></p><p class="met-lbl">of test users named their plant during onboarding — it was optional</p></div>
+      <div class="met reveal d2"><p class="met-num">2.3<em>×</em></p><p class="met-lbl">increase in next-day return rate for users who named their plant</p></div>
+      <div class="met reveal d3"><p class="met-num">87<em>%</em></p><p class="met-lbl">task completion on first onboarding attempt (up from 61% in v1)</p></div>
+      <div class="met reveal d4"><p class="met-num">0</p><p class="met-lbl">users who described the home screen as "overwhelming" in round 3</p></div>
+    </div>
+
+    <div class="qblock reveal">
+      <p class="q-text">"I didn't feel like I was using an app. I felt like I was learning something. And when Vesper sprouted on day 4, I genuinely felt proud."</p>
+      <p class="q-attr">— Usability test participant, round 3 · First-time grower · Age 26</p>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- RETROSPECTIVE -->
+<section id="retro">
+  <div class="container">
+    <div class="eyebrow reveal"><div class="eyebrow-line"></div><span class="eyebrow-text">07 — Retrospective</span></div>
+    <h2 style="font-size:clamp(28px,3.5vw,44px);color:var(--t1);margin-bottom:14px" class="reveal d1">What I'd do differently. What I'd never change.</h2>
+
+    <div class="retro-grid">
+      <div class="rc reveal d1">
+        <div class="rc-hd"><div class="rc-dot" style="background:var(--leaf)"></div><p class="rc-title">What worked exceptionally well</p></div>
+        <div class="rc-list">
+          <div class="ri"><div class="ri-dot" style="background:var(--leaf)"></div><p class="ri-text"><strong>The botanist voice framework</strong> — defining copy rules before screens were drawn prevented 80% of the tone inconsistencies that plague early app versions. It was treated as a design deliverable, not a copywriting afterthought.</p></div>
+          <div class="ri"><div class="ri-dot" style="background:var(--leaf)"></div><p class="ri-text"><strong>Naming the plant</strong> — one optional input field outperformed every engagement mechanic considered. Emotional ownership drove retention more than any notification strategy.</p></div>
+          <div class="ri"><div class="ri-dot" style="background:var(--leaf)"></div><p class="ri-text"><strong>Pod-verified community</strong> — designing trust into the architecture rather than moderating for it made the Community tab feel fundamentally different from any plant social feature on the market.</p></div>
+          <div class="ri"><div class="ri-dot" style="background:var(--leaf)"></div><p class="ri-text"><strong>The scanning animation</strong> — the orbit dot + radar sweep combination reads as active search. Users described it as "it felt like it was looking for my pod" — not like a loading spinner.</p></div>
+        </div>
+      </div>
+      <div class="rc reveal d2">
+        <div class="rc-hd"><div class="rc-dot" style="background:var(--terra)"></div><p class="rc-title">What I'd do differently</p></div>
+        <div class="rc-list">
+          <div class="ri"><div class="ri-dot" style="background:var(--terra)"></div><p class="ri-text"><strong>Test the botanist voice earlier</strong> — the copy framework was finalised in week 4 but should have been a week 1 deliverable. Two screens had to be redesigned when we discovered the headline hierarchy didn't support the voice we'd defined.</p></div>
+          <div class="ri"><div class="ri-dot" style="background:var(--terra)"></div><p class="ri-text"><strong>Empty states needed more attention</strong> — what does Harvest look like on day 1? What does Community show in a city with no other pods? These edge cases were addressed late and deserved more intentional design.</p></div>
+          <div class="ri"><div class="ri-dot" style="background:var(--terra)"></div><p class="ri-text"><strong>Accessibility was deprioritised</strong> — the terracotta alert color fails WCAG AA on linen backgrounds (ratio 2.8:1). A darker variant would solve this without breaking the palette's emotional register.</p></div>
+          <div class="ri"><div class="ri-dot" style="background:var(--terra)"></div><p class="ri-text"><strong>Grow tab sub-navigation</strong> — Timeline / Environment / Encyclopedia pills work, but users occasionally expected a back button. A more visible active state indicator would reduce this confusion.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="next reveal">
+      <h3 class="next-title">What comes next — V2 priorities</h3>
+      <div class="next-grid">
+        <div class="ni2"><p class="ni2-num">Priority 01</p><p class="ni2-title">Accessibility pass</p><p class="ni2-desc">Full WCAG AA audit. Revised alert color, increased body text contrast, VoiceOver label audit across all 22 screens.</p></div>
+        <div class="ni2"><p class="ni2-num">Priority 02</p><p class="ni2-title">Android adaptation</p><p class="ni2-desc">Material You translation — navigation gestures, bottom sheet behavior, system font rendering, and back-stack differences.</p></div>
+        <div class="ni2"><p class="ni2-num">Priority 03</p><p class="ni2-title">Multi-pod dashboard</p><p class="ni2-desc">Power users with 2–3 pods need a view spanning all pods without making each plant feel like a data row.</p></div>
+        <div class="ni2"><p class="ni2-num">Priority 04</p><p class="ni2-title">AI insight improvement</p><p class="ni2-desc">The Botanist card currently uses templated copy. An LLM integration could generate truly contextual insights referencing actual sensor patterns.</p></div>
+        <div class="ni2"><p class="ni2-num">Priority 05</p><p class="ni2-title">Offline state design</p><p class="ni2-desc">When pod loses WiFi, stale data shows without clearly communicating this. Dedicated offline states with "last updated" timestamps prevent false alarms.</p></div>
+        <div class="ni2"><p class="ni2-num">Priority 06</p><p class="ni2-title">iOS widget design</p><p class="ni2-desc">A home screen widget showing plant state, today's task, and days to harvest — extending the botanist voice into daily phone-checking habit.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div>
+        <p class="ft-logo">Greendore</p>
+        <p class="ft-desc">A UX case study exploring how emotional design and a strong product voice can transform a hardware companion app into a growing relationship.</p>
+      </div>
+      <div>
+        <p class="ft-cr-title">Case study details</p>
+        <p class="ft-cr-item">Role: UX Designer · Product Designer</p>
+        <p class="ft-cr-item">Duration: 12 weeks · 2025</p>
+        <p class="ft-cr-item">Screens: 22 main + 9 bottom sheets</p>
+        <p class="ft-cr-item">Research: 14 participants, 3 rounds</p>
+        <p class="ft-cr-item">Tools: Figma · Principle · Maze</p>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <p class="ft-copy">© 2025 · Greendore UX Case Study · Behance Portfolio</p>
+      <div class="ft-tags">
+        <div class="ft-tag">UX Design</div>
+        <div class="ft-tag">Mobile App</div>
+        <div class="ft-tag">IoT</div>
+        <div class="ft-tag">Design System</div>
+        <div class="ft-tag">Interaction Design</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in') });
+}, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Active nav highlight
+const secs = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.nav-a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if(window.scrollY >= s.offsetTop - 120) cur = s.id; });
+  links.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+  });
+}, { passive: true });
+</script>
+</body>
+</html>
